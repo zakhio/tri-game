@@ -1,14 +1,6 @@
 import React from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {
-    playerSessionId,
-    playerToken,
-    sessionMe,
-    sessionNumOfColumns,
-    sessionPlayers,
-    sessionWords,
-    turn
-} from "../../app/gameStateSlice";
+import {playerSessionId, playerToken, sessionNumOfColumns, sessionWords, turn} from "../../app/gameStateSlice";
 import styles from './WordTable.module.css';
 
 export function WordTable() {
@@ -17,8 +9,6 @@ export function WordTable() {
 
     const numOfColumns = Math.max(1, useSelector(sessionNumOfColumns));
     const words = useSelector(sessionWords);
-    const players = useSelector(sessionPlayers);
-    const me = useSelector(sessionMe);
     const dispatch = useDispatch();
 
     function turnWord(position: number) {
@@ -31,7 +21,8 @@ export function WordTable() {
     for (let i = 0; i < words.length; i += numOfColumns) {
         const cols = words.slice(i, i + numOfColumns).map((w, index) =>
             <td key={i + index} onClick={() => turnWord(i + index)}>
-                <div className={styles.word_cell + " " + (w.open ? styles.open + " " + styles["open_kind_" + w.skinid] : "")}>
+                <div
+                    className={styles.word_cell + " " + (w.open ? styles.open + " " + styles["open_kind_" + w.skinid] : "")}>
                     <span>{w.word}</span>
                 </div>
             </td>
@@ -40,10 +31,12 @@ export function WordTable() {
     }
 
     return <table onTouchStart={() => console.log()} className={styles.world_table}>
+        <tbody>
         {rows.map((r, index) =>
             <tr key={index}>
                 {r}
             </tr>
         )}
+        </tbody>
     </table>
 }

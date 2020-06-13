@@ -1,2 +1,2 @@
-# ras
-Card game RAS influenced by UNO, Mau-Mau, etc
+# tri
+Guess game TRI influenced by Codenames
