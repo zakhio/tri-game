@@ -1,0 +1,33 @@
+/*!* if portrait mode is detected, rotate the entire site -90 degrees to hint rotating to landscape *!*/
+/*@media (orientation: portrait) {*/
+/*  body {*/
+/*    -webkit-transform: rotate(-90deg);*/
+/*    -moz-transform: rotate(-90deg);*/
+/*    -o-transform: rotate(-90deg);*/
+/*    -ms-transform: rotate(-90deg);*/
+/*    transform: rotate(-90deg);*/
+/*  }*/
+/*}*/
+
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.App-header {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+}
+
+.App-link {
+  color: rgb(112, 76, 182);
+}

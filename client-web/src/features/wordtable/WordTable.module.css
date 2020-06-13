@@ -1,0 +1,132 @@
+.world_table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 700px;
+    height: 500px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: 'Roboto Condensed', sans-serif;
+    letter-spacing: 0.5px;
+    font-size: 15px;
+}
+
+.world_table td {
+    text-align: center;
+    vertical-align: middle;
+    padding: 10px;
+}
+
+.world_table td:active:hover > div {
+    transform: perspective(400px) rotateX(70deg);
+}
+
+.word_cell {
+    transition: transform 1s;
+    width: 100%;
+    height: 100%;
+    user-select: none;
+    background: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-align: center;
+    line-height: 80px;
+    color: #444;
+}
+
+.word_cell > span {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+}
+
+.open {
+    transition: none;
+    transform: perspective(400px) rotateX(70deg);
+    border-color: transparent;
+    animation-fill-mode: forwards;
+}
+
+@keyframes animation_open {
+    10%   {
+        transform: perspective(400px) rotateX(90deg);
+    }
+    100% {
+        transform: perspective(400px) rotateX(0deg);
+    }
+}
+
+.open_kind_none {
+    animation: animation_open 2s, openAnimation_none 2s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes openAnimation_none {
+    10%   {
+        background: #fafafa;
+    }
+    11%   {
+        background: #fffcf5;
+        color: #d8cfad;
+    }
+    100% {
+        background: #fffcf5;
+        color: #d8cfad;
+    }
+}
+
+.open_kind_black {
+    animation: animation_open 2s, openAnimation_black 2s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes openAnimation_black {
+    10%   {
+        background: #fafafa;
+    }
+    11%   {
+        background: #444;
+        color: #aaa;
+    }
+    100% {
+        background: #444;
+        color: #aaa;
+    }
+}
+
+.open_kind_red {
+    animation: animation_open 2s, openAnimation_red 2s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes openAnimation_red {
+    10%   {
+        background: #fafafa;
+    }
+    11%   {
+        background: #ff6450;
+        color: #8a1000;
+    }
+    100% {
+        background: #ff6450;
+        color: #8a1000;
+    }
+}
+
+.open_kind_blue {
+    animation: animation_open 2s, openAnimation_blue 2s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes openAnimation_blue {
+    10%   {
+        background: #fafafa;
+    }
+    11%   {
+        background: #50bbff;
+        color: #00548a;
+    }
+    100% {
+        background: #50bbff;
+        color: #00548a;
+    }
+}

@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+option go_package = "zakh.io/tri/proto";
+
+message Word {
+    string word = 1;
+    bool open = 2;
+    string skinId = 3;
+}
+
+message CurrentPlayer {
+    string token = 1;
+    int32 playerIndex = 2;
+}
+
+message Player {
+    string name = 1;
+    string score = 2;
+    repeated Word words = 3;
+}
+
+message CreateGameRequest {
+    // settings here
+}
+
+message CreateGameReply {
+    string sessionId = 1;
+    string creatorToken = 2;
+}
+
+message JoinGameRequest {
+    string sessionId = 1;
+    string playerName = 2;
+    string playerToken = 3;
+}
+
+message GameSessionStream {
+    CurrentPlayer me = 1;
+    repeated Player players = 2;
+    repeated Word words = 3;
+    int32 numberOfColumns = 4;
+}
+
+message TurnGameRequest {
+    string sessionId = 1;
+    string playerToken = 2;
+    int32 position = 3;
+}
+
+message StartGameRequest {
+    string sessionId = 1;
+    string playerToken = 2;
+    int32 numberOfRows = 3;
+    int32 numberOfColumns = 4;
+}
+
+service TRIGame {
+    rpc Create (CreateGameRequest) returns (CreateGameReply) {
+    }
+    rpc Join (JoinGameRequest) returns (stream GameSessionStream) {
+    }
+    rpc Start (StartGameRequest) returns (google.protobuf.Empty) {
+    }
+    rpc Turn (TurnGameRequest) returns (google.protobuf.Empty) {
+    }
+}
