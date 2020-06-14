@@ -8,16 +8,16 @@ import (
 // RASGame TODO
 type GameSession interface {
 	// AddPlayer TODO
-	AddPlayer(player string) error
-
-	// IsPlayer TODO
-	IsPlayer(player string) bool
+	NewPlayer() (string, error)
 
 	// Start TODO
-	Start(player string, numberOrRows, numberOfColumns int) error
+	Start(playerId string, numberOfTeams, numberOrRows, numberOfColumns int) error
 
 	// Turn TODO
-	Turn(player string, position int) error
+	Turn(playerId string, position int) error
+
+	// SetSettings TODO
+	SetSettings(playerId, teamId, alias string, captain bool) error
 
 	// StateObservable TODO
 	StateObservable() observable.Observable
@@ -28,32 +28,40 @@ type gameSession struct {
 	state      *logic.GameState
 }
 
-func (g *gameSession) AddPlayer(player string) error {
-	if err := g.state.AddPlayer(player); err != nil {
+func (g *gameSession) NewPlayer() (string, error) {
+	playerId, err := g.state.NewPlayer()
+	if err != nil {
+		return "", err
+	}
+
+	return playerId, g.publishCurrentState(playerId)
+}
+
+func (g *gameSession) SetSettings(playerId, teamId, alias string, captain bool) error {
+	if err := g.state.AddToTeam(playerId, teamId); err != nil {
 		return err
 	}
 
-	return g.publishCurrentState(player)
+	g.state.PromoteToCaptain(playerId, captain)
+	g.state.SetAlias(playerId, alias)
+
+	return g.publishCurrentState(playerId)
 }
 
-func (g *gameSession) IsPlayer(playerId string) bool {
-	return g.state.IsPlayer(playerId)
-}
-
-func (g *gameSession) Start(player string, numberOrRows, numberOfColumns int) error {
-	if err := g.state.Start(numberOrRows, numberOfColumns); err != nil {
+func (g *gameSession) Start(playerId string, numberOfTeams, numberOrRows, numberOfColumns int) error {
+	if err := g.state.Start(numberOfTeams, numberOrRows, numberOfColumns); err != nil {
 		return err
 	}
 
-	return g.publishCurrentState(player)
+	return g.publishCurrentState(playerId)
 }
 
-func (g *gameSession) Turn(player string, position int) error {
-	if err := g.state.Turn(player, position); err != nil {
+func (g *gameSession) Turn(playerId string, position int) error {
+	if err := g.state.Turn(playerId, position); err != nil {
 		return err
 	}
 
-	return g.publishCurrentState(player)
+	return g.publishCurrentState(playerId)
 }
 
 func (g *gameSession) StateObservable() observable.Observable {

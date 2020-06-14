@@ -7,30 +7,36 @@ import (
 
 type PlayerInfo interface {
 	AddPlayer(player string) error
-	IsPlayer(player string) bool
 	GetPlayers() []string
+	IsCaptain(playerId string) bool
+	PromoteToCaptain(playerId string, captain bool)
 }
 
-func (p *GameState) AddPlayer(player string) error {
-	if p.Started {
-		return fmt.Errorf("cannot add player: game already started")
+func (g *GameState) NewPlayer() (string, error) {
+	playerId := g.nextId()
+	if g.Started {
+		return "", fmt.Errorf("cannot add player: game already started")
 	}
 
-	if p.IsPlayer(player) {
-		return fmt.Errorf("cannot add player: %v already added", player)
+	if g.IsCaptain(playerId) {
+		return "", fmt.Errorf("cannot add player: %v already added", playerId)
 	}
 
-	p.Players = append(p.Players, player)
-	p.PlayerWords[player] = make([]entities.WordCell, 0)
+	g.Players = append(g.Players, playerId)
+	g.PlayerHistory[playerId] = make([]entities.WordCell, 0)
 
-	return nil
+	return "", nil
 }
 
-func (p *GameState) IsPlayer(player string) bool {
-	_, ok := p.PlayerWords[player]
+func (g *GameState) IsCaptain(playerId string) bool {
+	_, ok := g.PlayerHistory[playerId]
 	return ok
 }
 
-func (p *GameState) GetPlayers() []string {
-	return p.Players
+func (g *GameState) PromoteToCaptain(playerId string, captain bool) {
+	g.Captains[playerId] = captain
+}
+
+func (g *GameState) GetPlayers() []string {
+	return g.Players
 }

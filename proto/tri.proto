@@ -3,65 +3,91 @@ syntax = "proto3";
 import "google/protobuf/empty.proto";
 option go_package = "zakh.io/tri/proto";
 
-message Word {
+message Player {
+    string id = 1;
+    string alias = 2;
+    string teamId = 3;
+    string score = 4;
+}
+
+message Team {
+    string id = 1;
+    int32 remainingCount = 2;
+}
+
+message Cell {
     string word = 1;
     bool open = 2;
-    string skinId = 3;
-}
-
-message CurrentPlayer {
-    string token = 1;
-    int32 playerIndex = 2;
-}
-
-message Player {
-    string name = 1;
-    string score = 2;
-    repeated Word words = 3;
+    enum Type {
+        REGULAR = 0;
+        TEAM_OWNED = 1;
+        END_GAME = 2;
+    }
+    Type type = 3;
+    string ownerTeamId = 4;
 }
 
 message CreateGameRequest {
-    // settings here
+    string token = 1;
 }
 
 message CreateGameReply {
     string sessionId = 1;
-    string creatorToken = 2;
-}
-
-message JoinGameRequest {
-    string sessionId = 1;
-    string playerName = 2;
-    string playerToken = 3;
 }
 
 message GameSessionStream {
-    CurrentPlayer me = 1;
+    string playerId = 1;
     repeated Player players = 2;
-    repeated Word words = 3;
-    int32 numberOfColumns = 4;
+    repeated Team teams = 3;
+    repeated Cell cells = 4;
+    int32 numberOfColumns = 5;
+}
+
+message ObserveGameRequest {
+    string token = 1;
+    string sessionId = 2;
+}
+
+message SetAliasRequest {
+    string token = 1;
+    string sessionId = 2;
+    string anyId = 3;
+    string alias = 4;
+}
+
+message SetSettingsRequest {
+    string token = 1;
+    string sessionId = 2;
+    string teamId = 3;
+    string alias = 4;
+    bool captain = 5;
 }
 
 message TurnGameRequest {
-    string sessionId = 1;
-    string playerToken = 2;
+    string token = 1;
+    string sessionId = 2;
     int32 position = 3;
 }
 
 message StartGameRequest {
-    string sessionId = 1;
-    string playerToken = 2;
-    int32 numberOfRows = 3;
-    int32 numberOfColumns = 4;
+    string token = 1;
+    string sessionId = 2;
+    int32 numberOfTeams = 3;
+    int32 numberOfRows = 4;
+    int32 numberOfColumns = 5;
 }
 
 service TRIGame {
     rpc Create (CreateGameRequest) returns (CreateGameReply) {
     }
-    rpc Join (JoinGameRequest) returns (stream GameSessionStream) {
+    rpc Observe (ObserveGameRequest) returns (stream GameSessionStream) {
     }
     rpc Start (StartGameRequest) returns (google.protobuf.Empty) {
     }
     rpc Turn (TurnGameRequest) returns (google.protobuf.Empty) {
+    }
+    rpc SetAlias (SetAliasRequest) returns (google.protobuf.Empty) {
+    }
+    rpc SetSettings (SetSettingsRequest) returns (google.protobuf.Empty) {
     }
 }

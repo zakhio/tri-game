@@ -9,94 +9,72 @@ import (
 
 var Manager = NewSessionManager()
 
-const playerRole = "player_role"
-const creatorRole = "creator_role"
-
 type SessionManager interface {
-	Create() (string, string)
-	Join(sessionId, name, playerId string) (observable.Observable, string, error)
-	Observer(sessionId string) (observable.Observable, error)
-	GetSession(sessionId, playerId string) (engine.GameSession, error)
-	GetPlayers(sessionId string) map[string]MemberData
-	IsCreator(sessionId, playerId string) bool
+	Create(token string) string
+	Join(token, sessionId string) (observable.Observable, string, error)
+	GetSession(token, sessionId string) (engine.GameSession, string, error)
 }
 
 type sessionManager struct {
-	sessions map[string]engine.GameSession
-	roles    RoleManager
-	players  MemberManager
+	sessions  map[string]engine.GameSession
+	playerIds SessionPlayerManager
 }
 
-func (s *sessionManager) Create() (string, string) {
-	sessionId := random.RandString(4)
+func (s *sessionManager) Create(token string) string {
+	sessionId := s.nextSessionId()
 	session := engine.NewGameSession()
-	s.sessions[sessionId] = session
-	creatorId, _ := s.players.AddMember(sessionId, creatorRole)
-	//s.roles.AddRole(sessionId, creatorId, creatorRole)
-	s.roles.AddRole(sessionId, creatorId, playerRole)
-	session.AddPlayer(creatorId)
+	playerId, _ := session.NewPlayer()
+	s.playerIds.Add(token, sessionId, playerId)
 
-	return sessionId, creatorId
+	s.sessions[sessionId] = session
+
+	return sessionId
 }
 
-func (s *sessionManager) Join(sessionId, name, playerId string) (observable.Observable, string, error) {
+func (s *sessionManager) Join(token, sessionId string) (observable.Observable, string, error) {
 	session, ok := s.sessions[sessionId]
 	if !ok {
 		return nil, "", fmt.Errorf("session %v doesn't exist", sessionId)
 	}
 
-	if playerId != "" {
-		if !s.players.IsMember(sessionId, playerId) {
-			return nil, "", fmt.Errorf("player %v doesn't exist", playerId)
-		}
-	} else if name != "" {
-		playerId, _ = s.players.AddMember(sessionId, MemberData(name))
-		s.roles.AddRole(sessionId, playerId, playerRole)
-		if err := session.AddPlayer(playerId); err != nil {
-			return nil, "", err
-		}
+	if token == "" {
+		return nil, "", fmt.Errorf("token %v is empty", token)
+	}
+
+	playerId, ok := s.playerIds.Get(token, sessionId)
+
+	if !ok {
+		playerId, _ := session.NewPlayer()
+		s.playerIds.Add(token, sessionId, playerId)
 	}
 
 	return session.StateObservable(), playerId, nil
 }
 
-func (s *sessionManager) Observer(sessionId string) (observable.Observable, error) {
+func (s *sessionManager) GetSession(token, sessionId string) (engine.GameSession, string, error) {
 	session, ok := s.sessions[sessionId]
 	if !ok {
-		return nil, fmt.Errorf("session %v doesn't exist", sessionId)
+		return nil, "", fmt.Errorf("session %v doesn't exist", sessionId)
 	}
 
-	return session.StateObservable(), nil
-}
+	playerId, ok := s.playerIds.Get(token, sessionId)
 
-func (s *sessionManager) GetSession(sessionId, playerId string) (engine.GameSession, error) {
-	session, ok := s.sessions[sessionId]
 	if !ok {
-		return nil, fmt.Errorf("session %v doesn't exist", sessionId)
+		return nil, "", fmt.Errorf("token %v is not part of the session %v", token, sessionId)
 	}
 
-	if !s.players.IsMember(sessionId, playerId) {
-		return nil, fmt.Errorf("player %v is not part of the session %v", playerId, sessionId)
-	}
-
-	return session, nil
+	return session, playerId, nil
 }
 
-func (s *sessionManager) GetPlayers(sessionId string) map[string]MemberData {
-	return s.players.GetMemberData(sessionId)
-}
-
-func (s *sessionManager) IsCreator(sessionId, playerId string) bool {
-	return s.roles.HasRole(sessionId, playerId, creatorRole)
+func (s *sessionManager) nextSessionId() string {
+	return random.RandString(4)
 }
 
 func NewSessionManager() SessionManager {
 	roles := NewRoleManager()
-	players := NewMemberManager()
 	sessions := make(map[string]engine.GameSession)
 	return &sessionManager{
-		roles:    roles,
-		players:  players,
-		sessions: sessions,
+		playerIds: roles,
+		sessions:  sessions,
 	}
 }

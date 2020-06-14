@@ -2,65 +2,18 @@ import * as jspb from "google-protobuf"
 
 import * as google_protobuf_empty_pb from 'google-protobuf/google/protobuf/empty_pb';
 
-export class Word extends jspb.Message {
-  getWord(): string;
-  setWord(value: string): Word;
-
-  getOpen(): boolean;
-  setOpen(value: boolean): Word;
-
-  getSkinid(): string;
-  setSkinid(value: string): Word;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): Word.AsObject;
-  static toObject(includeInstance: boolean, msg: Word): Word.AsObject;
-  static serializeBinaryToWriter(message: Word, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): Word;
-  static deserializeBinaryFromReader(message: Word, reader: jspb.BinaryReader): Word;
-}
-
-export namespace Word {
-  export type AsObject = {
-    word: string,
-    open: boolean,
-    skinid: string,
-  }
-}
-
-export class CurrentPlayer extends jspb.Message {
-  getToken(): string;
-  setToken(value: string): CurrentPlayer;
-
-  getPlayerindex(): number;
-  setPlayerindex(value: number): CurrentPlayer;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): CurrentPlayer.AsObject;
-  static toObject(includeInstance: boolean, msg: CurrentPlayer): CurrentPlayer.AsObject;
-  static serializeBinaryToWriter(message: CurrentPlayer, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): CurrentPlayer;
-  static deserializeBinaryFromReader(message: CurrentPlayer, reader: jspb.BinaryReader): CurrentPlayer;
-}
-
-export namespace CurrentPlayer {
-  export type AsObject = {
-    token: string,
-    playerindex: number,
-  }
-}
-
 export class Player extends jspb.Message {
-  getName(): string;
-  setName(value: string): Player;
+  getId(): string;
+  setId(value: string): Player;
+
+  getAlias(): string;
+  setAlias(value: string): Player;
+
+  getTeamid(): string;
+  setTeamid(value: string): Player;
 
   getScore(): string;
   setScore(value: string): Player;
-
-  getWordsList(): Array<Word>;
-  setWordsList(value: Array<Word>): Player;
-  clearWordsList(): Player;
-  addWords(value?: Word, index?: number): Word;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Player.AsObject;
@@ -72,13 +25,75 @@ export class Player extends jspb.Message {
 
 export namespace Player {
   export type AsObject = {
-    name: string,
+    id: string,
+    alias: string,
+    teamid: string,
     score: string,
-    wordsList: Array<Word.AsObject>,
+  }
+}
+
+export class Team extends jspb.Message {
+  getId(): string;
+  setId(value: string): Team;
+
+  getRemainingcount(): number;
+  setRemainingcount(value: number): Team;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Team.AsObject;
+  static toObject(includeInstance: boolean, msg: Team): Team.AsObject;
+  static serializeBinaryToWriter(message: Team, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Team;
+  static deserializeBinaryFromReader(message: Team, reader: jspb.BinaryReader): Team;
+}
+
+export namespace Team {
+  export type AsObject = {
+    id: string,
+    remainingcount: number,
+  }
+}
+
+export class Cell extends jspb.Message {
+  getWord(): string;
+  setWord(value: string): Cell;
+
+  getOpen(): boolean;
+  setOpen(value: boolean): Cell;
+
+  getType(): Cell.Type;
+  setType(value: Cell.Type): Cell;
+
+  getOwnerteamid(): string;
+  setOwnerteamid(value: string): Cell;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Cell.AsObject;
+  static toObject(includeInstance: boolean, msg: Cell): Cell.AsObject;
+  static serializeBinaryToWriter(message: Cell, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Cell;
+  static deserializeBinaryFromReader(message: Cell, reader: jspb.BinaryReader): Cell;
+}
+
+export namespace Cell {
+  export type AsObject = {
+    word: string,
+    open: boolean,
+    type: Cell.Type,
+    ownerteamid: string,
+  }
+
+  export enum Type { 
+    REGULAR = 0,
+    TEAM_OWNED = 1,
+    END_GAME = 2,
   }
 }
 
 export class CreateGameRequest extends jspb.Message {
+  getToken(): string;
+  setToken(value: string): CreateGameRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreateGameRequest.AsObject;
   static toObject(includeInstance: boolean, msg: CreateGameRequest): CreateGameRequest.AsObject;
@@ -89,15 +104,13 @@ export class CreateGameRequest extends jspb.Message {
 
 export namespace CreateGameRequest {
   export type AsObject = {
+    token: string,
   }
 }
 
 export class CreateGameReply extends jspb.Message {
   getSessionid(): string;
   setSessionid(value: string): CreateGameReply;
-
-  getCreatortoken(): string;
-  setCreatortoken(value: string): CreateGameReply;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreateGameReply.AsObject;
@@ -110,51 +123,27 @@ export class CreateGameReply extends jspb.Message {
 export namespace CreateGameReply {
   export type AsObject = {
     sessionid: string,
-    creatortoken: string,
-  }
-}
-
-export class JoinGameRequest extends jspb.Message {
-  getSessionid(): string;
-  setSessionid(value: string): JoinGameRequest;
-
-  getPlayername(): string;
-  setPlayername(value: string): JoinGameRequest;
-
-  getPlayertoken(): string;
-  setPlayertoken(value: string): JoinGameRequest;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): JoinGameRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: JoinGameRequest): JoinGameRequest.AsObject;
-  static serializeBinaryToWriter(message: JoinGameRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): JoinGameRequest;
-  static deserializeBinaryFromReader(message: JoinGameRequest, reader: jspb.BinaryReader): JoinGameRequest;
-}
-
-export namespace JoinGameRequest {
-  export type AsObject = {
-    sessionid: string,
-    playername: string,
-    playertoken: string,
   }
 }
 
 export class GameSessionStream extends jspb.Message {
-  getMe(): CurrentPlayer | undefined;
-  setMe(value?: CurrentPlayer): GameSessionStream;
-  hasMe(): boolean;
-  clearMe(): GameSessionStream;
+  getPlayerid(): string;
+  setPlayerid(value: string): GameSessionStream;
 
   getPlayersList(): Array<Player>;
   setPlayersList(value: Array<Player>): GameSessionStream;
   clearPlayersList(): GameSessionStream;
   addPlayers(value?: Player, index?: number): Player;
 
-  getWordsList(): Array<Word>;
-  setWordsList(value: Array<Word>): GameSessionStream;
-  clearWordsList(): GameSessionStream;
-  addWords(value?: Word, index?: number): Word;
+  getTeamsList(): Array<Team>;
+  setTeamsList(value: Array<Team>): GameSessionStream;
+  clearTeamsList(): GameSessionStream;
+  addTeams(value?: Team, index?: number): Team;
+
+  getCellsList(): Array<Cell>;
+  setCellsList(value: Array<Cell>): GameSessionStream;
+  clearCellsList(): GameSessionStream;
+  addCells(value?: Cell, index?: number): Cell;
 
   getNumberofcolumns(): number;
   setNumberofcolumns(value: number): GameSessionStream;
@@ -169,19 +158,106 @@ export class GameSessionStream extends jspb.Message {
 
 export namespace GameSessionStream {
   export type AsObject = {
-    me?: CurrentPlayer.AsObject,
+    playerid: string,
     playersList: Array<Player.AsObject>,
-    wordsList: Array<Word.AsObject>,
+    teamsList: Array<Team.AsObject>,
+    cellsList: Array<Cell.AsObject>,
     numberofcolumns: number,
   }
 }
 
+export class ObserveGameRequest extends jspb.Message {
+  getToken(): string;
+  setToken(value: string): ObserveGameRequest;
+
+  getSessionid(): string;
+  setSessionid(value: string): ObserveGameRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): ObserveGameRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: ObserveGameRequest): ObserveGameRequest.AsObject;
+  static serializeBinaryToWriter(message: ObserveGameRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ObserveGameRequest;
+  static deserializeBinaryFromReader(message: ObserveGameRequest, reader: jspb.BinaryReader): ObserveGameRequest;
+}
+
+export namespace ObserveGameRequest {
+  export type AsObject = {
+    token: string,
+    sessionid: string,
+  }
+}
+
+export class SetAliasRequest extends jspb.Message {
+  getToken(): string;
+  setToken(value: string): SetAliasRequest;
+
+  getSessionid(): string;
+  setSessionid(value: string): SetAliasRequest;
+
+  getAnyid(): string;
+  setAnyid(value: string): SetAliasRequest;
+
+  getAlias(): string;
+  setAlias(value: string): SetAliasRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): SetAliasRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: SetAliasRequest): SetAliasRequest.AsObject;
+  static serializeBinaryToWriter(message: SetAliasRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): SetAliasRequest;
+  static deserializeBinaryFromReader(message: SetAliasRequest, reader: jspb.BinaryReader): SetAliasRequest;
+}
+
+export namespace SetAliasRequest {
+  export type AsObject = {
+    token: string,
+    sessionid: string,
+    anyid: string,
+    alias: string,
+  }
+}
+
+export class SetSettingsRequest extends jspb.Message {
+  getToken(): string;
+  setToken(value: string): SetSettingsRequest;
+
+  getSessionid(): string;
+  setSessionid(value: string): SetSettingsRequest;
+
+  getTeamid(): string;
+  setTeamid(value: string): SetSettingsRequest;
+
+  getAlias(): string;
+  setAlias(value: string): SetSettingsRequest;
+
+  getCaptain(): boolean;
+  setCaptain(value: boolean): SetSettingsRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): SetSettingsRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: SetSettingsRequest): SetSettingsRequest.AsObject;
+  static serializeBinaryToWriter(message: SetSettingsRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): SetSettingsRequest;
+  static deserializeBinaryFromReader(message: SetSettingsRequest, reader: jspb.BinaryReader): SetSettingsRequest;
+}
+
+export namespace SetSettingsRequest {
+  export type AsObject = {
+    token: string,
+    sessionid: string,
+    teamid: string,
+    alias: string,
+    captain: boolean,
+  }
+}
+
 export class TurnGameRequest extends jspb.Message {
+  getToken(): string;
+  setToken(value: string): TurnGameRequest;
+
   getSessionid(): string;
   setSessionid(value: string): TurnGameRequest;
-
-  getPlayertoken(): string;
-  setPlayertoken(value: string): TurnGameRequest;
 
   getPosition(): number;
   setPosition(value: number): TurnGameRequest;
@@ -196,18 +272,21 @@ export class TurnGameRequest extends jspb.Message {
 
 export namespace TurnGameRequest {
   export type AsObject = {
+    token: string,
     sessionid: string,
-    playertoken: string,
     position: number,
   }
 }
 
 export class StartGameRequest extends jspb.Message {
+  getToken(): string;
+  setToken(value: string): StartGameRequest;
+
   getSessionid(): string;
   setSessionid(value: string): StartGameRequest;
 
-  getPlayertoken(): string;
-  setPlayertoken(value: string): StartGameRequest;
+  getNumberofteams(): number;
+  setNumberofteams(value: number): StartGameRequest;
 
   getNumberofrows(): number;
   setNumberofrows(value: number): StartGameRequest;
@@ -225,8 +304,9 @@ export class StartGameRequest extends jspb.Message {
 
 export namespace StartGameRequest {
   export type AsObject = {
+    token: string,
     sessionid: string,
-    playertoken: string,
+    numberofteams: number,
     numberofrows: number,
     numberofcolumns: number,
   }

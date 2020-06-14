@@ -17,37 +17,34 @@ type triGameServer struct {
 }
 
 func (s *triGameServer) Create(ctx context.Context, req *pb.CreateGameRequest) (*pb.CreateGameReply, error) {
-	sessionId, creatorId := s.sessionManager.Create()
-	return &pb.CreateGameReply{SessionId: sessionId, CreatorToken: creatorId}, nil
+	token := req.GetToken()
+	sessionId := s.sessionManager.Create(token)
+	return &pb.CreateGameReply{SessionId: sessionId}, nil
 }
 
-func (s *triGameServer) Join(req *pb.JoinGameRequest, stream pb.TRIGame_JoinServer) error {
+func (s *triGameServer) Observe(req *pb.ObserveGameRequest, stream pb.TRIGame_ObserveServer) error {
 	sessionId := req.GetSessionId()
-	playerName := req.GetPlayerName()
-	playerId := req.GetPlayerToken()
+	token := req.GetToken()
 
-	observable, playerId, err := s.sessionManager.Join(sessionId, playerName, playerId)
+	observable, playerId, err := s.sessionManager.Join(sessionId, token)
 	if err != nil {
 		return err
 	}
 
-	hideSensitive := !s.sessionManager.IsCreator(sessionId, playerId)
 	value := observable.Value()
 
 	if len(value) > 0 {
 		state := value[0].(logic.GameState)
-		playerData := s.sessionManager.GetPlayers(sessionId)
 
-		if err := stream.Send(Convert(playerId, state, playerData, hideSensitive)); err != nil {
+		if err := stream.Send(Convert(playerId, state)); err != nil {
 			log.Printf("cannot stream: %v", err)
 			return err
 		}
 	}
 
 	err = observable.SubscribeSync(stream.Context(), func(state logic.GameState, changeMessage string) error {
-		log.Printf("[%v] update %v message %v", sessionId, playerId, changeMessage)
-		playerData := s.sessionManager.GetPlayers(sessionId)
-		res := Convert(playerId, state, playerData, hideSensitive)
+		log.Printf("[%v] update %v message %v", sessionId, token, changeMessage)
+		res := Convert(playerId, state)
 		log.Print(res)
 
 		if err := stream.Send(res); err != nil {
@@ -63,17 +60,18 @@ func (s *triGameServer) Join(req *pb.JoinGameRequest, stream pb.TRIGame_JoinServ
 
 func (s *triGameServer) Start(ctx context.Context, req *pb.StartGameRequest) (*empty.Empty, error) {
 	sessionId := req.GetSessionId()
-	playerId := req.GetPlayerToken()
+	token := req.GetToken()
 
-	session, err := s.sessionManager.GetSession(sessionId, playerId)
+	session, playerId, err := s.sessionManager.GetSession(sessionId, token)
 	if err != nil {
 		log.Print(err)
 		return nil, err
 	}
 
+	numberOfTeams := int(req.NumberOfTeams)
 	numberOfRows := int(req.NumberOfRows)
 	numberOfColumns := int(req.NumberOfColumns)
-	err = session.Start(playerId, numberOfRows, numberOfColumns)
+	err = session.Start(playerId, numberOfTeams, numberOfRows, numberOfColumns)
 	if err != nil {
 		log.Print(err)
 		return nil, err
@@ -84,16 +82,41 @@ func (s *triGameServer) Start(ctx context.Context, req *pb.StartGameRequest) (*e
 
 func (s *triGameServer) Turn(ctx context.Context, req *pb.TurnGameRequest) (*empty.Empty, error) {
 	sessionId := req.GetSessionId()
-	playerId := req.GetPlayerToken()
+	token := req.GetToken()
 
-	session, err := s.sessionManager.GetSession(sessionId, playerId)
+	session, playerId, err := s.sessionManager.GetSession(sessionId, token)
+	if err != nil {
+		log.Print(err)
+		return nil, err
+	}
+
+	position := req.GetPosition()
+	err = session.Turn(playerId, int(position))
 	if err != nil {
 		log.Print(err)
 		return new(empty.Empty), err
 	}
-	position := req.GetPosition()
 
-	err = session.Turn(playerId, int(position))
+	return new(empty.Empty), status.Errorf(codes.OK, "turned")
+}
+
+func (s *triGameServer) SetAlias(context.Context, *pb.SetAliasRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetAlias not implemented")
+}
+func (s *triGameServer) SetSettings(ctx context.Context, req *pb.SetSettingsRequest) (*empty.Empty, error) {
+	sessionId := req.GetSessionId()
+	token := req.GetToken()
+
+	session, playerId, err := s.sessionManager.GetSession(sessionId, token)
+	if err != nil {
+		log.Print(err)
+		return nil, err
+	}
+
+	teamId := req.GetTeamId()
+	alias := req.GetAlias()
+	captain := req.GetCaptain()
+	err = session.SetSettings(playerId, teamId, alias, captain)
 	if err != nil {
 		log.Print(err)
 		return new(empty.Empty), err

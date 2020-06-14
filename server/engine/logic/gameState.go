@@ -1,28 +1,43 @@
 package logic
 
-import "zakh.io/tri/server/engine/entities"
+import (
+	"zakh.io/tri/server/engine/entities"
+	"zakh.io/tri/server/middleware/random"
+)
 
 type GameState struct {
-	Players          []string
-	PlayerWords      map[string][]entities.WordCell
-	Words            []entities.WordCell
-	CurrentPlayer    string
-	CurrentPlayerIdx int
-	Started          bool
-	numberOrRows     int
-	numberOfColumns  int
+	Captains      map[string]bool
+	Players       []string
+	Teams         map[string][]string
+	PlayerHistory map[string][]entities.WordCell
+	Started       bool
 
+	Cells           []entities.WordCell
+	numberOrRows    int
+	numberOfColumns int
+
+	Alias map[string]string
+
+	TeamInfo
 	PlayerInfo
-	WordsInfo
+	CellsInfo
 	GameInfo
+	AliasInfo
+}
+
+func (g *GameState) nextId() string {
+	return random.RandString(4)
 }
 
 func NewGameState() *GameState {
 	state := new(GameState)
-	state.Words = make([]entities.WordCell, 0)
+	state.Cells = make([]entities.WordCell, 0)
 	state.Started = false
-	state.PlayerWords = make(map[string][]entities.WordCell)
+	state.PlayerHistory = make(map[string][]entities.WordCell)
+	state.Teams = make(map[string][]string, 0)
 	state.Players = make([]string, 0)
+	state.Captains = make(map[string]bool)
+	state.Alias = make(map[string]string)
 
 	return state
 }

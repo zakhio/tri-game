@@ -2,57 +2,71 @@ package handler
 
 import (
 	pb "zakh.io/tri/proto"
-	"zakh.io/tri/server/controller"
 	"zakh.io/tri/server/engine/entities"
 	"zakh.io/tri/server/engine/logic"
 )
 
-func Convert(currentPlayer string, gameState logic.GameState, playerData map[string]controller.MemberData, hideSensitive bool) *pb.GameSessionStream {
+func Convert(playerId string, gameState logic.GameState) *pb.GameSessionStream {
 	result := &pb.GameSessionStream{}
-	result.Me = &pb.CurrentPlayer{
-		Token: currentPlayer,
-	}
+	result.PlayerId = playerId
 
 	players := make([]*pb.Player, 0)
-	for idx, player := range gameState.GetPlayers() {
-		if player == currentPlayer {
-			result.Me.PlayerIndex = int32(idx)
-		}
-
-		words := make([]*pb.Word, 0)
-		picked, _ := gameState.GetPicked(player)
+	for _, pId := range gameState.GetPlayers() {
+		words := make([]*pb.Cell, 0)
+		picked, _ := gameState.GetPicked(pId)
 
 		for _, c := range picked {
-			words = append(words, convertWordCell(c, false))
+			words = append(words, convertCell(c, false))
 		}
+
+		teamId, _ := gameState.GetTeam(pId)
 		player := &pb.Player{
-			Name:  playerData[player].GetName(),
-			Words: words,
+			Alias:  gameState.GetAlias(pId),
+			TeamId: teamId,
 		}
 
 		players = append(players, player)
 	}
 	result.Players = players
 
-	words := make([]*pb.Word, 0)
-	for _, c := range gameState.GetWords() {
-		words = append(words, convertWordCell(c, hideSensitive))
+	teams := make([]*pb.Team, 0)
+	for tId, _ := range gameState.GetTeams() {
+		team := &pb.Team{
+			Id:             tId,
+			RemainingCount: int32(gameState.GetRemainCellsCount(tId)),
+		}
+
+		teams = append(teams, team)
 	}
-	result.Words = words
+	result.Teams = teams
+
+	cells := make([]*pb.Cell, 0)
+	for _, c := range gameState.GetCells() {
+		cells = append(cells, convertCell(c, gameState.IsCaptain(playerId)))
+	}
+	result.Cells = cells
 	result.NumberOfColumns = int32(gameState.GetNumOfColumns())
 
 	return result
 }
 
-func convertWordCell(c entities.WordCell, hideSensitive bool) *pb.Word {
-	word := &pb.Word{
-		Word: c.GetWord(),
-		Open: c.IsOpen(),
+func convertCell(c entities.WordCell, hideSensitive bool) *pb.Cell {
+	cell := &pb.Cell{
+		Word: c.Word,
+		Open: c.Open,
 	}
 
-	if !hideSensitive || c.IsOpen() {
-		word.SkinId = c.GetSkin()
+	if !hideSensitive || c.Open {
+		switch c.Type {
+		case entities.REGULAR:
+			cell.Type = pb.Cell_REGULAR
+		case entities.END_GAME:
+			cell.Type = pb.Cell_END_GAME
+		case entities.TEAM_OWNED:
+			cell.Type = pb.Cell_TEAM_OWNED
+			cell.OwnerTeamId = c.TeamId
+		}
 	}
 
-	return word
+	return cell
 }

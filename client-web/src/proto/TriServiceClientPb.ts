@@ -19,7 +19,9 @@ import {
   CreateGameReply,
   CreateGameRequest,
   GameSessionStream,
-  JoinGameRequest,
+  ObserveGameRequest,
+  SetAliasRequest,
+  SetSettingsRequest,
   StartGameRequest,
   TurnGameRequest} from './tri_pb';
 
@@ -82,23 +84,23 @@ export class TRIGameClient {
     this.methodInfoCreate);
   }
 
-  methodInfoJoin = new grpcWeb.AbstractClientBase.MethodInfo(
+  methodInfoObserve = new grpcWeb.AbstractClientBase.MethodInfo(
     GameSessionStream,
-    (request: JoinGameRequest) => {
+    (request: ObserveGameRequest) => {
       return request.serializeBinary();
     },
     GameSessionStream.deserializeBinary
   );
 
-  join(
-    request: JoinGameRequest,
+  observe(
+    request: ObserveGameRequest,
     metadata?: grpcWeb.Metadata) {
     return this.client_.serverStreaming(
       this.hostname_ +
-        '/TRIGame/Join',
+        '/TRIGame/Observe',
       request,
       metadata || {},
-      this.methodInfoJoin);
+      this.methodInfoObserve);
   }
 
   methodInfoStart = new grpcWeb.AbstractClientBase.MethodInfo(
@@ -179,6 +181,86 @@ export class TRIGameClient {
     request,
     metadata || {},
     this.methodInfoTurn);
+  }
+
+  methodInfoSetAlias = new grpcWeb.AbstractClientBase.MethodInfo(
+    google_protobuf_empty_pb.Empty,
+    (request: SetAliasRequest) => {
+      return request.serializeBinary();
+    },
+    google_protobuf_empty_pb.Empty.deserializeBinary
+  );
+
+  setAlias(
+    request: SetAliasRequest,
+    metadata: grpcWeb.Metadata | null): Promise<google_protobuf_empty_pb.Empty>;
+
+  setAlias(
+    request: SetAliasRequest,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.Error,
+               response: google_protobuf_empty_pb.Empty) => void): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
+
+  setAlias(
+    request: SetAliasRequest,
+    metadata: grpcWeb.Metadata | null,
+    callback?: (err: grpcWeb.Error,
+               response: google_protobuf_empty_pb.Empty) => void) {
+    if (callback !== undefined) {
+      return this.client_.rpcCall(
+        this.hostname_ +
+          '/TRIGame/SetAlias',
+        request,
+        metadata || {},
+        this.methodInfoSetAlias,
+        callback);
+    }
+    return this.client_.unaryCall(
+    this.hostname_ +
+      '/TRIGame/SetAlias',
+    request,
+    metadata || {},
+    this.methodInfoSetAlias);
+  }
+
+  methodInfoSetSettings = new grpcWeb.AbstractClientBase.MethodInfo(
+    google_protobuf_empty_pb.Empty,
+    (request: SetSettingsRequest) => {
+      return request.serializeBinary();
+    },
+    google_protobuf_empty_pb.Empty.deserializeBinary
+  );
+
+  setSettings(
+    request: SetSettingsRequest,
+    metadata: grpcWeb.Metadata | null): Promise<google_protobuf_empty_pb.Empty>;
+
+  setSettings(
+    request: SetSettingsRequest,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.Error,
+               response: google_protobuf_empty_pb.Empty) => void): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
+
+  setSettings(
+    request: SetSettingsRequest,
+    metadata: grpcWeb.Metadata | null,
+    callback?: (err: grpcWeb.Error,
+               response: google_protobuf_empty_pb.Empty) => void) {
+    if (callback !== undefined) {
+      return this.client_.rpcCall(
+        this.hostname_ +
+          '/TRIGame/SetSettings',
+        request,
+        metadata || {},
+        this.methodInfoSetSettings,
+        callback);
+    }
+    return this.client_.unaryCall(
+    this.hostname_ +
+      '/TRIGame/SetSettings',
+    request,
+    metadata || {},
+    this.methodInfoSetSettings);
   }
 
 }
