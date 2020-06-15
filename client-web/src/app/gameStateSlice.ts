@@ -9,6 +9,7 @@ import {
     GameSessionStream,
     ObserveSessionRequest,
     Player,
+    SetSettingsRequest,
     StartGameRequest,
     Team,
     TurnGameRequest
@@ -83,6 +84,7 @@ export const joinAsync = (token: string, sessionId: string): AppThunk => dispatc
     }
 
     localStorage.setItem("sessionId", sessionId);
+    localStorage.setItem("token", token);
     console.log(client.hostname_)
 
     const observerReq = new ObserveSessionRequest();
@@ -150,6 +152,17 @@ export const turn = (token: string, sessionId: string, position: number): AppThu
     req.setSessionid(sessionId);
     req.setPosition(position);
     client.turn(req, null, (err: Error, response: Empty) => {
+    });
+};
+
+export const setSettings = (token: string, sessionId: string, alias: string, captain: boolean, teamId: string): AppThunk => dispatch => {
+    const req = new SetSettingsRequest();
+    req.setToken(token)
+    req.setSessionid(sessionId);
+    req.setAlias(alias);
+    req.setCaptain(captain);
+    req.setTeamid(teamId);
+    client.setSettings(req, null, (err: Error, response: Empty) => {
     });
 };
 

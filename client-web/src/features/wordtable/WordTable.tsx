@@ -34,9 +34,6 @@ export function WordTable() {
     const rows = [];
     for (let i = 0; i < words.length; i += numOfColumns) {
         const cols = words.slice(i, i + numOfColumns).map((w, index) => {
-                let style = "";
-
-                if (w.open) {
                     let kindStyle = "";
                     if (w.type === Cell.Type.END_GAME) {
                         kindStyle =  styles["kind_end"];
@@ -46,12 +43,11 @@ export function WordTable() {
                         kindStyle =  styles["kind_regular"];
                     }
 
-                    style = styles.open + " " + kindStyle
-                }
+                    let openStyle = w.open ? styles.open : ""
 
                 return <td key={i + index} onClick={() => turnWord(i + index)}>
                     <div
-                        className={styles.word_cell + " " + style}>
+                        className={[styles.word_cell,kindStyle,openStyle].join(' ')}>
                         <span>{w.word}</span>
                     </div>
                 </td>

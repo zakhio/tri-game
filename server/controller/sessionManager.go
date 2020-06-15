@@ -46,7 +46,7 @@ func (s *sessionManager) Join(token, sessionId string) (observable.Observable, s
 	playerId, ok := s.playerIds.Get(token, sessionId)
 
 	if !ok {
-		playerId, _ := session.NewPlayer()
+		playerId, _ = session.NewPlayer()
 		s.playerIds.Add(token, sessionId, playerId)
 	}
 
