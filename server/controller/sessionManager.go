@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"log"
 	"zakh.io/tri/server/engine"
 	"zakh.io/tri/server/middleware/observable"
 	"zakh.io/tri/server/middleware/random"
@@ -24,6 +25,7 @@ func (s *sessionManager) Create(token string) string {
 	sessionId := s.nextSessionId()
 	session := engine.NewGameSession()
 	playerId, _ := session.NewPlayer()
+	log.Printf("create: token %v session %v playerId %v", token, sessionId, playerId)
 	s.playerIds.Add(token, sessionId, playerId)
 
 	s.sessions[sessionId] = session

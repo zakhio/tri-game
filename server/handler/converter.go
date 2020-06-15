@@ -21,6 +21,7 @@ func Convert(playerId string, gameState logic.GameState) *pb.GameSessionStream {
 
 		teamId, _ := gameState.GetTeam(pId)
 		player := &pb.Player{
+			Id:     pId,
 			Alias:  gameState.GetAlias(pId),
 			TeamId: teamId,
 		}
@@ -30,9 +31,10 @@ func Convert(playerId string, gameState logic.GameState) *pb.GameSessionStream {
 	result.Players = players
 
 	teams := make([]*pb.Team, 0)
-	for tId, _ := range gameState.GetTeams() {
+	for _, tId := range gameState.GetTeams() {
 		team := &pb.Team{
 			Id:             tId,
+			Alias:          gameState.GetAlias(tId),
 			RemainingCount: int32(gameState.GetRemainCellsCount(tId)),
 		}
 
@@ -42,7 +44,7 @@ func Convert(playerId string, gameState logic.GameState) *pb.GameSessionStream {
 
 	cells := make([]*pb.Cell, 0)
 	for _, c := range gameState.GetCells() {
-		cells = append(cells, convertCell(c, gameState.IsCaptain(playerId)))
+		cells = append(cells, convertCell(c, !gameState.IsCaptain(playerId)))
 	}
 	result.Cells = cells
 	result.NumberOfColumns = int32(gameState.GetNumOfColumns())

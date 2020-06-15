@@ -4,10 +4,10 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"github.com/google/uuid"
 	"io"
 	"log"
 	"math/rand"
-	"strconv"
 	"time"
 
 	"google.golang.org/grpc"
@@ -18,19 +18,12 @@ const (
 	address = "localhost:50053"
 )
 
-var playerToken string
-
-func joinSession(client *pb.TRIGameClient, sessionID string, playerID string) {
-	var stream pb.TRIGame_JoinClient
+func joinSession(client *pb.TRIGameClient, sessionID string, token string) {
+	var stream pb.TRIGame_ObserveSessionClient
 	var err error
-	req := &pb.JoinGameRequest{SessionId: sessionID}
-	if playerID != "" {
-		req.PlayerToken = playerID
-	} else {
-		req.PlayerName = "pl" + strconv.Itoa(rand.Int())
-	}
+	req := &pb.ObserveSessionRequest{Token: token, SessionId: sessionID}
 
-	if stream, err = (*client).Join(context.Background(), req); err != nil {
+	if stream, err = (*client).ObserveSession(context.Background(), req); err != nil {
 		fmt.Printf("cannot join: %v", err)
 		return
 	}
@@ -43,20 +36,25 @@ func joinSession(client *pb.TRIGameClient, sessionID string, playerID string) {
 		if err != nil {
 			log.Fatalf("%v.CreateGameSession(_) = _, %v", client, err)
 		}
-		playerToken = reply.GetMe().GetToken()
 		log.Printf("recived reply: %v", reply)
 	}
 }
 
 func main() {
 	rand.Seed(time.Now().UTC().UnixNano())
+	var token string
 	var sessionID string
-	var playerID string
 	var startFlag bool
+	flag.StringVar(&token, "token", "", "the player's token")
 	flag.StringVar(&sessionID, "sessionID", "", "the session id")
-	flag.StringVar(&playerID, "playerID", "", "the player id")
 	flag.BoolVar(&startFlag, "start", false, "the flag to start the game")
 	flag.Parse()
+
+	if token == "" {
+		tokenUUID, _ := uuid.NewUUID()
+		token = tokenUUID.String()
+		log.Printf("new token generated: %v", token)
+	}
 
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
@@ -66,8 +64,8 @@ func main() {
 
 	client := pb.NewTRIGameClient(conn)
 	if sessionID == "" {
-		var createReplay *pb.CreateGameReply
-		if createReplay, err = client.Create(context.Background(), &pb.CreateGameRequest{}); err != nil {
+		var createReplay *pb.CreateSessionReply
+		if createReplay, err = client.CreateSession(context.Background(), &pb.CreateSessionRequest{Token: token}); err != nil {
 			log.Fatalf("failed to create session: %v", err)
 		}
 		sessionID = createReplay.SessionId
@@ -87,20 +85,26 @@ func main() {
 			switch u {
 			case -1:
 				client.Start(context.Background(), &pb.StartGameRequest{
-					SessionId:   sessionID,
-					PlayerToken: playerToken,
-					NumberOfColumns: 5,
-					NumberOfRows: 5,
+					Token:     token,
+					SessionId: sessionID,
+				})
+			case -2:
+				client.SetSettings(context.Background(), &pb.SetSettingsRequest{
+					Token:     token,
+					SessionId: sessionID,
+					TeamId:    "tdsw",
+					Captain:   true,
+					Alias:     "diysha",
 				})
 			default:
 				client.Turn(context.Background(), &pb.TurnGameRequest{
-					SessionId:   sessionID,
-					PlayerToken: playerToken,
-					Position:    int32(u),
+					Token:     token,
+					SessionId: sessionID,
+					Position:  int32(u),
 				})
 			}
 		}
 	}()
 
-	joinSession(&client, sessionID, playerID)
+	joinSession(&client, sessionID, token)
 }

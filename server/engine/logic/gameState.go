@@ -6,11 +6,14 @@ import (
 )
 
 type GameState struct {
+	Started bool
+
 	Captains      map[string]bool
 	Players       []string
-	Teams         map[string][]string
 	PlayerHistory map[string][]entities.WordCell
-	Started       bool
+
+	Teams       []string
+	TeamPlayers map[string][]string
 
 	Cells           []entities.WordCell
 	numberOrRows    int
@@ -31,12 +34,17 @@ func (g *GameState) nextId() string {
 
 func NewGameState() *GameState {
 	state := new(GameState)
-	state.Cells = make([]entities.WordCell, 0)
 	state.Started = false
-	state.PlayerHistory = make(map[string][]entities.WordCell)
-	state.Teams = make(map[string][]string, 0)
+
 	state.Players = make([]string, 0)
 	state.Captains = make(map[string]bool)
+	state.PlayerHistory = make(map[string][]entities.WordCell)
+
+	state.Teams = make([]string, 0)
+	state.TeamPlayers = make(map[string][]string)
+
+	state.Cells = make([]entities.WordCell, 0)
+
 	state.Alias = make(map[string]string)
 
 	return state

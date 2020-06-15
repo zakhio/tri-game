@@ -38,7 +38,7 @@ func (g *gameSession) NewPlayer() (string, error) {
 }
 
 func (g *gameSession) SetSettings(playerId, teamId, alias string, captain bool) error {
-	if err := g.state.AddToTeam(playerId, teamId); err != nil {
+	if err := g.state.AddToTeam(teamId, playerId); err != nil {
 		return err
 	}
 

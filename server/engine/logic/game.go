@@ -18,8 +18,17 @@ func (g *GameState) Start(numberOfTeams, numberOrRows, numberOfColumns int) erro
 		return fmt.Errorf("cannot start: game already started")
 	}
 
-	teams := make([]string, 1)
+	if numberOfTeams < 2 {
+		numberOfTeams = 2
+	}
+	if numberOrRows <= 0 {
+		numberOrRows = 5
+	}
+	if numberOfColumns <= 0 {
+		numberOfColumns = 5
+	}
 
+	teams := make([]string, 1)
 	for i := 0; i < numberOfTeams; i++ {
 		tId, _ := g.NewTeam()
 		teams = append(teams, tId)
@@ -27,15 +36,15 @@ func (g *GameState) Start(numberOfTeams, numberOrRows, numberOfColumns int) erro
 
 	g.numberOrRows = numberOrRows
 	g.numberOfColumns = numberOfColumns
-	dict, _ := dictionary.ReadLines("server/dict.txt")
-	cells := make([]entities.WordCell, 0)
+	dict, _ := dictionary.ReadLines("server/words.txt")
 
 	types := []int{entities.REGULAR, entities.END_GAME, entities.TEAM_OWNED}
+
+	cells := make([]entities.WordCell, 0)
 	for i := 0; i < numberOrRows*numberOfColumns; i++ {
 		cell := entities.NewCell(dict[rand.Intn(len(dict))], types[rand.Intn(len(types))], teams[rand.Intn(len(teams))])
-		cells = append(g.Cells, cell)
+		cells = append(cells, cell)
 	}
-
 	g.SetCells(cells)
 
 	g.Started = true

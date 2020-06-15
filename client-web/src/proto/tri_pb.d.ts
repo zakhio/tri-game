@@ -36,6 +36,9 @@ export class Team extends jspb.Message {
   getId(): string;
   setId(value: string): Team;
 
+  getAlias(): string;
+  setAlias(value: string): Team;
+
   getRemainingcount(): number;
   setRemainingcount(value: number): Team;
 
@@ -50,6 +53,7 @@ export class Team extends jspb.Message {
 export namespace Team {
   export type AsObject = {
     id: string,
+    alias: string,
     remainingcount: number,
   }
 }
@@ -90,37 +94,37 @@ export namespace Cell {
   }
 }
 
-export class CreateGameRequest extends jspb.Message {
+export class CreateSessionRequest extends jspb.Message {
   getToken(): string;
-  setToken(value: string): CreateGameRequest;
+  setToken(value: string): CreateSessionRequest;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): CreateGameRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: CreateGameRequest): CreateGameRequest.AsObject;
-  static serializeBinaryToWriter(message: CreateGameRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): CreateGameRequest;
-  static deserializeBinaryFromReader(message: CreateGameRequest, reader: jspb.BinaryReader): CreateGameRequest;
+  toObject(includeInstance?: boolean): CreateSessionRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: CreateSessionRequest): CreateSessionRequest.AsObject;
+  static serializeBinaryToWriter(message: CreateSessionRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): CreateSessionRequest;
+  static deserializeBinaryFromReader(message: CreateSessionRequest, reader: jspb.BinaryReader): CreateSessionRequest;
 }
 
-export namespace CreateGameRequest {
+export namespace CreateSessionRequest {
   export type AsObject = {
     token: string,
   }
 }
 
-export class CreateGameReply extends jspb.Message {
+export class CreateSessionReply extends jspb.Message {
   getSessionid(): string;
-  setSessionid(value: string): CreateGameReply;
+  setSessionid(value: string): CreateSessionReply;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): CreateGameReply.AsObject;
-  static toObject(includeInstance: boolean, msg: CreateGameReply): CreateGameReply.AsObject;
-  static serializeBinaryToWriter(message: CreateGameReply, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): CreateGameReply;
-  static deserializeBinaryFromReader(message: CreateGameReply, reader: jspb.BinaryReader): CreateGameReply;
+  toObject(includeInstance?: boolean): CreateSessionReply.AsObject;
+  static toObject(includeInstance: boolean, msg: CreateSessionReply): CreateSessionReply.AsObject;
+  static serializeBinaryToWriter(message: CreateSessionReply, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): CreateSessionReply;
+  static deserializeBinaryFromReader(message: CreateSessionReply, reader: jspb.BinaryReader): CreateSessionReply;
 }
 
-export namespace CreateGameReply {
+export namespace CreateSessionReply {
   export type AsObject = {
     sessionid: string,
   }
@@ -166,22 +170,22 @@ export namespace GameSessionStream {
   }
 }
 
-export class ObserveGameRequest extends jspb.Message {
+export class ObserveSessionRequest extends jspb.Message {
   getToken(): string;
-  setToken(value: string): ObserveGameRequest;
+  setToken(value: string): ObserveSessionRequest;
 
   getSessionid(): string;
-  setSessionid(value: string): ObserveGameRequest;
+  setSessionid(value: string): ObserveSessionRequest;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): ObserveGameRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: ObserveGameRequest): ObserveGameRequest.AsObject;
-  static serializeBinaryToWriter(message: ObserveGameRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): ObserveGameRequest;
-  static deserializeBinaryFromReader(message: ObserveGameRequest, reader: jspb.BinaryReader): ObserveGameRequest;
+  toObject(includeInstance?: boolean): ObserveSessionRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: ObserveSessionRequest): ObserveSessionRequest.AsObject;
+  static serializeBinaryToWriter(message: ObserveSessionRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ObserveSessionRequest;
+  static deserializeBinaryFromReader(message: ObserveSessionRequest, reader: jspb.BinaryReader): ObserveSessionRequest;
 }
 
-export namespace ObserveGameRequest {
+export namespace ObserveSessionRequest {
   export type AsObject = {
     token: string,
     sessionid: string,

@@ -3,10 +3,10 @@ package logic
 type AliasInfo interface {
 }
 
-func (g *GameState) GetAlias(playerId string) string {
-	return g.Alias[playerId]
+func (g *GameState) GetAlias(id string) string {
+	return g.Alias[id]
 }
 
-func (g *GameState) SetAlias(playerId, alias string) {
-	g.Alias[playerId] = alias
+func (g *GameState) SetAlias(id, alias string) {
+	g.Alias[id] = alias
 }

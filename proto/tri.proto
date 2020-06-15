@@ -12,7 +12,8 @@ message Player {
 
 message Team {
     string id = 1;
-    int32 remainingCount = 2;
+    string alias = 2;
+    int32 remainingCount = 3;
 }
 
 message Cell {
@@ -27,11 +28,11 @@ message Cell {
     string ownerTeamId = 4;
 }
 
-message CreateGameRequest {
+message CreateSessionRequest {
     string token = 1;
 }
 
-message CreateGameReply {
+message CreateSessionReply {
     string sessionId = 1;
 }
 
@@ -43,7 +44,7 @@ message GameSessionStream {
     int32 numberOfColumns = 5;
 }
 
-message ObserveGameRequest {
+message ObserveSessionRequest {
     string token = 1;
     string sessionId = 2;
 }
@@ -78,10 +79,11 @@ message StartGameRequest {
 }
 
 service TRIGame {
-    rpc Create (CreateGameRequest) returns (CreateGameReply) {
+    rpc CreateSession (CreateSessionRequest) returns (CreateSessionReply) {
     }
-    rpc Observe (ObserveGameRequest) returns (stream GameSessionStream) {
+    rpc ObserveSession (ObserveSessionRequest) returns (stream GameSessionStream) {
     }
+
     rpc Start (StartGameRequest) returns (google.protobuf.Empty) {
     }
     rpc Turn (TurnGameRequest) returns (google.protobuf.Empty) {

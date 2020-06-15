@@ -16,10 +16,10 @@ import * as grpcWeb from 'grpc-web';
 import * as google_protobuf_empty_pb from 'google-protobuf/google/protobuf/empty_pb';
 
 import {
-  CreateGameReply,
-  CreateGameRequest,
+  CreateSessionReply,
+  CreateSessionRequest,
   GameSessionStream,
-  ObserveGameRequest,
+  ObserveSessionRequest,
   SetAliasRequest,
   SetSettingsRequest,
   StartGameRequest,
@@ -44,63 +44,63 @@ export class TRIGameClient {
     this.options_ = options;
   }
 
-  methodInfoCreate = new grpcWeb.AbstractClientBase.MethodInfo(
-    CreateGameReply,
-    (request: CreateGameRequest) => {
+  methodInfoCreateSession = new grpcWeb.AbstractClientBase.MethodInfo(
+    CreateSessionReply,
+    (request: CreateSessionRequest) => {
       return request.serializeBinary();
     },
-    CreateGameReply.deserializeBinary
+    CreateSessionReply.deserializeBinary
   );
 
-  create(
-    request: CreateGameRequest,
-    metadata: grpcWeb.Metadata | null): Promise<CreateGameReply>;
+  createSession(
+    request: CreateSessionRequest,
+    metadata: grpcWeb.Metadata | null): Promise<CreateSessionReply>;
 
-  create(
-    request: CreateGameRequest,
+  createSession(
+    request: CreateSessionRequest,
     metadata: grpcWeb.Metadata | null,
     callback: (err: grpcWeb.Error,
-               response: CreateGameReply) => void): grpcWeb.ClientReadableStream<CreateGameReply>;
+               response: CreateSessionReply) => void): grpcWeb.ClientReadableStream<CreateSessionReply>;
 
-  create(
-    request: CreateGameRequest,
+  createSession(
+    request: CreateSessionRequest,
     metadata: grpcWeb.Metadata | null,
     callback?: (err: grpcWeb.Error,
-               response: CreateGameReply) => void) {
+               response: CreateSessionReply) => void) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/TRIGame/Create',
+          '/TRIGame/CreateSession',
         request,
         metadata || {},
-        this.methodInfoCreate,
+        this.methodInfoCreateSession,
         callback);
     }
     return this.client_.unaryCall(
     this.hostname_ +
-      '/TRIGame/Create',
+      '/TRIGame/CreateSession',
     request,
     metadata || {},
-    this.methodInfoCreate);
+    this.methodInfoCreateSession);
   }
 
-  methodInfoObserve = new grpcWeb.AbstractClientBase.MethodInfo(
+  methodInfoObserveSession = new grpcWeb.AbstractClientBase.MethodInfo(
     GameSessionStream,
-    (request: ObserveGameRequest) => {
+    (request: ObserveSessionRequest) => {
       return request.serializeBinary();
     },
     GameSessionStream.deserializeBinary
   );
 
-  observe(
-    request: ObserveGameRequest,
+  observeSession(
+    request: ObserveSessionRequest,
     metadata?: grpcWeb.Metadata) {
     return this.client_.serverStreaming(
       this.hostname_ +
-        '/TRIGame/Observe',
+        '/TRIGame/ObserveSession',
       request,
       metadata || {},
-      this.methodInfoObserve);
+      this.methodInfoObserveSession);
   }
 
   methodInfoStart = new grpcWeb.AbstractClientBase.MethodInfo(

@@ -16,17 +16,17 @@ type triGameServer struct {
 	sessionManager controller.SessionManager
 }
 
-func (s *triGameServer) Create(ctx context.Context, req *pb.CreateGameRequest) (*pb.CreateGameReply, error) {
+func (s *triGameServer) CreateSession(ctx context.Context, req *pb.CreateSessionRequest) (*pb.CreateSessionReply, error) {
 	token := req.GetToken()
 	sessionId := s.sessionManager.Create(token)
-	return &pb.CreateGameReply{SessionId: sessionId}, nil
+	return &pb.CreateSessionReply{SessionId: sessionId}, nil
 }
 
-func (s *triGameServer) Observe(req *pb.ObserveGameRequest, stream pb.TRIGame_ObserveServer) error {
+func (s *triGameServer) ObserveSession(req *pb.ObserveSessionRequest, stream pb.TRIGame_ObserveSessionServer) error {
 	sessionId := req.GetSessionId()
 	token := req.GetToken()
 
-	observable, playerId, err := s.sessionManager.Join(sessionId, token)
+	observable, playerId, err := s.sessionManager.Join(token, sessionId)
 	if err != nil {
 		return err
 	}
@@ -62,7 +62,7 @@ func (s *triGameServer) Start(ctx context.Context, req *pb.StartGameRequest) (*e
 	sessionId := req.GetSessionId()
 	token := req.GetToken()
 
-	session, playerId, err := s.sessionManager.GetSession(sessionId, token)
+	session, playerId, err := s.sessionManager.GetSession(token, sessionId)
 	if err != nil {
 		log.Print(err)
 		return nil, err
@@ -84,7 +84,7 @@ func (s *triGameServer) Turn(ctx context.Context, req *pb.TurnGameRequest) (*emp
 	sessionId := req.GetSessionId()
 	token := req.GetToken()
 
-	session, playerId, err := s.sessionManager.GetSession(sessionId, token)
+	session, playerId, err := s.sessionManager.GetSession(token, sessionId)
 	if err != nil {
 		log.Print(err)
 		return nil, err
@@ -107,7 +107,7 @@ func (s *triGameServer) SetSettings(ctx context.Context, req *pb.SetSettingsRequ
 	sessionId := req.GetSessionId()
 	token := req.GetToken()
 
-	session, playerId, err := s.sessionManager.GetSession(sessionId, token)
+	session, playerId, err := s.sessionManager.GetSession(token, sessionId)
 	if err != nil {
 		log.Print(err)
 		return nil, err

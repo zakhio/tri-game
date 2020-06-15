@@ -11,14 +11,16 @@ type TeamInfo interface {
 }
 
 func (g *GameState) NewTeam() (string, error) {
-	teamId := g.nextId()
-
 	if g.Started {
 		return "", fmt.Errorf("cannot add teamId: game already started")
 	}
 
-	team := make([]string, 0)
-	g.Teams[teamId] = team
+	teamId := g.nextId()
+	g.Teams = append(g.Teams, teamId)
+	g.SetAlias(teamId, teamId)
+
+	teamPlayers := make([]string, 0)
+	g.TeamPlayers[teamId] = teamPlayers
 
 	return teamId, nil
 }
@@ -27,20 +29,20 @@ func (g *GameState) AddToTeam(teamId, playerId string) error {
 	oldTeamId, oldTeamIdx := g.GetTeam(playerId)
 
 	if oldTeamId != "" {
-		g.Teams[oldTeamId] = append(g.Teams[oldTeamId][:oldTeamIdx], g.Teams[oldTeamId][oldTeamIdx+1:]...)
+		g.TeamPlayers[oldTeamId] = append(g.TeamPlayers[oldTeamId][:oldTeamIdx], g.TeamPlayers[oldTeamId][oldTeamIdx+1:]...)
 	}
 
-	if _, ok := g.Teams[teamId]; !ok {
+	if _, ok := g.TeamPlayers[teamId]; !ok {
 		return fmt.Errorf("cannot add to team [%v]: team doesn't exist", teamId)
 	}
 
-	g.Teams[teamId] = append(g.Teams[teamId], playerId)
+	g.TeamPlayers[teamId] = append(g.TeamPlayers[teamId], playerId)
 
 	return nil
 }
 
 func (g *GameState) GetTeam(playerId string) (string, int) {
-	for k, v := range g.Teams {
+	for k, v := range g.TeamPlayers {
 		for i, pId := range v {
 			if pId == playerId {
 				return k, i
@@ -51,6 +53,6 @@ func (g *GameState) GetTeam(playerId string) (string, int) {
 	return "", -1
 }
 
-func (g *GameState) GetTeams() map[string][]string {
+func (g *GameState) GetTeams() []string {
 	return g.Teams
 }

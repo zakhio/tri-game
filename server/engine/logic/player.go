@@ -1,7 +1,6 @@
 package logic
 
 import (
-	"fmt"
 	"zakh.io/tri/server/engine/entities"
 )
 
@@ -14,23 +13,15 @@ type PlayerInfo interface {
 
 func (g *GameState) NewPlayer() (string, error) {
 	playerId := g.nextId()
-	if g.Started {
-		return "", fmt.Errorf("cannot add player: game already started")
-	}
-
-	if g.IsCaptain(playerId) {
-		return "", fmt.Errorf("cannot add player: %v already added", playerId)
-	}
-
 	g.Players = append(g.Players, playerId)
 	g.PlayerHistory[playerId] = make([]entities.WordCell, 0)
+	g.SetAlias(playerId, playerId)
 
-	return "", nil
+	return playerId, nil
 }
 
 func (g *GameState) IsCaptain(playerId string) bool {
-	_, ok := g.PlayerHistory[playerId]
-	return ok
+	return g.Captains[playerId]
 }
 
 func (g *GameState) PromoteToCaptain(playerId string, captain bool) {
