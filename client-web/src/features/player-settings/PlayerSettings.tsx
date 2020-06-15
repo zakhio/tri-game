@@ -1,16 +1,33 @@
 import React, {useState} from 'react';
 import commonStyles from '../Common.module.css';
 import {useDispatch, useSelector} from 'react-redux';
-import {playerSessionId, playerToken, sessionTeams, setSettings,} from '../../app/gameStateSlice';
+import {
+    playerSessionId,
+    playerToken,
+    sessionMe,
+    sessionPlayers,
+    sessionTeams,
+    setSettings,
+} from '../../app/gameStateSlice';
+import {Player} from "../../proto/tri_pb";
 
 export function PlayerSettings() {
     const token = useSelector(playerToken)
     const sessionId = useSelector(playerSessionId)
     const teams = useSelector(sessionTeams)
+    const players = useSelector(sessionPlayers)
+    const me = useSelector(sessionMe)
     const dispatch = useDispatch();
 
+    let player:Player.AsObject;
+    for (let i = 0; i < players.length; i++) {
+        if (players[i].id === me) {
+            player = players[i]
+        }
+    }
+
     const [captain, setCaptain] = useState(false);
-    const [alias, setAlias] = useState('Andrey');
+    const [alias, setAlias] = useState(player!.alias);
     const [teamId, setTeamId] = useState(teams[0].id);
 
     const teamOptions = teams.map((team, index) => (
@@ -19,7 +36,7 @@ export function PlayerSettings() {
 
     return (
         <div>
-            <h1>Settings {sessionId}</h1>
+            <h1>Settings {player!.alias}</h1>
             <div className={commonStyles.row}>
                 <input
                     type="checkbox"

@@ -2,6 +2,7 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {ClientReadableStream, Error} from 'grpc-web';
 import {AppThunk, RootState} from './store';
 import {TRIGameClient} from '../proto/TriServiceClientPb';
+import {v4} from 'uuid';
 import {
     Cell,
     CreateSessionReply,
@@ -30,7 +31,7 @@ interface GameState {
 
 const initialState: GameState = {
     sessionId: null,
-    token: "1",
+    token: v4(),
     connected: false,
     me: null,
     players: [],
@@ -85,7 +86,6 @@ export const joinAsync = (token: string, sessionId: string): AppThunk => dispatc
 
     localStorage.setItem("sessionId", sessionId);
     localStorage.setItem("token", token);
-    console.log(client.hostname_)
 
     const observerReq = new ObserveSessionRequest();
     observerReq.setSessionid(sessionId);
@@ -173,6 +173,7 @@ export const sessionNumOfColumns = (state: RootState) => state.gameState.numOfCo
 export const sessionCells = (state: RootState) => state.gameState.cells;
 export const sessionTeams = (state: RootState) => state.gameState.teams;
 export const sessionPlayers = (state: RootState) => state.gameState.players;
+export const sessionMe = (state: RootState) => state.gameState.me;
 export const playerSessionId = (state: RootState) => state.gameState.sessionId;
 export const playerToken = (state: RootState) => state.gameState.token;
 export const sessionConnected = (state: RootState) => state.gameState.connected;
