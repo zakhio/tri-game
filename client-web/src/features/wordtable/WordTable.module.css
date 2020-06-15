@@ -55,12 +55,12 @@
     }
 }
 
-.open_kind_none {
-    animation: animation_open 2s, openAnimation_none 2s;
+.kind_regular {
+    animation: animation_open 2s, openAnimation_regular 2s;
     animation-fill-mode: forwards;
 }
 
-@keyframes openAnimation_none {
+@keyframes openAnimation_regular {
     10%   {
         background: #fafafa;
     }
@@ -74,12 +74,12 @@
     }
 }
 
-.open_kind_black {
-    animation: animation_open 2s, openAnimation_black 2s;
+.kind_end {
+    animation: animation_open 2s, openAnimation_end 2s;
     animation-fill-mode: forwards;
 }
 
-@keyframes openAnimation_black {
+@keyframes openAnimation_end {
     10%   {
         background: #fafafa;
     }
@@ -93,12 +93,12 @@
     }
 }
 
-.open_kind_red {
-    animation: animation_open 2s, openAnimation_red 2s;
+.kind_owned_0 {
+    animation: animation_open 2s, openAnimation_owned_0 2s;
     animation-fill-mode: forwards;
 }
 
-@keyframes openAnimation_red {
+@keyframes openAnimation_owned_0 {
     10%   {
         background: #fafafa;
     }
@@ -112,12 +112,12 @@
     }
 }
 
-.open_kind_blue {
-    animation: animation_open 2s, openAnimation_blue 2s;
+.kind_owned_1 {
+    animation: animation_open 2s, openAnimation_owned_1 2s;
     animation-fill-mode: forwards;
 }
 
-@keyframes openAnimation_blue {
+@keyframes openAnimation_owned_1 {
     10%   {
         background: #fafafa;
     }

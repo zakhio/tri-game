@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
 import commonStyles from '../Common.module.css';
-import {useDispatch} from 'react-redux';
-import {joinAsync,} from '../../app/gameStateSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {joinAsync, playerToken,} from '../../app/gameStateSlice';
 
 export function GameJoin({sessionId}: { sessionId: string }) {
+    const token = useSelector(playerToken)
     const dispatch = useDispatch();
+
     const [_sessionId, _setSessionId] = useState(sessionId);
     const [playerName, setPlayerName] = useState('Andrey');
 
@@ -27,7 +29,7 @@ export function GameJoin({sessionId}: { sessionId: string }) {
                 />
                 <button
                     className={commonStyles.button}
-                    onClick={() => dispatch(joinAsync(sessionId, playerName, null))}
+                    onClick={() => dispatch(joinAsync(token, sessionId))}
                 >
                     Join
                 </button>

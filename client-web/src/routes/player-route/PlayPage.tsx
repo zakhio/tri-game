@@ -1,6 +1,6 @@
 import {GameJoin} from "../../features/game-join/GameJoin";
 import {useSelector} from "react-redux";
-import {sessionConnected, sessionWords} from "../../app/gameStateSlice";
+import {sessionConnected, sessionCells} from "../../app/gameStateSlice";
 import React from "react";
 import {WordTable} from "../../features/wordtable/WordTable";
 import {UserList} from "../../features/user-list/UserList";
@@ -9,7 +9,7 @@ import {useParams} from "react-router-dom";
 export function PlayPage() {
     const {sessionId} = useParams();
     const connected = useSelector(sessionConnected);
-    const words = useSelector(sessionWords);
+    const words = useSelector(sessionCells);
 
     return <>
         {!connected &&

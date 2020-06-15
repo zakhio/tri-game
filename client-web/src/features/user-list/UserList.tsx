@@ -13,7 +13,7 @@ export function UserList() {
     const token = useSelector(playerToken)
 
     const p = players.map((player, i) =>
-        <li key={i}>{player.name}</li>
+        <li key={i}>{player.alias}</li>
     );
 
     return (
@@ -29,7 +29,7 @@ export function UserList() {
                 <button
                     disabled={!sessionId || !token}
                     className={commonStyles.button}
-                    onClick={() => dispatch(startGame(sessionId!, token!))}>
+                    onClick={() => dispatch(startGame(token!, sessionId!))}>
                     Start
                 </button>
             </div>

@@ -1,10 +1,11 @@
 import React from 'react';
 // @ts-ignore
 import commonStyles from '../Common.module.css';
-import {useDispatch} from 'react-redux';
-import {createGame,} from '../../app/gameStateSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {createSession, playerToken,} from '../../app/gameStateSlice';
 
-export function GameCreate() {
+export function SessionCreate() {
+    const token = useSelector(playerToken)
     const dispatch = useDispatch();
 
     return (
@@ -13,7 +14,7 @@ export function GameCreate() {
             <div className={commonStyles.row}>
                 <button
                     className={commonStyles.button}
-                    onClick={() => dispatch(createGame())}>
+                    onClick={() => dispatch(createSession(token))}>
                     Create
                 </button>
             </div>
