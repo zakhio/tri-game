@@ -1,7 +1,13 @@
 import React from "react";
-import styles from './ClipboardText.module.css';
+import styles from './JoinLink.module.css';
+import {gameSessionUrl} from "../../app/config";
+import {useSelector} from "react-redux";
+import {playerSessionId} from "../../app/gameStateSlice";
 
-export function ClipboardText({link}: { link: string }) {
+export function JoinLink() {
+    const sessionId = useSelector(playerSessionId)
+    const link = gameSessionUrl(sessionId!);
+    
     function copyMessage(val: string) {
         const selBox = document.createElement('textarea');
         selBox.style.position = 'fixed';

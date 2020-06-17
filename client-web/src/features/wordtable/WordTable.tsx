@@ -10,6 +10,8 @@ import {
 } from "../../app/gameStateSlice";
 import styles from './WordTable.module.css';
 import {Cell, Team} from "../../proto/tri_pb";
+import {GameScore} from "../game-score/GameScore";
+import {JoinLink} from "../link-join/JoinLink";
 
 export function WordTable() {
     const sessionId = useSelector(playerSessionId);
@@ -55,9 +57,14 @@ export function WordTable() {
         );
         rows.push(cols)
     }
+    const scoreColSpan = Math.floor(numOfColumns / 2);
 
     return <table onTouchStart={() => console.log()} className={styles.world_table}>
         <tbody>
+        <tr>
+            <td colSpan={scoreColSpan}><GameScore/></td>
+            <td colSpan={numOfColumns - scoreColSpan}><JoinLink/></td>
+        </tr>
         {rows.map((r, index) =>
             <tr key={index}>
                 {r}

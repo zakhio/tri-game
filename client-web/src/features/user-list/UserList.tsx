@@ -3,8 +3,7 @@ import React from 'react';
 import commonStyles from '../Common.module.css';
 import {useDispatch, useSelector} from 'react-redux';
 import {playerSessionId, playerToken, sessionPlayers, startGame} from '../../app/gameStateSlice';
-import {ClipboardText} from "../clipboard-text/ClipboardText";
-import {gameSessionUrl} from "../../app/config";
+import {JoinLink} from "../link-join/JoinLink";
 
 export function UserList() {
     const dispatch = useDispatch();
@@ -19,7 +18,7 @@ export function UserList() {
     return (
         <div>
             <h1>Game Session #{sessionId}</h1>
-            <ClipboardText link={gameSessionUrl(sessionId!)}/>
+            <JoinLink/>
             <div className={commonStyles.row}>
                 <ul>
                     {p}

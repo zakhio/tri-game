@@ -20,8 +20,8 @@ export function CreatePage() {
         {words.length > 0 &&
         <WordTable/>
         }
-        {connected && words.length > 0 &&
-        <PlayerSettings/>
-        }
+        {/*{connected && words.length > 0 &&*/}
+        {/*<PlayerSettings/>*/}
+        {/*}*/}
     </>
 }

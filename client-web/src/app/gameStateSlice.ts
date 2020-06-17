@@ -55,16 +55,12 @@ export const gameStateSlice = createSlice({
             state.teams = action.payload.teamsList
             state.me = action.payload.playerid
         },
-        resetCurrentState: (state, action: PayloadAction<void>) => {
-            state.cells = []
-            state.teams = []
-            state.players = []
-            state.me = null
-            state.connected = false
-        },
         // Use the PayloadAction type to declare the contents of `action.payload`
         replaceCurrentSession: (state, action: PayloadAction<string>) => {
             state.sessionId = action.payload;
+        },
+        replaceCurrentToken: (state, action: PayloadAction<string>) => {
+            state.token = action.payload;
         },
         // Use the PayloadAction type to declare the contents of `action.payload`
         replaceConnected: (state, action: PayloadAction<boolean>) => {
@@ -73,7 +69,7 @@ export const gameStateSlice = createSlice({
     },
 });
 
-export const {replaceCurrentState, resetCurrentState, replaceCurrentSession, replaceConnected} = gameStateSlice.actions;
+export const {replaceCurrentState, replaceCurrentToken, replaceCurrentSession, replaceConnected} = gameStateSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
@@ -95,6 +91,7 @@ export const joinAsync = (token: string, sessionId: string): AppThunk => dispatc
     stream.on('data', (res) => {
         console.log("stream.data", res.toObject());
         dispatch(replaceConnected(true));
+        dispatch(replaceCurrentToken(token));
         dispatch(replaceCurrentState(res.toObject()));
     });
 
