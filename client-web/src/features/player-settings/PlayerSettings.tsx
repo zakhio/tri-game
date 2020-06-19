@@ -19,7 +19,7 @@ export function PlayerSettings() {
     const me = useSelector(sessionMe)
     const dispatch = useDispatch();
 
-    let player:Player.AsObject;
+    let player: Player.AsObject;
     for (let i = 0; i < players.length; i++) {
         if (players[i].id === me) {
             player = players[i]
@@ -44,15 +44,21 @@ export function PlayerSettings() {
                     checked={captain}
                     onChange={e => setCaptain(e.target.checked)}
                 />
+            </div>
+            <div className={commonStyles.row}>
                 <input
                     className={commonStyles.textbox}
                     aria-label="Set player Alias"
                     value={alias}
                     onChange={e => setAlias(e.target.value)}
                 />
+            </div>
+            <div className={commonStyles.row}>
                 <select id="teamId" onChange={e => setTeamId(e.target.value)} value={teamId}>
                     {teamOptions}
                 </select>
+            </div>
+            <div className={commonStyles.row}>
                 <button
                     className={commonStyles.button}
                     onClick={() => dispatch(setSettings(token, sessionId!, alias, captain, teamId))}

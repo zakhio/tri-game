@@ -12,13 +12,15 @@ import styles from './WordTable.module.css';
 import {Cell, Team} from "../../proto/tri_pb";
 import {GameScore} from "../game-score/GameScore";
 import {JoinLink} from "../link-join/JoinLink";
+import {WordCell} from "./WordCell";
+import {WordCell2} from "./WordCell2";
 
 export function WordTable() {
     const sessionId = useSelector(playerSessionId);
     const token = useSelector(playerToken);
 
     const numOfColumns = Math.max(1, useSelector(sessionNumOfColumns));
-    const words = useSelector(sessionCells);
+    const cells = useSelector(sessionCells);
     const teams = useSelector(sessionTeams);
     const dispatch = useDispatch();
 
@@ -34,24 +36,11 @@ export function WordTable() {
     }
 
     const rows = [];
-    for (let i = 0; i < words.length; i += numOfColumns) {
-        const cols = words.slice(i, i + numOfColumns).map((w, index) => {
-                    let kindStyle = "";
-                    if (w.type === Cell.Type.END_GAME) {
-                        kindStyle =  styles["kind_end"];
-                    } else if (w.type === Cell.Type.TEAM_OWNED) {
-                        kindStyle = styles["kind_owned_" + teamIdx.get(w.ownerteamid)];
-                    } else {
-                        kindStyle =  styles["kind_regular"];
-                    }
-
-                    let openStyle = w.open ? styles.open : ""
-
-                return <td key={i + index} onClick={() => turnWord(i + index)}>
-                    <div
-                        className={[styles.word_cell,kindStyle,openStyle].join(' ')}>
-                        <span>{w.word}</span>
-                    </div>
+    for (let i = 0; i < cells.length; i += numOfColumns) {
+        const cols = cells.slice(i, i + numOfColumns).map((c, index) => {
+                return <td key={i + index}>
+                    <WordCell cell={c} teamIdx={teamIdx} onClick={() => turnWord(i + index)}/>
+                    {/*<WordCell2 cell={c}/>*/}
                 </td>
             }
         );
@@ -59,7 +48,7 @@ export function WordTable() {
     }
     const scoreColSpan = Math.floor(numOfColumns / 2);
 
-    return <table onTouchStart={() => console.log()} className={styles.world_table}>
+    return <table id="Gamefield" onTouchStart={() => console.log()} className={styles.world_table}>
         <tbody>
         <tr>
             <td colSpan={scoreColSpan}><GameScore/></td>

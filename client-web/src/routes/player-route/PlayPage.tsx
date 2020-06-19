@@ -4,7 +4,8 @@ import {sessionConnected, sessionCells} from "../../app/gameStateSlice";
 import React from "react";
 import {WordTable} from "../../features/wordtable/WordTable";
 import {UserList} from "../../features/user-list/UserList";
-import {useParams} from "react-router-dom";
+import {BrowserRouter as Router, useParams} from "react-router-dom";
+import {slide as Menu} from "react-burger-menu";
 
 export function PlayPage() {
     const {sessionId} = useParams();
