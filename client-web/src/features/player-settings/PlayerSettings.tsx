@@ -13,6 +13,9 @@ export function PlayerSettings() {
     const [captain, setCaptain] = useState(me!.captain);
     const [alias, setAlias] = useState(me!.alias);
     const [teamId, setTeamId] = useState(me!.teamid);
+    if (!teamId) {
+        setTeamId(teams[0].id)
+    }
 
     const teamOptions = teams.map((team, index) => (
         <option value={team.id} key={index}>{team.alias}</option>
@@ -20,11 +23,11 @@ export function PlayerSettings() {
 
     return (
         <div>
-            <h1>Settings {me!.alias}</h1>
+            <h1>Game #{sessionId}</h1>
             <div className={commonStyles.row}>
                 <input
                     type="checkbox"
-                    aria-label="Set sessionId"
+                    aria-label="Set captain flag"
                     checked={captain}
                     onChange={e => setCaptain(e.target.checked)}
                 />

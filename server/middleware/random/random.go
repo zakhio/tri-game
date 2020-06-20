@@ -3,6 +3,7 @@ package random
 import (
 	"math/rand"
 	"strings"
+	"time"
 )
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyz"
@@ -13,8 +14,9 @@ const (
 	letterIdxMax  = 63 / letterIdxBits   // # of letter indices fitting in 63 bits
 )
 
-// var src = rand.NewSource(time.Now().UnixNano())
-var src = rand.NewSource(0)
+var src = rand.NewSource(time.Now().UnixNano())
+
+//var src = rand.NewSource(0)
 
 // RandString TODO
 func RandString(n int) string {
