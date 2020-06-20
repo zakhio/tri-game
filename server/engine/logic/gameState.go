@@ -14,6 +14,7 @@ type GameState struct {
 
 	Teams       []string
 	TeamPlayers map[string][]string
+	CurrentTeam string
 
 	Cells           []entities.WordCell
 	numberOrRows    int

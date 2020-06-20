@@ -2,6 +2,7 @@ package logic
 
 import (
 	"fmt"
+	"log"
 	"math/rand"
 	"zakh.io/tri/server/engine/entities"
 	"zakh.io/tri/server/middleware/dictionary"
@@ -28,24 +29,60 @@ func (g *GameState) Start(numberOfTeams, numberOrRows, numberOfColumns int) erro
 		numberOfColumns = 5
 	}
 
-	teams := make([]string, 1)
+	// configure teams
+	teams := make([]string, 0)
 	for i := 0; i < numberOfTeams; i++ {
 		tId, _ := g.NewTeam()
 		teams = append(teams, tId)
 	}
 
-	g.numberOrRows = numberOrRows
-	g.numberOfColumns = numberOfColumns
-	dict, _ := dictionary.ReadLines("server/words.txt")
+	g.CurrentTeam = teams[rand.Intn(len(teams))]
 
-	types := []int{entities.REGULAR, entities.END_GAME, entities.TEAM_OWNED}
+	// configure cells
+	dict, err := dictionary.ReadLines("server/words.txt")
+	log.Print(err)
+
+	wordsCount := numberOrRows * numberOfColumns
+	wordsDict := make(map[string]bool)
+
+	for len(wordsDict) < wordsCount {
+		word := dict[rand.Intn(len(dict))]
+		wordsDict[word] = false
+	}
 
 	cells := make([]entities.WordCell, 0)
-	for i := 0; i < numberOrRows*numberOfColumns; i++ {
-		cell := entities.NewCell(dict[rand.Intn(len(dict))], types[rand.Intn(len(types))], teams[rand.Intn(len(teams))])
+
+	for k, _ := range wordsDict {
+		cell := entities.NewCell(k, entities.REGULAR, "")
 		cells = append(cells, cell)
 	}
+
+	g.numberOrRows = numberOrRows
+	g.numberOfColumns = numberOfColumns
 	g.SetCells(cells)
+
+	// configure ownership
+	teamWordSize := wordsCount / (numberOfTeams + 1)
+	endPosition := rand.Intn(wordsCount)
+	cells[endPosition].Type = entities.END_GAME
+	wordsDict[cells[endPosition].Word] = true
+
+	for _, tId := range teams {
+		size := teamWordSize
+		if tId == g.CurrentTeam {
+			size++
+		}
+
+		for i := 0; i < size; i++ {
+			pos := rand.Intn(wordsCount)
+			for wordsDict[cells[pos].Word] == true {
+				pos = rand.Intn(wordsCount)
+			}
+			cells[pos].Type = entities.TEAM_OWNED
+			cells[pos].TeamId = tId
+			wordsDict[cells[pos].Word] = true
+		}
+	}
 
 	g.Started = true
 
