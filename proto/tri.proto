@@ -8,6 +8,7 @@ message Player {
     string alias = 2;
     string teamId = 3;
     string score = 4;
+    bool captain = 5;
 }
 
 message Team {

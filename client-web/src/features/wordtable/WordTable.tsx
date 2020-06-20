@@ -4,16 +4,16 @@ import {
     playerSessionId,
     playerToken,
     sessionCells,
+    sessionMe,
     sessionNumOfColumns,
     sessionTeams,
     turn
 } from "../../app/gameStateSlice";
 import styles from './WordTable.module.css';
-import {Cell, Team} from "../../proto/tri_pb";
+import {Team} from "../../proto/tri_pb";
 import {GameScore} from "../game-score/GameScore";
 import {JoinLink} from "../link-join/JoinLink";
 import {WordCell} from "./WordCell";
-import {WordCell2} from "./WordCell2";
 
 export function WordTable() {
     const sessionId = useSelector(playerSessionId);
@@ -22,6 +22,7 @@ export function WordTable() {
     const numOfColumns = Math.max(1, useSelector(sessionNumOfColumns));
     const cells = useSelector(sessionCells);
     const teams = useSelector(sessionTeams);
+    const me = useSelector(sessionMe);
     const dispatch = useDispatch();
 
     const teamIdx = teams.reduce<Map<string, number>>((map: Map<string, number>, currentValue: Team.AsObject, currentIndex: number) => {
@@ -40,7 +41,7 @@ export function WordTable() {
         const cols = cells.slice(i, i + numOfColumns).map((c, index) => {
                 return <td key={i + index}>
                     <WordCell cell={c} teamIdx={teamIdx} onClick={() => turnWord(i + index)}/>
-                    {/*<WordCell2 cell={c}/>*/}
+                    {/*<WordCell2 cell={c} onClick={() => turnWord(i + index)} showColor={me!.captain}/>*/}
                 </td>
             }
         );

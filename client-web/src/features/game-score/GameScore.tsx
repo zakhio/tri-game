@@ -7,9 +7,9 @@ export function GameScore() {
     const teams = useSelector(sessionTeams)
     const r:JSX.Element[] = [];
     teams.forEach((t, i) => {
-        r.push(<span key={i} className={styles.gameScore}>{t.remainingcount}</span>);
+        r.push(<span key={2 * i} className={styles.gameScore}>{t.remainingcount}</span>);
         if (i !== teams.length - 1) {
-            r.push(<span>:</span>);
+            r.push(<span key={2 * i + 1}>:</span>);
         }
     });
 

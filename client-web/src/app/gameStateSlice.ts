@@ -22,7 +22,7 @@ interface GameState {
     sessionId: string | null;
     token: string;
     connected: boolean;
-    me?: string | null;
+    me?: Player.AsObject;
     players: Player.AsObject[];
     teams: Team.AsObject[];
     cells: Cell.AsObject[];
@@ -33,7 +33,7 @@ const initialState: GameState = {
     sessionId: null,
     token: v4(),
     connected: false,
-    me: null,
+    me: undefined,
     players: [],
     teams: [],
     cells: [],
@@ -51,9 +51,17 @@ export const gameStateSlice = createSlice({
         replaceCurrentState: (state, action: PayloadAction<GameSessionStream.AsObject>) => {
             state.cells = action.payload.cellsList
             state.numOfColumns = action.payload.numberofcolumns;
-            state.players = action.payload.playersList
             state.teams = action.payload.teamsList
-            state.me = action.payload.playerid
+
+            const myId = action.payload.playerid;
+            const players = action.payload.playersList;
+            state.players = players;
+
+            for (let i = 0; i < players.length; i++) {
+                if (players[i].id === myId) {
+                    state.me = players[i];
+                }
+            }
         },
         // Use the PayloadAction type to declare the contents of `action.payload`
         replaceCurrentSession: (state, action: PayloadAction<string>) => {

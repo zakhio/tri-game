@@ -21,9 +21,10 @@ func Convert(playerId string, gameState logic.GameState) *pb.GameSessionStream {
 
 		teamId, _ := gameState.GetTeam(pId)
 		player := &pb.Player{
-			Id:     pId,
-			Alias:  gameState.GetAlias(pId),
-			TeamId: teamId,
+			Id:      pId,
+			Alias:   gameState.GetAlias(pId),
+			TeamId:  teamId,
+			Captain: gameState.IsCaptain(pId),
 		}
 
 		players = append(players, player)

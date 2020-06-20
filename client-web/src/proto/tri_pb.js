@@ -294,7 +294,8 @@ proto.Player.toObject = function(includeInstance, msg) {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     alias: jspb.Message.getFieldWithDefault(msg, 2, ""),
     teamid: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    score: jspb.Message.getFieldWithDefault(msg, 4, "")
+    score: jspb.Message.getFieldWithDefault(msg, 4, ""),
+    captain: jspb.Message.getBooleanFieldWithDefault(msg, 5, false)
   };
 
   if (includeInstance) {
@@ -346,6 +347,10 @@ proto.Player.deserializeBinaryFromReader = function(msg, reader) {
     case 4:
       var value = /** @type {string} */ (reader.readString());
       msg.setScore(value);
+      break;
+    case 5:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setCaptain(value);
       break;
     default:
       reader.skipField();
@@ -401,6 +406,13 @@ proto.Player.serializeBinaryToWriter = function(message, writer) {
   if (f.length > 0) {
     writer.writeString(
       4,
+      f
+    );
+  }
+  f = message.getCaptain();
+  if (f) {
+    writer.writeBool(
+      5,
       f
     );
   }
@@ -476,6 +488,24 @@ proto.Player.prototype.getScore = function() {
  */
 proto.Player.prototype.setScore = function(value) {
   return jspb.Message.setProto3StringField(this, 4, value);
+};
+
+
+/**
+ * optional bool captain = 5;
+ * @return {boolean}
+ */
+proto.Player.prototype.getCaptain = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 5, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.Player} returns this
+ */
+proto.Player.prototype.setCaptain = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 5, value);
 };
 
 

@@ -15,6 +15,9 @@ export class Player extends jspb.Message {
   getScore(): string;
   setScore(value: string): Player;
 
+  getCaptain(): boolean;
+  setCaptain(value: boolean): Player;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Player.AsObject;
   static toObject(includeInstance: boolean, msg: Player): Player.AsObject;
@@ -29,6 +32,7 @@ export namespace Player {
     alias: string,
     teamid: string,
     score: string,
+    captain: boolean,
   }
 }
 

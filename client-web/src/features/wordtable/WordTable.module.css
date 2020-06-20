@@ -16,21 +16,18 @@
     padding: 10px;
 }
 
-.world_table td:active:hover > div {
-    transform: perspective(400px) rotateX(70deg);
+.word_cell_container {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
 }
 
 .word_cell {
-    transition: transform 1s;
-    width: 100%;
-    height: 100%;
     user-select: none;
-    background: #fafafa;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    text-align: center;
     line-height: 80px;
-    color: #444;
+    border-radius: 4px;
+    border-width: 1px;
+    border-style: solid;
 }
 
 .word_cell > span {
@@ -40,20 +37,15 @@
 }
 
 .open {
-    transition: none;
-    transform: perspective(400px) rotateX(70deg);
     border-color: transparent;
-    animation-fill-mode: forwards;
 }
 
-@keyframes animation_open {
-    10%   {
-        transform: perspective(400px) rotateX(90deg);
-    }
-    100% {
-        transform: perspective(400px) rotateX(0deg);
-    }
+.closed {
+    border-color: #ddd;
+    background: #fafafa;
+    color: #444;
 }
+
 
 .kind_regular {
     animation: animation_open 2s, openAnimation_regular 2s;

@@ -14,7 +14,6 @@ function App() {
     const connected = useSelector(sessionConnected);
     const words = useSelector(sessionCells);
 
-
     useEffect(() => {
         if (!connected) {
             dispatch(checkCurrentSession());
