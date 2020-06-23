@@ -16,7 +16,7 @@ export function WordCell({cell, teamIdx, onClick}: { cell: Cell.AsObject, teamId
     let openStyle = cell.open ? styles.open : ""
 
     return <div onClick={() => onClick()}
-        className={[styles.word_cell, kindStyle, openStyle].join(' ')}>
+        className={[styles.cell, kindStyle, openStyle].join(' ')}>
         <span>{cell.word}</span>
     </div>
 

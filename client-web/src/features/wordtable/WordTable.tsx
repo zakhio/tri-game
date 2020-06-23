@@ -14,6 +14,7 @@ import {Team} from "../../proto/tri_pb";
 import {GameScore} from "../game-score/GameScore";
 import {JoinLink} from "../link-join/JoinLink";
 import {WordCell} from "./WordCell";
+import {WordCell2} from "./WordCell2";
 
 export function WordTable() {
     const sessionId = useSelector(playerSessionId);
@@ -40,8 +41,8 @@ export function WordTable() {
     for (let i = 0; i < cells.length; i += numOfColumns) {
         const cols = cells.slice(i, i + numOfColumns).map((c, index) => {
                 return <td key={i + index}>
-                    <WordCell cell={c} teamIdx={teamIdx} onClick={() => turnWord(i + index)}/>
-                    {/*<WordCell2 cell={c} onClick={() => turnWord(i + index)} showColor={me!.captain}/>*/}
+                    {/*<WordCell cell={c} teamIdx={teamIdx} onClick={() => turnWord(i + index)}/>*/}
+                    <WordCell2 cell={c} onClick={() => turnWord(i + index)} showColor={me!.captain}/>
                 </td>
             }
         );

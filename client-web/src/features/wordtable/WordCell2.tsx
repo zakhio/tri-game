@@ -13,10 +13,7 @@ function calcVal(open: boolean, hover: boolean = false): number {
 
 const trans = (val: number) => {
     let rot = val * 80 + Math.max(0, val - 1) * 20;
-    if (rot >= 90) {
-        rot = 180 - rot;
-    }
-    return `perspective(400px) rotateX(${rot}deg`
+    return `rotateX(${rot}deg`
 }
 
 
@@ -38,6 +35,14 @@ export function WordCell2({cell, onClick, showColor}: { cell: Cell.AsObject, onC
             onClick();
         }}
 
+        onMouseOver={(event) => {
+            onHover(true);
+        }}
+
+        onMouseOut={(event) => {
+            onHover(false);
+        }}
+
         onTouchStart={(event) => {
             onHover(true);
         }}
@@ -57,11 +62,12 @@ export function WordCell2({cell, onClick, showColor}: { cell: Cell.AsObject, onC
             }
         }}
 
-        className={styles.word_cell_container}>
+        className={styles.cell_container}>
         <animated.div
-            className={styles.word_cell}
+            className={styles.cell}
             style={{transform: val.to(trans)}}>
-            <animated.span>{cell.word}</animated.span>
+            <animated.div className={[styles.cell_face, styles.face_front].join(" ")}>{cell.word}</animated.div>
+            <animated.div className={[styles.cell_face, styles.face_back, styles.kind_owned_0].join(" ")}>{cell.word}</animated.div>
         </animated.div>
     </div>
 

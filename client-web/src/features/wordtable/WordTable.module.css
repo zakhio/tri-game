@@ -16,109 +16,59 @@
     padding: 10px;
 }
 
-.word_cell_container {
+.cell_container {
     width: 100%;
     height: 100%;
     cursor: pointer;
+    perspective: 400px;
 }
 
-.word_cell {
+.cell {
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    cursor: pointer;
+    transform-style: preserve-3d;
+}
+
+.cell_face {
     user-select: none;
-    line-height: 80px;
     border-radius: 4px;
     border-width: 1px;
     border-style: solid;
-}
-
-.word_cell > span {
+    backface-visibility: hidden;
     display: inline-block;
-    vertical-align: middle;
-    line-height: normal;
+    /*vertical-align: middle;*/
+    /*line-height: normal;*/
 }
 
-.open {
-    border-color: transparent;
-}
-
-.closed {
+.face_front {
     border-color: #ddd;
     background: #fafafa;
     color: #444;
 }
 
-
-.kind_regular {
-    animation: animation_open 2s, openAnimation_regular 2s;
-    animation-fill-mode: forwards;
+.face_back {
+    border-color: transparent;
+    transform: rotateX(180deg);
 }
 
-@keyframes openAnimation_regular {
-    10%   {
-        background: #fafafa;
-    }
-    11%   {
-        background: #fffcf5;
-        color: #d8cfad;
-    }
-    100% {
-        background: #fffcf5;
-        color: #d8cfad;
-    }
+.kind_regular {
+    background: #fffcf5;
+    color: #d8cfad;
 }
 
 .kind_end {
-    animation: animation_open 2s, openAnimation_end 2s;
-    animation-fill-mode: forwards;
-}
-
-@keyframes openAnimation_end {
-    10%   {
-        background: #fafafa;
-    }
-    11%   {
-        background: #444;
-        color: #aaa;
-    }
-    100% {
-        background: #444;
-        color: #aaa;
-    }
+    background: #444;
+    color: #aaa;
 }
 
 .kind_owned_0 {
-    animation: animation_open 2s, openAnimation_owned_0 2s;
-    animation-fill-mode: forwards;
-}
-
-@keyframes openAnimation_owned_0 {
-    10%   {
-        background: #fafafa;
-    }
-    11%   {
-        background: #ff6450;
-        color: #8a1000;
-    }
-    100% {
-        background: #ff6450;
-        color: #8a1000;
-    }
+    background: #ff6450;
+    color: #8a1000;
 }
 
 .kind_owned_1 {
-    animation: animation_open 2s, openAnimation_owned_1 2s;
-    animation-fill-mode: forwards;
-}
-
-@keyframes openAnimation_owned_1 {
-    10%   {
-        background: #fafafa;
-    }
-    11%   {
-        background: #50bbff;
-        color: #00548a;
-    }
-    100% {
-        background: #50bbff;
-        color: #00548a;
-    }
+    background: #50bbff;
+    color: #00548a;
 }
