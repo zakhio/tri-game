@@ -2,6 +2,7 @@ package logic
 
 import (
 	"fmt"
+	"strconv"
 )
 
 type TeamInfo interface {
@@ -15,7 +16,7 @@ func (g *GameState) NewTeam() (string, error) {
 		return "", fmt.Errorf("cannot add teamId: game already started")
 	}
 
-	teamId := g.nextId()
+	teamId := g.nextTeamId()
 	g.Teams = append(g.Teams, teamId)
 	g.SetAlias(teamId, teamId)
 
@@ -55,4 +56,8 @@ func (g *GameState) GetTeam(playerId string) (string, int) {
 
 func (g *GameState) GetTeams() []string {
 	return g.Teams
+}
+
+func (g *GameState) nextTeamId() string {
+	return strconv.Itoa(len(g.Teams))
 }

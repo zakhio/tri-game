@@ -1,8 +1,8 @@
 import React from "react";
-import styles from './WordTable.module.css';
-import {Cell} from "../../proto/tri_pb";
+import styles from '../table/WordTable.module.css';
+import {Cell} from "../../../proto/tri_pb";
 
-export function WordCell({cell, teamIdx, onClick}: { cell: Cell.AsObject, teamIdx: Map<string, number>, onClick:Function }) {
+export function FieldCell({cell, teamIdx, onClick}: { cell: Cell.AsObject, teamIdx: Map<string, number>, onClick:Function }) {
     let kindStyle;
 
     if (cell.type === Cell.Type.END_GAME) {

@@ -9,27 +9,21 @@ import {
     sessionTeams,
     turn
 } from "../../app/gameStateSlice";
-import styles from './WordTable.module.css';
+import styles from './GameField.module.css';
 import {Team} from "../../proto/tri_pb";
-import {GameScore} from "../game-score/GameScore";
+import {Score} from "./score/Score";
 import {JoinLink} from "../link-join/JoinLink";
-import {WordCell} from "./WordCell";
-import {WordCell2} from "./WordCell2";
+import {FieldCell} from "./cell/FieldCell";
+import {FieldCell2} from "./cell/FieldCell2";
 
-export function WordTable() {
+export function GameField() {
     const sessionId = useSelector(playerSessionId);
     const token = useSelector(playerToken);
 
     const numOfColumns = Math.max(1, useSelector(sessionNumOfColumns));
     const cells = useSelector(sessionCells);
-    const teams = useSelector(sessionTeams);
     const me = useSelector(sessionMe);
     const dispatch = useDispatch();
-
-    const teamIdx = teams.reduce<Map<string, number>>((map: Map<string, number>, currentValue: Team.AsObject, currentIndex: number) => {
-        map.set(currentValue.id, currentIndex);
-        return map;
-    }, new Map());
 
     function turnWord(position: number) {
         if (sessionId && token) {
@@ -41,8 +35,8 @@ export function WordTable() {
     for (let i = 0; i < cells.length; i += numOfColumns) {
         const cols = cells.slice(i, i + numOfColumns).map((c, index) => {
                 return <td key={i + index}>
-                    {/*<WordCell cell={c} teamIdx={teamIdx} onClick={() => turnWord(i + index)}/>*/}
-                    <WordCell2 cell={c} onClick={() => turnWord(i + index)} showColor={me!.captain}/>
+                    {/*<FieldCell cell={c} teamIdx={teamIdx} onClick={() => turnWord(i + index)}/>*/}
+                    <FieldCell2 cell={c} onClick={() => turnWord(i + index)} showColor={me!.captain}/>
                 </td>
             }
         );
@@ -50,10 +44,10 @@ export function WordTable() {
     }
     const scoreColSpan = Math.floor(numOfColumns / 2);
 
-    return <table id="Gamefield" onTouchStart={() => console.log()} className={styles.world_table}>
+    return <table className={styles.world_table}>
         <tbody>
         <tr>
-            <td colSpan={scoreColSpan}><GameScore/></td>
+            <td colSpan={scoreColSpan}><Score/></td>
             <td colSpan={numOfColumns - scoreColSpan}><JoinLink/></td>
         </tr>
         {rows.map((r, index) =>

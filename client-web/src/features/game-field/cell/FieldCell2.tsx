@@ -1,6 +1,7 @@
 import React, {useRef} from "react";
-import {Cell} from "../../proto/tri_pb";
-import styles from './WordTable.module.css';
+import {Cell} from "../../../proto/tri_pb";
+import styles from './FieldCell.module.css';
+import fieldStyles from '../GameField.module.css';
 import {animated, useSpring} from "react-spring";
 
 function calcVal(open: boolean, hover: boolean = false): number {
@@ -17,9 +18,11 @@ const trans = (val: number) => {
 }
 
 
-export function WordCell2({cell, onClick, showColor}: { cell: Cell.AsObject, onClick: Function, showColor: boolean }) {
+export function FieldCell2({cell, onClick, showColor}: { cell: Cell.AsObject, onClick: Function, showColor: boolean }) {
     const prevVal = useRef(calcVal(cell.open));
     const [{val}, setVal] = useSpring(() => ({val: prevVal.current}));
+
+    console.log(cell, onClick, showColor)
 
     function onHover(flag: boolean) {
         const v = calcVal(cell.open, flag);
@@ -28,6 +31,23 @@ export function WordCell2({cell, onClick, showColor}: { cell: Cell.AsObject, onC
     }
 
     setVal({val: calcVal(cell.open)})
+
+    let kind_style;
+
+    switch (cell.type) {
+        case Cell.Type.TEAM_OWNED:
+            kind_style = fieldStyles["kind_owned_" + cell.ownerteamid];
+            break
+        case Cell.Type.END_GAME:
+            kind_style = fieldStyles.kind_end;
+            break;
+        case Cell.Type.REGULAR:
+        default:
+            kind_style = fieldStyles.kind_regular;
+            break;
+    }
+
+    const kind_front_style = showColor ? kind_style : fieldStyles.kind_closed;
 
     return <div
         onClick={(event) => {
@@ -66,9 +86,20 @@ export function WordCell2({cell, onClick, showColor}: { cell: Cell.AsObject, onC
         <animated.div
             className={styles.cell}
             style={{transform: val.to(trans)}}>
-            <animated.div className={[styles.cell_face, styles.face_front].join(" ")}>{cell.word}</animated.div>
-            <animated.div className={[styles.cell_face, styles.face_back, styles.kind_owned_0].join(" ")}>{cell.word}</animated.div>
+            <animated.div
+                className={[
+                    styles.cell_face,
+                    styles.face_front,
+                    kind_front_style].join(" ")}>
+                {cell.word}
+            </animated.div>
+            <animated.div
+                className={[
+                    styles.cell_face,
+                    styles.face_back,
+                    kind_style].join(" ")}>
+                {cell.word}
+            </animated.div>
         </animated.div>
     </div>
-
 }

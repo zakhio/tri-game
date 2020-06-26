@@ -3,7 +3,7 @@ import {sessionCells, sessionConnected} from "../../app/gameStateSlice";
 import React, {useState} from "react";
 import {SessionCreate} from "../../features/session-create/SessionCreate";
 import {UserList} from "../../features/user-list/UserList";
-import {WordTable} from "../../features/wordtable/WordTable";
+import {GameField} from "../../features/game-field/GameField";
 import {slide as Menu} from 'react-burger-menu';
 
 export function CreatePage() {
@@ -23,7 +23,7 @@ export function CreatePage() {
         <UserList/>
         }
         {words.length > 0 &&
-        <WordTable/>
+        <GameField/>
         }
     </>
 }
