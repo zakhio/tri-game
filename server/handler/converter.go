@@ -25,6 +25,7 @@ func Convert(playerId string, gameState logic.GameState) *pb.GameSessionStream {
 			Alias:   gameState.GetAlias(pId),
 			TeamId:  teamId,
 			Captain: gameState.IsCaptain(pId),
+			Score:   int32(gameState.GetScore(pId)),
 		}
 
 		players = append(players, player)
@@ -49,6 +50,7 @@ func Convert(playerId string, gameState logic.GameState) *pb.GameSessionStream {
 	}
 	result.Cells = cells
 	result.NumberOfColumns = int32(gameState.GetNumOfColumns())
+	result.Started = gameState.Started
 
 	return result
 }

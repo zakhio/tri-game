@@ -294,7 +294,7 @@ proto.Player.toObject = function(includeInstance, msg) {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     alias: jspb.Message.getFieldWithDefault(msg, 2, ""),
     teamid: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    score: jspb.Message.getFieldWithDefault(msg, 4, ""),
+    score: jspb.Message.getFieldWithDefault(msg, 4, 0),
     captain: jspb.Message.getBooleanFieldWithDefault(msg, 5, false)
   };
 
@@ -345,7 +345,7 @@ proto.Player.deserializeBinaryFromReader = function(msg, reader) {
       msg.setTeamid(value);
       break;
     case 4:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {number} */ (reader.readInt32());
       msg.setScore(value);
       break;
     case 5:
@@ -403,8 +403,8 @@ proto.Player.serializeBinaryToWriter = function(message, writer) {
     );
   }
   f = message.getScore();
-  if (f.length > 0) {
-    writer.writeString(
+  if (f !== 0) {
+    writer.writeInt32(
       4,
       f
     );
@@ -474,20 +474,20 @@ proto.Player.prototype.setTeamid = function(value) {
 
 
 /**
- * optional string score = 4;
- * @return {string}
+ * optional int32 score = 4;
+ * @return {number}
  */
 proto.Player.prototype.getScore = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
 };
 
 
 /**
- * @param {string} value
+ * @param {number} value
  * @return {!proto.Player} returns this
  */
 proto.Player.prototype.setScore = function(value) {
-  return jspb.Message.setProto3StringField(this, 4, value);
+  return jspb.Message.setProto3IntField(this, 4, value);
 };
 
 
@@ -1234,7 +1234,8 @@ proto.GameSessionStream.toObject = function(includeInstance, msg) {
     proto.Team.toObject, includeInstance),
     cellsList: jspb.Message.toObjectList(msg.getCellsList(),
     proto.Cell.toObject, includeInstance),
-    numberofcolumns: jspb.Message.getFieldWithDefault(msg, 5, 0)
+    numberofcolumns: jspb.Message.getFieldWithDefault(msg, 5, 0),
+    started: jspb.Message.getBooleanFieldWithDefault(msg, 6, false)
   };
 
   if (includeInstance) {
@@ -1293,6 +1294,10 @@ proto.GameSessionStream.deserializeBinaryFromReader = function(msg, reader) {
     case 5:
       var value = /** @type {number} */ (reader.readInt32());
       msg.setNumberofcolumns(value);
+      break;
+    case 6:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setStarted(value);
       break;
     default:
       reader.skipField();
@@ -1358,6 +1363,13 @@ proto.GameSessionStream.serializeBinaryToWriter = function(message, writer) {
   if (f !== 0) {
     writer.writeInt32(
       5,
+      f
+    );
+  }
+  f = message.getStarted();
+  if (f) {
+    writer.writeBool(
+      6,
       f
     );
   }
@@ -1511,6 +1523,24 @@ proto.GameSessionStream.prototype.getNumberofcolumns = function() {
  */
 proto.GameSessionStream.prototype.setNumberofcolumns = function(value) {
   return jspb.Message.setProto3IntField(this, 5, value);
+};
+
+
+/**
+ * optional bool started = 6;
+ * @return {boolean}
+ */
+proto.GameSessionStream.prototype.getStarted = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 6, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.GameSessionStream} returns this
+ */
+proto.GameSessionStream.prototype.setStarted = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 6, value);
 };
 
 

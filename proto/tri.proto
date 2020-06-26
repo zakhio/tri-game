@@ -7,7 +7,7 @@ message Player {
     string id = 1;
     string alias = 2;
     string teamId = 3;
-    string score = 4;
+    int32 score = 4;
     bool captain = 5;
 }
 
@@ -43,6 +43,7 @@ message GameSessionStream {
     repeated Team teams = 3;
     repeated Cell cells = 4;
     int32 numberOfColumns = 5;
+    bool started = 6;
 }
 
 message ObserveSessionRequest {

@@ -15,9 +15,7 @@ type GameInfo interface {
 }
 
 func (g *GameState) Start(numberOfTeams, numberOrRows, numberOfColumns int) error {
-	if g.Started {
-		return fmt.Errorf("cannot start: game already started")
-	}
+	g.ClearTeams()
 
 	if numberOfTeams < 2 {
 		numberOfTeams = 2
@@ -93,10 +91,30 @@ func (g *GameState) GetNumOfColumns() int {
 	return g.numberOfColumns
 }
 
-func (g *GameState) Turn(player string, position int) error {
+func (g *GameState) Turn(playerId string, position int) error {
 	if !g.Started {
 		return fmt.Errorf("cannot turn: game did not start yet")
 	}
 
-	return g.Pick(player, position)
+	cell, err := g.Pick(playerId, position)
+	if err != nil {
+		return err
+	}
+
+	if cell.Type == entities.END_GAME {
+		g.Started = false
+	} else if cell.Type == entities.TEAM_OWNED {
+		if t, _ := g.GetTeam(playerId); cell.TeamId == t {
+			g.IncreaseScore(playerId, 1)
+		}
+
+		for _, tId := range g.GetTeams() {
+			if g.GetRemainCellsCount(tId) == 0 {
+				g.Started = false
+				break
+			}
+		}
+	}
+
+	return nil
 }

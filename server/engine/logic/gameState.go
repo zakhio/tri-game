@@ -8,8 +8,9 @@ import (
 type GameState struct {
 	Started bool
 
-	Captains      map[string]bool
 	Players       []string
+	Captains      map[string]bool
+	PlayerScore   map[string]int
 	PlayerHistory map[string][]entities.WordCell
 
 	Teams       []string
@@ -39,6 +40,7 @@ func NewGameState() *GameState {
 
 	state.Players = make([]string, 0)
 	state.Captains = make(map[string]bool)
+	state.PlayerScore = make(map[string]int)
 	state.PlayerHistory = make(map[string][]entities.WordCell)
 
 	state.Teams = make([]string, 0)

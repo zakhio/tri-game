@@ -38,13 +38,11 @@ export function GameField() {
         );
         rows.push(cols)
     }
-    const scoreColSpan = Math.floor(numOfColumns / 2);
 
     return <table className={styles.world_table}>
         <tbody>
         <tr>
             <td colSpan={numOfColumns}><Score/></td>
-            {/*<td colSpan={numOfColumns - scoreColSpan}><JoinLink/></td>*/}
         </tr>
         {rows.map((r, index) =>
             <tr key={index}>

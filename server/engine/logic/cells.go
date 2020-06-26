@@ -7,18 +7,18 @@ import (
 
 // CellsInfo structure for player
 type CellsInfo interface {
-	Pick(player string, position int) error
+	Pick(player string, position int) (entities.WordCell, error)
 	GetCells() []entities.WordCell
 	GetRemainCellsCount(teamId string) int
 }
 
-func (g *GameState) Pick(player string, position int) error {
+func (g *GameState) Pick(player string, position int) (*entities.WordCell, error) {
 	if err := g.validateInfo(player); err != nil {
-		return err
+		return nil, err
 	}
 
 	if position < 0 || position >= len(g.Cells) {
-		return fmt.Errorf("cannot pick: position %v is out gamefiled [%v][%v]", position, g.numberOrRows, g.numberOfColumns)
+		return nil, fmt.Errorf("cannot pick: position %v is out gamefiled [%v][%v]", position, g.numberOrRows, g.numberOfColumns)
 	}
 
 	cell := g.Cells[position]
@@ -29,7 +29,7 @@ func (g *GameState) Pick(player string, position int) error {
 		g.Cells[position] = cell
 	}
 
-	return nil
+	return &cell, nil
 }
 
 func (g *GameState) GetPicked(player string) ([]entities.WordCell, error) {

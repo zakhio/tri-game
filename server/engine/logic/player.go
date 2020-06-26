@@ -28,6 +28,15 @@ func (g *GameState) PromoteToCaptain(playerId string, captain bool) {
 	g.Captains[playerId] = captain
 }
 
+func (g *GameState) GetScore(playerId string) int {
+	return g.PlayerScore[playerId]
+}
+
+func (g *GameState) IncreaseScore(playerId string, amount int) {
+	score := g.PlayerScore[playerId]
+	g.PlayerScore[playerId] = score + amount
+}
+
 func (g *GameState) GetPlayers() []string {
 	return g.Players
 }

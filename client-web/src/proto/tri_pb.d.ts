@@ -12,8 +12,8 @@ export class Player extends jspb.Message {
   getTeamid(): string;
   setTeamid(value: string): Player;
 
-  getScore(): string;
-  setScore(value: string): Player;
+  getScore(): number;
+  setScore(value: number): Player;
 
   getCaptain(): boolean;
   setCaptain(value: boolean): Player;
@@ -31,7 +31,7 @@ export namespace Player {
     id: string,
     alias: string,
     teamid: string,
-    score: string,
+    score: number,
     captain: boolean,
   }
 }
@@ -156,6 +156,9 @@ export class GameSessionStream extends jspb.Message {
   getNumberofcolumns(): number;
   setNumberofcolumns(value: number): GameSessionStream;
 
+  getStarted(): boolean;
+  setStarted(value: boolean): GameSessionStream;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GameSessionStream.AsObject;
   static toObject(includeInstance: boolean, msg: GameSessionStream): GameSessionStream.AsObject;
@@ -171,6 +174,7 @@ export namespace GameSessionStream {
     teamsList: Array<Team.AsObject>,
     cellsList: Array<Cell.AsObject>,
     numberofcolumns: number,
+    started: boolean,
   }
 }
 

@@ -9,6 +9,7 @@ type TeamInfo interface {
 	AddTeam(teamId string) error
 	AddToTeam(teamId, playerId string) error
 	GetTeams() []string
+	ClearTeams()
 }
 
 func (g *GameState) NewTeam() (string, error) {
@@ -56,6 +57,11 @@ func (g *GameState) GetTeam(playerId string) (string, int) {
 
 func (g *GameState) GetTeams() []string {
 	return g.Teams
+}
+
+func (g *GameState) ClearTeams() {
+	g.Teams = make([]string, 0)
+	g.TeamPlayers = make(map[string][]string)
 }
 
 func (g *GameState) nextTeamId() string {
