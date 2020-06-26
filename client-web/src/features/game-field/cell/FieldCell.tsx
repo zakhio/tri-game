@@ -17,7 +17,6 @@ const trans = (val: number) => {
     return `rotateX(${rot}deg`
 }
 
-
 export function FieldCell({cell, onClick, showColor}: { cell: Cell.AsObject, onClick: Function, showColor: boolean }) {
     const prevVal = useRef(calcVal(cell.open));
     const [{val}, setVal] = useSpring(() => ({val: prevVal.current}));
@@ -46,12 +45,14 @@ export function FieldCell({cell, onClick, showColor}: { cell: Cell.AsObject, onC
     }
 
     const kind_front_style = showColor ? kind_style : fieldStyles.kind_closed;
-    const cell_overlay = showColor && !cell.open  ? styles.cell_overlay : "";
+    const cell_overlay = showColor && !cell.open ? styles.cell_overlay : "";
 
     return <div
         onClick={(event) => {
             event.preventDefault()
-            onClick();
+            if (prevVal.current === 1) {
+                onClick();
+            }
         }}
 
         onMouseOver={(event) => {
@@ -68,7 +69,9 @@ export function FieldCell({cell, onClick, showColor}: { cell: Cell.AsObject, onC
         onTouchEnd={(event) => {
             event.preventDefault()
             onHover(false)
-            onClick();
+            if (prevVal.current === 1) {
+                onClick();
+            }
         }}
         onTouchMove={(event) => {
             let myLocation = event.changedTouches[0];

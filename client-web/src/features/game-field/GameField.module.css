@@ -1,8 +1,8 @@
 .world_table {
     border-collapse: collapse;
     table-layout: fixed;
-    width: 90vmin;
-    height: 70vmin;
+    width: 90%;
+    height: 70%;
     text-transform: uppercase;
     font-weight: bold;
     font-family: 'Roboto Condensed', sans-serif;
