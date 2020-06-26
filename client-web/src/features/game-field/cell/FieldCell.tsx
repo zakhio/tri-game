@@ -22,8 +22,6 @@ export function FieldCell({cell, onClick, showColor}: { cell: Cell.AsObject, onC
     const prevVal = useRef(calcVal(cell.open));
     const [{val}, setVal] = useSpring(() => ({val: prevVal.current}));
 
-    console.log(cell, onClick, showColor)
-
     function onHover(flag: boolean) {
         const v = calcVal(cell.open, flag);
         prevVal.current = v;
@@ -48,6 +46,7 @@ export function FieldCell({cell, onClick, showColor}: { cell: Cell.AsObject, onC
     }
 
     const kind_front_style = showColor ? kind_style : fieldStyles.kind_closed;
+    const cell_overlay = showColor && !cell.open  ? styles.cell_overlay : "";
 
     return <div
         onClick={(event) => {
@@ -82,7 +81,9 @@ export function FieldCell({cell, onClick, showColor}: { cell: Cell.AsObject, onC
             }
         }}
 
-        className={styles.cell_container}>
+        className={[
+            styles.cell_container,
+            cell_overlay].join(" ")}>
         <animated.div
             className={styles.cell}
             style={{transform: val.to(trans)}}>

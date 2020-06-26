@@ -14,6 +14,8 @@
     text-align: center;
     vertical-align: middle;
     padding: 10px;
+    /*strange hack to calculate correct height*/
+    height: 1px;
 }
 
 .kind_closed {
@@ -23,21 +25,25 @@
 }
 
 .kind_regular {
-    background: #fffcf5;
-    color: #d8cfad;
+    border-color: transparent;
+    background: #ffeec9;
+    color: #524936;
 }
 
 .kind_end {
+    border-color: transparent;
     background: #444;
     color: #aaa;
 }
 
 .kind_owned_0 {
+    border-color: transparent;
     background: #ff6450;
     color: #8a1000;
 }
 
 .kind_owned_1 {
+    border-color: transparent;
     background: #50bbff;
     color: #00548a;
 }
