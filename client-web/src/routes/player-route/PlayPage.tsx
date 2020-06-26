@@ -1,11 +1,10 @@
 import {GameJoin} from "../../features/game-join/GameJoin";
 import {useSelector} from "react-redux";
-import {sessionConnected, sessionCells} from "../../app/gameStateSlice";
+import {sessionCells, sessionConnected} from "../../app/gameStateSlice";
 import React from "react";
 import {GameField} from "../../features/game-field/GameField";
 import {UserList} from "../../features/user-list/UserList";
-import {BrowserRouter as Router, useParams} from "react-router-dom";
-import {slide as Menu} from "react-burger-menu";
+import {useParams} from "react-router-dom";
 
 export function PlayPage() {
     const {sessionId} = useParams();
