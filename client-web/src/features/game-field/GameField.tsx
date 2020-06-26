@@ -43,14 +43,17 @@ export function GameField() {
     return <table className={styles.world_table}>
         <tbody>
         <tr>
-            <td colSpan={scoreColSpan}><Score/></td>
-            <td colSpan={numOfColumns - scoreColSpan}><JoinLink/></td>
+            <td colSpan={numOfColumns}><Score/></td>
+            {/*<td colSpan={numOfColumns - scoreColSpan}><JoinLink/></td>*/}
         </tr>
         {rows.map((r, index) =>
             <tr key={index}>
                 {r}
             </tr>
         )}
+        <tr>
+            <td colSpan={numOfColumns}><JoinLink/></td>
+        </tr>
         </tbody>
     </table>
 }

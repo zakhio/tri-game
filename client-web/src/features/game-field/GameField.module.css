@@ -1,49 +1,54 @@
 .world_table {
+    font-family: 'Roboto Condensed', sans-serif;
+
     border-collapse: collapse;
     table-layout: fixed;
     width: 90%;
     height: 70%;
-    text-transform: uppercase;
-    font-weight: bold;
-    font-family: 'Roboto Condensed', sans-serif;
-    letter-spacing: 0.5px;
-    font-size: 15px;
 }
 
 .world_table td {
     text-align: center;
     vertical-align: middle;
-    padding: 10px;
+    padding: 0.8%;
     /*strange hack to calculate correct height*/
     height: 1px;
 }
 
-.kind_closed {
+.cell_closed {
     border-color: #ddd;
     background: #fafafa;
     color: #444;
 }
 
-.kind_regular {
+.cell_regular {
     border-color: transparent;
     background: #ffeec9;
     color: #524936;
 }
 
-.kind_end {
+.cell_end {
     border-color: transparent;
     background: #444;
     color: #aaa;
 }
 
-.kind_owned_0 {
+.cell_owned_0 {
     border-color: transparent;
     background: #ff6450;
     color: #8a1000;
 }
 
-.kind_owned_1 {
+.cell_owned_1 {
     border-color: transparent;
     background: #50bbff;
     color: #00548a;
+}
+
+.score_owned_0 {
+    color: #ff6450;
+}
+
+.score_owned_1 {
+    color: #50bbff;
 }

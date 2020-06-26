@@ -33,18 +33,18 @@ export function FieldCell({cell, onClick, showColor}: { cell: Cell.AsObject, onC
 
     switch (cell.type) {
         case Cell.Type.TEAM_OWNED:
-            kind_style = fieldStyles["kind_owned_" + cell.ownerteamid];
+            kind_style = fieldStyles["cell_owned_" + cell.ownerteamid];
             break
         case Cell.Type.END_GAME:
-            kind_style = fieldStyles.kind_end;
+            kind_style = fieldStyles.cell_end;
             break;
         case Cell.Type.REGULAR:
         default:
-            kind_style = fieldStyles.kind_regular;
+            kind_style = fieldStyles.cell_regular;
             break;
     }
 
-    const kind_front_style = showColor ? kind_style : fieldStyles.kind_closed;
+    const kind_front_style = showColor ? kind_style : fieldStyles.cell_closed;
     const cell_overlay = showColor && !cell.open ? styles.cell_overlay : "";
 
     return <div

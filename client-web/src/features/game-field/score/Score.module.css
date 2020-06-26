@@ -1,5 +1,6 @@
 .gameScore {
-    font-weight: bold;
-    padding-left: 4px;
-    padding-right: 4px;
+    font-size: 3em;
+}
+.gameScore > span{
+    padding: 0 4px;
 }

@@ -7,7 +7,7 @@ import {playerSessionId} from "../../app/gameStateSlice";
 export function JoinLink() {
     const sessionId = useSelector(playerSessionId)
     const link = gameSessionUrl(sessionId!);
-    
+
     function copyMessage(val: string) {
         const selBox = document.createElement('textarea');
         selBox.style.position = 'fixed';
@@ -22,9 +22,11 @@ export function JoinLink() {
         document.body.removeChild(selBox);
     }
 
-    return <label className={styles.tooltip} onClick={() => copyMessage(link)}>
-        Copy Game link
-        <input type="checkbox"/>
-        <span>{link} copied!</span>
-    </label>
+    return <div>
+        <label className={styles.tooltip} onClick={() => copyMessage(link)}>
+            Share session #{sessionId}
+            <input type="checkbox"/>
+            <span>Link copied!</span>
+        </label>
+    </div>
 }
