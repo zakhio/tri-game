@@ -38,12 +38,17 @@ func (g *gameSession) NewPlayer() (string, error) {
 }
 
 func (g *gameSession) SetSettings(playerId, teamId, alias string, captain bool) error {
-	if err := g.state.AddToTeam(teamId, playerId); err != nil {
-		return err
+	if teamId != "" {
+		if err := g.state.AddToTeam(teamId, playerId); err != nil {
+			return err
+		}
 	}
 
 	g.state.PromoteToCaptain(playerId, captain)
-	g.state.SetAlias(playerId, alias)
+
+	if alias != "" {
+		g.state.SetAlias(playerId, alias)
+	}
 
 	return g.publishCurrentState(playerId)
 }

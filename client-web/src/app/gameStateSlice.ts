@@ -17,6 +17,7 @@ import {
 } from '../proto/tri_pb';
 import {Empty} from "google-protobuf/google/protobuf/empty_pb";
 import {hostUrl} from "./config";
+import {History, LocationState} from "history";
 
 interface GameState {
     sessionId: string | null;
@@ -116,9 +117,10 @@ export const joinAsync = (token: string, sessionId: string): AppThunk => dispatc
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
 // will call the thunk with the `dispatch` function as the first argument. Async
 // code can then be executed and other actions can be dispatched
-export const createSession = (token: string): AppThunk => dispatch => {
+export const createSession = (token: string, history: History<LocationState>): AppThunk => dispatch => {
     const req = new CreateSessionRequest();
     req.setToken(token);
+    localStorage.setItem("token", token);
 
     client.createSession(req, null, (err: Error, res: CreateSessionReply) => {
         if (err) {
@@ -126,8 +128,9 @@ export const createSession = (token: string): AppThunk => dispatch => {
             return;
         }
         const sessionId: string = res.getSessionid();
-        dispatch(replaceCurrentSession(sessionId))
-        dispatch(joinAsync(token, sessionId))
+        history.push("/" + sessionId);
+        // dispatch(replaceCurrentSession(sessionId))
+        // dispatch(joinAsync(token, sessionId))
     });
 };
 
@@ -160,13 +163,19 @@ export const turn = (token: string, sessionId: string, position: number): AppThu
     });
 };
 
-export const setSettings = (token: string, sessionId: string, alias: string, captain: boolean, teamId: string): AppThunk => dispatch => {
+export const setSettings = (token: string, sessionId: string, alias?: string, captain?: boolean, teamId?: string): AppThunk => dispatch => {
     const req = new SetSettingsRequest();
     req.setToken(token)
     req.setSessionid(sessionId);
-    req.setAlias(alias);
-    req.setCaptain(captain);
-    req.setTeamid(teamId);
+    if (alias) {
+        req.setAlias(alias);
+    }
+    if (captain) {
+        req.setCaptain(captain);
+    }
+    if (teamId) {
+        req.setTeamid(teamId);
+    }
     client.setSettings(req, null, (err: Error, response: Empty) => {
     });
 };

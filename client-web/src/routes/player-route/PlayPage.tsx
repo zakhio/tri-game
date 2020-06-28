@@ -3,8 +3,8 @@ import {useSelector} from "react-redux";
 import {sessionCells, sessionConnected} from "../../app/gameStateSlice";
 import React from "react";
 import {GameField} from "../../features/game-field/GameField";
-import {UserList} from "../../features/user-list/UserList";
 import {useParams} from "react-router-dom";
+import {GameIntro} from "../../features/game-intro/GameIntro";
 
 export function PlayPage() {
     const {sessionId} = useParams();
@@ -16,7 +16,7 @@ export function PlayPage() {
         <GameJoin sessionId={sessionId}/>
         }
         {connected && words.length === 0 &&
-        <UserList/>
+        <GameIntro/>
         }
         {words.length > 0 &&
         <GameField/>

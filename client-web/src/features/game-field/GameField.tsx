@@ -10,7 +10,7 @@ import {
 } from "../../app/gameStateSlice";
 import styles from './GameField.module.css';
 import {Score} from "./score/Score";
-import {JoinLink} from "../link-join/JoinLink";
+import {GameShare} from "../link-join/GameShare";
 import {FieldCell} from "./cell/FieldCell";
 
 export function GameField() {
@@ -50,7 +50,7 @@ export function GameField() {
             </tr>
         )}
         <tr>
-            <td colSpan={numOfColumns}><JoinLink/></td>
+            <td colSpan={numOfColumns}><GameShare/></td>
         </tr>
         </tbody>
     </table>

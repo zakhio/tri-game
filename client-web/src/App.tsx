@@ -8,6 +8,7 @@ import {PlayPage} from "./routes/player-route/PlayPage";
 import {CreatePage} from "./routes/creator-route/CreatePage";
 import {elastic as Menu} from "react-burger-menu";
 import {PlayerSettings} from "./features/player-settings/PlayerSettings";
+import {IntlProvider} from "react-intl";
 
 function App() {
     const dispatch = useDispatch();
@@ -21,24 +22,28 @@ function App() {
     });
 
     return (
-        <Router>
-            <Menu outerContainerId={"root"} pageWrapId={"App"} right>
-                {connected && words.length > 0 &&
-                <PlayerSettings/>
+        <IntlProvider locale='en'>
+            <Router>
+                {connected &&
+                <Menu outerContainerId={"root"} pageWrapId={"App"} right>
+                    {words.length > 0 &&
+                    <PlayerSettings/>
+                    }
+                </Menu>
                 }
-            </Menu>
-            <div className="App" id="App">
-                <Switch>
-                    <Route path="/:sessionId">
-                        <PlayPage/>
-                    </Route>
-                    <Route path="/">
-                        <CreatePage/>
-                    </Route>
-                </Switch>
-            </div>
+                <div className="App" id="App">
+                    <Switch>
+                        <Route path="/create">
+                            <CreatePage/>
+                        </Route>
+                        <Route path="/:sessionId">
+                            <PlayPage/>
+                        </Route>
+                    </Switch>
+                </div>
 
-        </Router>
+            </Router>
+        </IntlProvider>
     );
 }
 
