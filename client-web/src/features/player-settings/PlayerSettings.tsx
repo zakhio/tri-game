@@ -23,7 +23,9 @@ export function PlayerSettings() {
 
     return (
         <div>
-            <h1>Game #{sessionId}</h1>
+            <h1>
+                Game #{sessionId}
+            </h1>
             <div className={commonStyles.row}>
                 <input
                     type="checkbox"

@@ -1,4 +1,4 @@
-import {GameJoin} from "../../features/game-join/GameJoin";
+import {SessionJoin} from "../../features/session-join/SessionJoin";
 import {useSelector} from "react-redux";
 import {sessionCells, sessionConnected} from "../../app/gameStateSlice";
 import React from "react";
@@ -13,7 +13,7 @@ export function PlayPage() {
 
     return <>
         {!connected &&
-        <GameJoin sessionId={sessionId}/>
+        <SessionJoin sessionId={sessionId}/>
         }
         {connected && words.length === 0 &&
         <GameIntro/>
