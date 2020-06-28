@@ -10,6 +10,15 @@ import {elastic as Menu} from "react-burger-menu";
 import {PlayerSettings} from "./features/player-settings/PlayerSettings";
 import {IntlProvider} from "react-intl";
 
+import messages_en from "./translations/en.json";
+import messages_ru from "./translations/ru.json";
+
+const messages: Record<string, Record<string, string>> = {
+    'ru': messages_ru,
+    'en': messages_en
+};
+const language = 'ru';//navigator.language.split(/[-_]/)[0];
+
 function App() {
     const dispatch = useDispatch();
     const connected = useSelector(sessionConnected);
@@ -22,7 +31,7 @@ function App() {
     });
 
     return (
-        <IntlProvider locale='en'>
+        <IntlProvider locale={language} messages={messages[language]}>
             <Router>
                 {connected &&
                 <Menu outerContainerId={"root"} pageWrapId={"App"} right>

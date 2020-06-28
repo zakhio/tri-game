@@ -19,13 +19,17 @@
     "react-spring": "^9.0.0-rc.3",
     "react-use-gesture": "^7.0.15",
     "typescript": "~3.8.2",
-    "uuid": "^8.1.0"
+    "uuid": "^8.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "trans:compile": "tsc -p ./ --target ES6 --module es6 --jsx preserve --outDir ./tmp/extracted",
+    "trans:extract": "babel ./tmp/extracted --out-dir ./tmp/messages",
+    "trans:combine": "node ./translationRunner.mjs",
+    "trans": "yarn trans:compile && yarn trans:extract"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -43,6 +47,10 @@
     ]
   },
   "devDependencies": {
+    "@babel/cli": "^7.10.3",
+    "@babel/core": "^7.10.3",
+    "@babel/preset-react": "^7.10.1",
+    "@babel/preset-typescript": "^7.10.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -53,7 +61,11 @@
     "@types/react": "^16.9.0",
     "@types/react-burger-menu": "^2.6.1",
     "@types/react-dom": "^16.9.0",
+    "@types/react-intl": "^3.0.0",
     "@types/react-redux": "^7.1.7",
-    "@types/react-router-dom": "^5.1.5"
+    "@types/react-router-dom": "^5.1.5",
+    "@types/uuid": "^8.0.0",
+    "babel-plugin-react-intl": "^7.5.24",
+    "react-intl-translations-manager": "^5.0.3"
   }
 }
