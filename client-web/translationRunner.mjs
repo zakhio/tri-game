@@ -5,7 +5,7 @@ const {readMessageFiles, createSingleMessagesFile} = pkg;
 
 const messagesDir = "tmp/messages"
 const translationsDir = "src/translations/"
-const singleMessageFileDir = "."
+const singleMessageFileDir = "tmp"
 
 manageTranslations({
     messagesDirectory: messagesDir,

@@ -4,7 +4,7 @@
     [
       "react-intl",
       {
-        "messagesDir": "./messages",
+        "messagesDir": "./tmp/messages",
         "extractSourceLocation": true
       }
     ]

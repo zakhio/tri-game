@@ -26,10 +26,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "trans:compile": "tsc -p ./ --target ES6 --module es6 --jsx preserve --outDir ./tmp/extracted",
-    "trans:extract": "babel ./tmp/extracted --out-dir ./tmp/messages",
+    "trans:compile": "tsc ./src/*.ts ./src/*.tsx --target ES6 --module es6 --jsx preserve --outDir ./tmp/extracted || true",
+    "trans:extract": "babel ./tmp/extracted --out-file /dev/null",
     "trans:combine": "node ./translationRunner.mjs",
-    "trans": "yarn trans:compile && yarn trans:extract"
+    "trans": "yarn trans:compile && yarn trans:extract && yarn trans:combine"
   },
   "eslintConfig": {
     "extends": "react-app"
