@@ -1,20 +1,15 @@
 import React from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {
-    playerSessionId,
-    playerToken,
-    sessionCells,
-    sessionMe,
-    sessionNumOfColumns,
-    turn
-} from "../../app/gameStateSlice";
+import {playerToken, sessionCells, sessionMe, sessionNumOfColumns, turn} from "../../app/gameStateSlice";
 import styles from './GameField.module.css';
 import {Score} from "./score/Score";
 import {SessionShare} from "../session-share/SessionShare";
 import {FieldCell} from "./cell/FieldCell";
+import {useParams} from "react-router-dom";
 
 export function GameField() {
-    const sessionId = useSelector(playerSessionId);
+    const {sessionId} = useParams();
+
     const token = useSelector(playerToken);
 
     const numOfColumns = Math.max(1, useSelector(sessionNumOfColumns));
@@ -38,6 +33,7 @@ export function GameField() {
         );
         rows.push(cols)
     }
+
 
     return <table className={styles.world_table}>
         <tbody>

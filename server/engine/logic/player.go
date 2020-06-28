@@ -15,7 +15,6 @@ func (g *GameState) NewPlayer() (string, error) {
 	playerId := g.nextId()
 	g.Players = append(g.Players, playerId)
 	g.PlayerHistory[playerId] = make([]entities.WordCell, 0)
-	g.SetAlias(playerId, playerId)
 
 	return playerId, nil
 }

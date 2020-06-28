@@ -1,11 +1,13 @@
 import React, {useState} from 'react';
 import commonStyles from '../Common.module.css';
 import {useDispatch, useSelector} from 'react-redux';
-import {playerSessionId, playerToken, sessionMe, sessionTeams, setSettings,} from '../../app/gameStateSlice';
+import {playerToken, sessionMe, sessionTeams, setSettings,} from '../../app/gameStateSlice';
+import {useParams} from "react-router-dom";
 
 export function PlayerSettings() {
+    const {sessionId} = useParams();
+
     const token = useSelector(playerToken)
-    const sessionId = useSelector(playerSessionId)
     const teams = useSelector(sessionTeams)
     const me = useSelector(sessionMe)
     const dispatch = useDispatch();

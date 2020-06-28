@@ -20,7 +20,6 @@ import {hostUrl} from "./config";
 import {History, LocationState} from "history";
 
 interface GameState {
-    sessionId: string | null;
     token: string;
     connected: boolean;
     me?: Player.AsObject;
@@ -31,7 +30,6 @@ interface GameState {
 }
 
 const initialState: GameState = {
-    sessionId: null,
     token: localStorage.getItem("token") || v4(),
     connected: false,
     me: undefined,
@@ -65,20 +63,13 @@ export const gameStateSlice = createSlice({
             }
         },
         // Use the PayloadAction type to declare the contents of `action.payload`
-        replaceCurrentSession: (state, action: PayloadAction<string>) => {
-            state.sessionId = action.payload;
-        },
-        replaceCurrentToken: (state, action: PayloadAction<string>) => {
-            state.token = action.payload;
-        },
-        // Use the PayloadAction type to declare the contents of `action.payload`
         replaceConnected: (state, action: PayloadAction<boolean>) => {
             state.connected = action.payload;
         },
     },
 });
 
-export const {replaceCurrentState, replaceCurrentToken, replaceCurrentSession, replaceConnected} = gameStateSlice.actions;
+export const {replaceCurrentState, replaceConnected} = gameStateSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
@@ -89,9 +80,7 @@ export const joinAsync = (token: string, sessionId: string): AppThunk => dispatc
         stream.cancel();
     }
 
-    localStorage.setItem("sessionId", sessionId);
     localStorage.setItem("token", token);
-
     const observerReq = new ObserveSessionRequest();
     observerReq.setSessionid(sessionId);
     observerReq.setToken(token);
@@ -100,7 +89,6 @@ export const joinAsync = (token: string, sessionId: string): AppThunk => dispatc
     stream.on('data', (res) => {
         console.log("stream.data", res.toObject());
         dispatch(replaceConnected(true));
-        dispatch(replaceCurrentToken(token));
         dispatch(replaceCurrentState(res.toObject()));
     });
 
@@ -182,7 +170,6 @@ export const sessionCells = (state: RootState) => state.gameState.cells;
 export const sessionTeams = (state: RootState) => state.gameState.teams;
 export const sessionPlayers = (state: RootState) => state.gameState.players;
 export const sessionMe = (state: RootState) => state.gameState.me;
-export const playerSessionId = (state: RootState) => state.gameState.sessionId;
 export const playerToken = (state: RootState) => state.gameState.token;
 export const sessionConnected = (state: RootState) => state.gameState.connected;
 

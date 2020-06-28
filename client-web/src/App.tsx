@@ -3,7 +3,7 @@ import './App.css';
 
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import {sessionCells, sessionConnected} from "./app/gameStateSlice";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {PlayPage} from "./routes/player-route/PlayPage";
 import {CreatePage} from "./routes/creator-route/CreatePage";
 import {elastic as Menu} from "react-burger-menu";

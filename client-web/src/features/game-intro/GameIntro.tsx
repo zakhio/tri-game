@@ -1,16 +1,20 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {playerSessionId, playerToken, startGame,} from '../../app/gameStateSlice';
+import {playerToken, startGame,} from '../../app/gameStateSlice';
 import {PlayerList} from "../player-list/PlayerList";
 import styles from "./GameIntro.module.css"
 import commonStyles from "../Common.module.css";
 import {SessionShare} from "../session-share/SessionShare";
 import {FormattedMessage} from "react-intl";
+import {useParams} from "react-router-dom";
 
 export function GameIntro() {
+    const {sessionId} = useParams();
+
     const token = useSelector(playerToken);
-    const sessionId = useSelector(playerSessionId);
     const dispatch = useDispatch();
+
+    console.log(token, sessionId)
 
     return (
         <div className={styles.container}>

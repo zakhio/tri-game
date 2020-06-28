@@ -1,13 +1,13 @@
 import React from "react";
 import {gameSessionUrl} from "../../app/config";
-import {useSelector} from "react-redux";
-import {playerSessionId} from "../../app/gameStateSlice";
 import {TelegramIcon, TelegramShareButton} from "react-share";
 import {FormattedMessage, useIntl} from "react-intl";
+import {useParams} from "react-router-dom";
 
 export function SessionShare() {
+    const {sessionId} = useParams();
+
     const intl = useIntl();
-    const sessionId = useSelector(playerSessionId)
     const link = gameSessionUrl(sessionId!);
 
     return <div>
