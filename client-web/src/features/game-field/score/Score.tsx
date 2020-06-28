@@ -3,6 +3,7 @@ import styles from './Score.module.css';
 import fieldStyles from '../GameField.module.css';
 import {useSelector} from 'react-redux';
 import {sessionTeams,} from '../../../app/gameStateSlice';
+import Typography from '@material-ui/core/Typography';
 
 export function Score() {
     const teams = useSelector(sessionTeams)
@@ -19,5 +20,5 @@ export function Score() {
         }
     });
 
-    return <div className={styles.gameScore}>{r}</div>;
+    return <Typography variant="h3">{r}</Typography>;
 }

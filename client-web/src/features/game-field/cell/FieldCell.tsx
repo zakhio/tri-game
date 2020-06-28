@@ -3,6 +3,8 @@ import {Cell} from "../../../proto/tri_pb";
 import styles from './FieldCell.module.css';
 import fieldStyles from '../GameField.module.css';
 import {animated, useSpring} from "react-spring";
+import Box from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 
 function calcVal(open: boolean, hover: boolean = false): number {
     if (hover && !open) {
@@ -47,7 +49,7 @@ export function FieldCell({cell, onClick, showColor}: { cell: Cell.AsObject, onC
     const kind_front_style = showColor ? kind_style : fieldStyles.cell_closed;
     const cell_overlay = showColor && !cell.open ? styles.cell_overlay : "";
 
-    return <div
+    return <Box
         onClick={(event) => {
             event.preventDefault()
             if (prevVal.current === 1) {
@@ -68,7 +70,6 @@ export function FieldCell({cell, onClick, showColor}: { cell: Cell.AsObject, onC
         }}
         onTouchEnd={(event) => {
             event.preventDefault()
-            onHover(false)
             if (prevVal.current === 1) {
                 onClick();
             }
@@ -95,15 +96,19 @@ export function FieldCell({cell, onClick, showColor}: { cell: Cell.AsObject, onC
                     styles.cell_face,
                     styles.face_front,
                     kind_front_style].join(" ")}>
-                {cell.word}
+                <Typography variant="caption" align="center">
+                    {cell.word}
+                </Typography>
             </animated.div>
             <animated.div
                 className={[
                     styles.cell_face,
                     styles.face_back,
                     kind_style].join(" ")}>
-                {cell.word}
+                <Typography variant="caption" align="center">
+                    {cell.word}
+                </Typography>
             </animated.div>
         </animated.div>
-    </div>
+    </Box>
 }

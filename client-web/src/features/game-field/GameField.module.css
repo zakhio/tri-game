@@ -1,16 +1,5 @@
 .world_table {
-    border-collapse: collapse;
-    table-layout: fixed;
     width: 90%;
-    height: 70%;
-}
-
-.world_table td {
-    text-align: center;
-    vertical-align: middle;
-    padding: 0.8%;
-    /*strange hack to calculate correct height*/
-    height: 1px;
 }
 
 .cell_closed {

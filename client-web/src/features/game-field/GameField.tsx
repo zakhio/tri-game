@@ -6,6 +6,7 @@ import {Score} from "./score/Score";
 import {SessionShare} from "../session-share/SessionShare";
 import {FieldCell} from "./cell/FieldCell";
 import {useParams} from "react-router-dom";
+import Grid from '@material-ui/core/Grid';
 
 export function GameField() {
     const {sessionId} = useParams();
@@ -26,28 +27,27 @@ export function GameField() {
     const rows = [];
     for (let i = 0; i < cells.length; i += numOfColumns) {
         const cols = cells.slice(i, i + numOfColumns).map((c, index) => {
-                return <td key={i + index}>
+                return <Grid item xs key={i + index}>
                     <FieldCell cell={c} onClick={() => turnWord(i + index)} showColor={me!.captain}/>
-                </td>
+                </Grid>
             }
         );
         rows.push(cols)
     }
 
-
-    return <table className={styles.world_table}>
-        <tbody>
-        <tr>
-            <td colSpan={numOfColumns}><Score/></td>
-        </tr>
-        {rows.map((r, index) =>
-            <tr key={index}>
-                {r}
-            </tr>
-        )}
-        <tr>
-            <td colSpan={numOfColumns}><SessionShare/></td>
-        </tr>
-        </tbody>
-    </table>
+    return <div className={styles.world_table}>
+        <Grid container spacing={1} justify="center">
+            <Score/>
+        </Grid>
+        <Grid container spacing={1}>
+            {rows.map((r, index) =>
+                <Grid container item xs={12} spacing={1} key={index}>
+                    {r}
+                </Grid>
+            )}
+        </Grid>
+        <Grid container spacing={1}>
+            <SessionShare/>
+        </Grid>
+    </div>
 }
