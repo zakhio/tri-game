@@ -32,7 +32,7 @@ interface GameState {
 
 const initialState: GameState = {
     sessionId: null,
-    token: v4(),
+    token: localStorage.getItem("token") || v4(),
     connected: false,
     me: undefined,
     players: [],
@@ -129,17 +129,11 @@ export const createSession = (token: string, history: History<LocationState>): A
         }
         const sessionId: string = res.getSessionid();
         history.push("/" + sessionId);
-        // dispatch(replaceCurrentSession(sessionId))
-        // dispatch(joinAsync(token, sessionId))
     });
 };
 
-export const checkCurrentSession = (): AppThunk => dispatch => {
-    const sessionId = localStorage.getItem("sessionId");
-    const token = localStorage.getItem("token");
-
+export const autoJoinSession = (token: string, sessionId: string): AppThunk => dispatch => {
     if (token && sessionId) {
-        dispatch(replaceCurrentSession(sessionId))
         dispatch(joinAsync(token, sessionId))
     }
 };

@@ -13,8 +13,8 @@ export function GameIntro() {
     const dispatch = useDispatch();
 
     return (
-        <div>
-            <div className={styles.container}>
+        <div className={styles.container}>
+            <div className={styles.row}>
                 <div className={styles.cell}>
                     <p>
                         <FormattedMessage id="page.start.intro.p1"
@@ -36,7 +36,7 @@ export function GameIntro() {
                     <PlayerList/>
                 </div>
             </div>
-            <div className={styles.container}>
+            <div className={styles.row}>
                 <div>
                     <button
                         disabled={!sessionId || !token}

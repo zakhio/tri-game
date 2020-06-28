@@ -20,7 +20,7 @@ export function SessionShare() {
         <TelegramShareButton
             url={link}
             title={intl.formatMessage({
-                id: 'feature.invite.button',
+                id: 'feature.invite.provider.title',
                 defaultMessage: 'TRI Game',
                 description: 'Title for share window in provider window'})}>
             <TelegramIcon size={32} round/>

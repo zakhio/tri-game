@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.10.2",
     "@reduxjs/toolkit": "^1.2.5",
     "@wry/equality": "^0.1.11",
     "google-protobuf": "^3.12.1",

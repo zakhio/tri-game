@@ -1,8 +1,8 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import './App.css';
 
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
-import {checkCurrentSession, sessionCells, sessionConnected} from "./app/gameStateSlice";
+import {sessionCells, sessionConnected} from "./app/gameStateSlice";
 import {useDispatch, useSelector} from "react-redux";
 import {PlayPage} from "./routes/player-route/PlayPage";
 import {CreatePage} from "./routes/creator-route/CreatePage";
@@ -20,15 +20,8 @@ const messages: Record<string, Record<string, string>> = {
 const language = 'ru';//navigator.language.split(/[-_]/)[0];
 
 function App() {
-    const dispatch = useDispatch();
     const connected = useSelector(sessionConnected);
     const words = useSelector(sessionCells);
-
-    useEffect(() => {
-        if (!connected) {
-            dispatch(checkCurrentSession());
-        }
-    });
 
     return (
         <IntlProvider locale={language} messages={messages[language]}>
