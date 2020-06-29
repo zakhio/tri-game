@@ -10,7 +10,7 @@ const singleMessageFileDir = "tmp"
 manageTranslations({
     messagesDirectory: messagesDir,
     translationsDirectory: translationsDir,
-    languages: ["en", "ru"],
+    languages: ["ru"],
 })
 
 const extractedMessages = readMessageFiles(messagesDir)

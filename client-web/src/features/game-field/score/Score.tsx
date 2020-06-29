@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from './Score.module.css';
 import fieldStyles from '../GameField.module.css';
 import {useSelector} from 'react-redux';
 import {sessionTeams,} from '../../../app/gameStateSlice';

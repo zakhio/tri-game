@@ -1,10 +1,12 @@
 {
-  "feature.invite.text": "Позвать друзей",
   "feature.invite.provider.title": "Игра TRI",
+  "feature.invite.text": "Позвать друзей",
   "feature.players.title": "Игроки",
   "page.create.button": "Создать игровую сессию",
   "page.create.title": "Добро пожаловать в игру TRI",
   "page.join.button": "Присоединиться",
+  "page.join.playerName": "Имя игрока",
+  "page.join.sessionId": "ID Сессии",
   "page.join.title": "Присоединиться к сессии",
   "page.start.button": "Старт!",
   "page.start.intro.p1": "Капитаны знают тайные личности 25 агентов. Игроки же знают агентов только по их кодовым именам.",

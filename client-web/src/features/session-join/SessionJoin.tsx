@@ -1,13 +1,27 @@
 import React, {useState} from 'react';
-import commonStyles from '../Common.module.css';
 import {useDispatch, useSelector} from 'react-redux';
 import {playerToken, tryJoinAsync,} from '../../app/gameStateSlice';
-import {FormattedMessage} from 'react-intl';
+import {defineMessages, FormattedMessage, useIntl} from 'react-intl';
 import {useHistory} from "react-router-dom";
-import {Grid, Typography, Button, TextField} from "@material-ui/core";
+import {Button, Grid, TextField, Typography} from "@material-ui/core";
+
+const messages = defineMessages({
+    sessionId: {
+        id: 'page.join.sessionId',
+        defaultMessage: 'Session ID',
+        description: 'Title for session id input on join session page',
+    },
+    playerName: {
+        id: 'page.join.playerName',
+        defaultMessage: 'Player Name',
+        description: 'Title for player name input on join session page',
+    },
+});
 
 export function SessionJoin({sessionId}: { sessionId?: string }) {
     const history = useHistory();
+
+    const intl = useIntl();
 
     const token = useSelector(playerToken)
     const dispatch = useDispatch();
@@ -29,14 +43,14 @@ export function SessionJoin({sessionId}: { sessionId?: string }) {
                     <Grid item xs>
                         <TextField required
                                    id="standard-required"
-                                   label="Session ID"
+                                   label={intl.formatMessage(messages.sessionId)}
                                    value={sessionId}
                                    onChange={e => _setSessionId(e.target.value)}/>
                     </Grid>
                     <Grid item xs>
                         <TextField required
                                    id="standard-required"
-                                   label="Player Name"
+                                   label={intl.formatMessage(messages.playerName)}
                                    value={playerName}
                                    onChange={e => setPlayerName(e.target.value)}/>
                     </Grid>

@@ -1,8 +1,16 @@
 import React from "react";
 import {gameSessionUrl} from "../../app/config";
 import {TelegramIcon, TelegramShareButton} from "react-share";
-import {FormattedMessage, useIntl} from "react-intl";
+import {FormattedMessage, useIntl, defineMessages} from "react-intl";
 import {useParams} from "react-router-dom";
+
+const messages = defineMessages({
+    provider_title: {
+        id: 'feature.invite.provider.title',
+        defaultMessage: 'TRI Game',
+        description: 'Title for share window in provider window',
+    },
+});
 
 export function SessionShare() {
     const {sessionId} = useParams();
@@ -19,10 +27,7 @@ export function SessionShare() {
         </span>
         <TelegramShareButton
             url={link}
-            title={intl.formatMessage({
-                id: 'feature.invite.provider.title',
-                defaultMessage: 'TRI Game',
-                description: 'Title for share window in provider window'})}>
+            title={intl.formatMessage(messages.provider_title)}>
             <TelegramIcon size={32} round/>
         </TelegramShareButton>
     </div>
