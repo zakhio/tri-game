@@ -6,9 +6,10 @@ import {Score} from "./score/Score";
 import {SessionShare} from "../session-share/SessionShare";
 import {FieldCell} from "./cell/FieldCell";
 import {useParams} from "react-router-dom";
-import Grid from '@material-ui/core/Grid';
+import {Grid} from '@material-ui/core';
+import {Settings} from '@material-ui/icons';
 
-export function GameField() {
+export function GameField({onSettings}: { onSettings: Function }) {
     const {sessionId} = useParams();
 
     const token = useSelector(playerToken);
@@ -38,6 +39,7 @@ export function GameField() {
     return <div className={styles.world_table}>
         <Grid container spacing={1} justify="center">
             <Score/>
+            <Settings onClick={() => onSettings()}/>
         </Grid>
         <Grid container spacing={1}>
             {rows.map((r, index) =>

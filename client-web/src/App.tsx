@@ -12,6 +12,7 @@ import {IntlProvider} from "react-intl";
 
 import messages_en from "./translations/en.json";
 import messages_ru from "./translations/ru.json";
+import {JoinPage} from "./routes/join-route/JoinPage";
 
 const messages: Record<string, Record<string, string>> = {
     'ru': messages_ru,
@@ -20,19 +21,9 @@ const messages: Record<string, Record<string, string>> = {
 const language = 'ru';//navigator.language.split(/[-_]/)[0];
 
 function App() {
-    const connected = useSelector(sessionConnected);
-    const words = useSelector(sessionCells);
-
     return (
         <IntlProvider locale={language} messages={messages[language]}>
             <Router>
-                {connected &&
-                <Menu outerContainerId={"root"} pageWrapId={"App"} right>
-                    {words.length > 0 &&
-                    <PlayerSettings/>
-                    }
-                </Menu>
-                }
                 <div className="App" id="App">
                     <Switch>
                         <Route path="/create">
@@ -40,6 +31,9 @@ function App() {
                         </Route>
                         <Route path="/:sessionId">
                             <PlayPage/>
+                        </Route>
+                        <Route path="/">
+                            <JoinPage/>
                         </Route>
                     </Switch>
                 </div>

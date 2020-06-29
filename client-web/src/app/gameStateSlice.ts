@@ -105,6 +105,36 @@ export const joinAsync = (token: string, sessionId: string): AppThunk => dispatc
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
 // will call the thunk with the `dispatch` function as the first argument. Async
 // code can then be executed and other actions can be dispatched
+export const tryJoinAsync = (token: string, sessionId: string, playerName:string, history: History<LocationState>): AppThunk => dispatch => {
+    if (stream) {
+        stream.cancel();
+    }
+
+    localStorage.setItem("token", token);
+    const observerReq = new ObserveSessionRequest();
+    observerReq.setSessionid(sessionId);
+    observerReq.setToken(token);
+
+    stream = client.observeSession(observerReq);
+    stream.on('data', (res) => {
+        stream.cancel();
+        dispatch(setSettings(token, sessionId, playerName));
+        history.push("/" + sessionId);
+    });
+
+    stream.on("error", (err) => {
+        console.log("stream.error", err);
+    });
+
+    stream.on("end", () => {
+        console.log("stream.end");
+    });
+};
+
+// The function below is called a thunk and allows us to perform async logic. It
+// can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
+// will call the thunk with the `dispatch` function as the first argument. Async
+// code can then be executed and other actions can be dispatched
 export const createSession = (token: string, history: History<LocationState>): AppThunk => dispatch => {
     const req = new CreateSessionRequest();
     req.setToken(token);
