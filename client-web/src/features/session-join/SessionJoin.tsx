@@ -34,7 +34,7 @@ export function SessionJoin({sessionId}: { sessionId?: string }) {
             <form autoComplete="off">
                 <Grid container direction="column" justify="center" alignItems="center" spacing={3}>
                     <Grid item xs>
-                        <Typography variant="h4">
+                        <Typography variant="h4" align="center">
                             <FormattedMessage id="page.join.title"
                                               defaultMessage="Join to session"
                                               description="Welcome title on join game session page"/>
