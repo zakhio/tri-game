@@ -1,10 +1,10 @@
 import React from 'react';
 // @ts-ignore
-import commonStyles from '../Common.module.css';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from "react-router-dom";
 import {createSession, playerToken,} from '../../app/gameStateSlice';
 import {FormattedMessage} from "react-intl";
+import {Button, Grid, Typography} from "@material-ui/core";
 
 export function SessionCreate() {
     const history = useHistory();
@@ -12,21 +12,24 @@ export function SessionCreate() {
     const dispatch = useDispatch();
 
     return (
-        <div>
-            <h1>
-                <FormattedMessage id="page.create.title"
-                                  defaultMessage="Welcome to TRI game"
-                                  description="Welcome title on create game session page"/>
-            </h1>
-            <div className={commonStyles.row}>
-                <button
-                    className={commonStyles.button}
+        <Grid container direction="column" alignItems="center" spacing={3}>
+            <Grid item xs>
+                <Typography variant="h4" align="center">
+                    <FormattedMessage id="page.create.title"
+                                      defaultMessage="Welcome to TRI game"
+                                      description="Welcome title on create game session page"/>
+                </Typography>
+            </Grid>
+            <Grid item xs>
+                <Button
+                    variant="contained"
+                    color="primary"
                     onClick={() => dispatch(createSession(token, history))}>
                     <FormattedMessage id="page.create.button"
                                       defaultMessage="Create Game Session"
                                       description="Button on create game session page"/>
-                </button>
-            </div>
-        </div>
+                </Button>
+            </Grid>
+        </Grid>
     );
 }

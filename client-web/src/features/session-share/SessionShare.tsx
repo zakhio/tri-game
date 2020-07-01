@@ -1,8 +1,9 @@
 import React from "react";
 import {gameSessionUrl} from "../../app/config";
 import {TelegramIcon, TelegramShareButton} from "react-share";
-import {FormattedMessage, useIntl, defineMessages} from "react-intl";
+import {defineMessages, FormattedMessage, useIntl} from "react-intl";
 import {useParams} from "react-router-dom";
+import {Grid, Typography} from "@material-ui/core";
 
 const messages = defineMessages({
     provider_title: {
@@ -18,17 +19,21 @@ export function SessionShare() {
     const intl = useIntl();
     const link = gameSessionUrl(sessionId!);
 
-    return <div>
-        <span>
-            <FormattedMessage id="feature.invite.text"
-                              defaultMessage="Invite friends"
-                              description="Text for inviting friend for the game session"
-                              values={{sessionId}}/>
-        </span>
-        <TelegramShareButton
-            url={link}
-            title={intl.formatMessage(messages.provider_title)}>
-            <TelegramIcon size={32} round/>
-        </TelegramShareButton>
-    </div>
+    return <Grid container spacing={1} justify="center">
+        <Grid item alignItems="center">
+            <Typography variant="body2">
+                <FormattedMessage id="feature.invite.text"
+                                  defaultMessage="Invite friends"
+                                  description="Text for inviting friend for the game session"
+                                  values={{sessionId}}/>
+            </Typography>
+        </Grid>
+        <Grid item>
+            <TelegramShareButton
+                url={link}
+                title={intl.formatMessage(messages.provider_title)}>
+                <TelegramIcon size={20} round/>
+            </TelegramShareButton>
+        </Grid>
+    </Grid>
 }

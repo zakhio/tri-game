@@ -30,44 +30,42 @@ export function SessionJoin({sessionId}: { sessionId?: string }) {
     const [playerName, setPlayerName] = useState("");
 
     return (
-        <div>
-            <form autoComplete="off">
-                <Grid container direction="column" justify="center" alignItems="center" spacing={3}>
-                    <Grid item xs>
-                        <Typography variant="h4" align="center">
-                            <FormattedMessage id="page.join.title"
-                                              defaultMessage="Join to session"
-                                              description="Welcome title on join game session page"/>
-                        </Typography>
-                    </Grid>
-                    <Grid item xs>
-                        <TextField required
-                                   id="standard-required"
-                                   label={intl.formatMessage(messages.sessionId)}
-                                   value={sessionId}
-                                   onChange={e => _setSessionId(e.target.value)}/>
-                    </Grid>
-                    <Grid item xs>
-                        <TextField required
-                                   id="standard-required"
-                                   label={intl.formatMessage(messages.playerName)}
-                                   value={playerName}
-                                   onChange={e => setPlayerName(e.target.value)}/>
-                    </Grid>
-                    <Grid item xs>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={() => {
-                                dispatch(tryJoinAsync(token, _sessionId, playerName, history));
-                            }}>
-                            <FormattedMessage id="page.join.button"
-                                              defaultMessage="Join"
-                                              description="Button on join game session page"/>
-                        </Button>
-                    </Grid>
+        <form autoComplete="off">
+            <Grid container direction="column" alignItems="center" spacing={3}>
+                <Grid item xs>
+                    <Typography variant="h4" align="center">
+                        <FormattedMessage id="page.join.title"
+                                          defaultMessage="Join to session"
+                                          description="Welcome title on join game session page"/>
+                    </Typography>
                 </Grid>
-            </form>
-        </div>
+                <Grid item xs>
+                    <TextField required
+                               id="standard-required"
+                               label={intl.formatMessage(messages.sessionId)}
+                               value={sessionId}
+                               onChange={e => _setSessionId(e.target.value)}/>
+                </Grid>
+                <Grid item xs>
+                    <TextField required
+                               id="standard-required"
+                               label={intl.formatMessage(messages.playerName)}
+                               value={playerName}
+                               onChange={e => setPlayerName(e.target.value)}/>
+                </Grid>
+                <Grid item xs>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                            dispatch(tryJoinAsync(token, _sessionId, playerName, history));
+                        }}>
+                        <FormattedMessage id="page.join.button"
+                                          defaultMessage="Join"
+                                          description="Button on join game session page"/>
+                    </Button>
+                </Grid>
+            </Grid>
+        </form>
     );
 }

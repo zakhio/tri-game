@@ -116,5 +116,10 @@ func (g *GameState) Turn(playerId string, position int) error {
 		}
 	}
 
+	// reveal all cells when game is over
+	if g.Started == false {
+		g.PickAll()
+	}
+
 	return nil
 }

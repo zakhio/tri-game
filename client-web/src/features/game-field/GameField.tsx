@@ -37,19 +37,21 @@ export function GameField({onSettings}: { onSettings: Function }) {
     }
 
     return <div className={styles.world_table}>
-        <Grid container spacing={1} justify="center">
-            <Score/>
-            <Settings onClick={() => onSettings()}/>
-        </Grid>
-        <Grid container spacing={1}>
-            {rows.map((r, index) =>
-                <Grid container item xs={12} spacing={1} key={index}>
-                    {r}
-                </Grid>
-            )}
-        </Grid>
-        <Grid container spacing={1}>
-            <SessionShare/>
+        <Grid container direction="column">
+            <Grid container item spacing={1} justify="center">
+                <Score/>
+                <Settings onClick={() => onSettings()}/>
+            </Grid>
+            <Grid container item spacing={1}>
+                {rows.map((r, index) =>
+                    <Grid container item xs={12} spacing={1} key={index}>
+                        {r}
+                    </Grid>
+                )}
+            </Grid>
+            <Grid container item spacing={1}>
+                <SessionShare/>
+            </Grid>
         </Grid>
     </div>
 }

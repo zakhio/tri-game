@@ -8,6 +8,7 @@ import (
 // CellsInfo structure for player
 type CellsInfo interface {
 	Pick(player string, position int) (entities.WordCell, error)
+	PickAll()
 	GetCells() []entities.WordCell
 	GetRemainCellsCount(teamId string) int
 }
@@ -30,6 +31,12 @@ func (g *GameState) Pick(player string, position int) (*entities.WordCell, error
 	}
 
 	return &cell, nil
+}
+
+func (g *GameState) PickAll() {
+	for i := 0; i < len(g.Cells); i++ {
+		g.Cells[i].Open = true
+	}
 }
 
 func (g *GameState) GetPicked(player string) ([]entities.WordCell, error) {
