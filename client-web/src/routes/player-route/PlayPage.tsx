@@ -1,6 +1,5 @@
-import {SessionJoin} from "../../features/session-join/SessionJoin";
 import {useDispatch, useSelector} from "react-redux";
-import {autoJoinSession, playerToken, sessionCells, sessionConnected, sessionMe} from "../../app/gameStateSlice";
+import {autoJoinSession, playerToken, sessionCells, sessionConnected} from "../../app/gameStateSlice";
 import React, {useEffect, useState} from "react";
 import {GameField} from "../../features/game-field/GameField";
 import {useParams} from "react-router-dom";
@@ -9,6 +8,7 @@ import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import {PlayerName} from "../../features/player-name/PlayerName";
 
 
 export function PlayPage() {
@@ -21,7 +21,6 @@ export function PlayPage() {
     const token = useSelector(playerToken);
     const connected = useSelector(sessionConnected);
     const words = useSelector(sessionCells);
-    const me = useSelector(sessionMe);
 
     useEffect(() => {
         if (!connected) {
@@ -30,11 +29,11 @@ export function PlayPage() {
     });
 
     return <>
-        {connected && !(me) &&
-        <SessionJoin sessionId={sessionId}/>
+        {connected &&
+        <PlayerName sessionId={sessionId}/>
         }
         {connected && words.length === 0 &&
-        <GameIntro/>
+        <GameIntro sessionId={sessionId}/>
         }
         {words.length > 0 &&
         <>
@@ -49,7 +48,7 @@ export function PlayPage() {
                     </List>
                 </Drawer>
             </React.Fragment>
-            <GameField onSettings={() => setShowSettings(true)}/>
+            <GameField sessionId={sessionId} onSettings={() => setShowSettings(true)}/>
         </>
         }
     </>

@@ -2,17 +2,12 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {playerToken, startGame,} from '../../app/gameStateSlice';
 import {FormattedMessage} from "react-intl";
-import {useParams} from "react-router-dom";
 import {Button, Grid, Typography} from "@material-ui/core";
 import {PlayerList} from "../player-list/PlayerList";
 
-export function GameIntro() {
-    const {sessionId} = useParams();
-
+export function GameIntro({sessionId}: { sessionId: string }) {
     const token = useSelector(playerToken);
     const dispatch = useDispatch();
-
-    console.log(token, sessionId)
 
     return (
         <Grid container direction="column" alignItems="center" spacing={3}>

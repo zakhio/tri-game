@@ -41,6 +41,8 @@ export function SessionJoin({sessionId}: { sessionId?: string }) {
                 </Grid>
                 <Grid item xs>
                     <TextField required
+                               autoFocus
+                               fullWidth
                                id="standard-required"
                                label={intl.formatMessage(messages.sessionId)}
                                value={sessionId}
@@ -48,6 +50,7 @@ export function SessionJoin({sessionId}: { sessionId?: string }) {
                 </Grid>
                 <Grid item xs>
                     <TextField required
+                               fullWidth
                                id="standard-required"
                                label={intl.formatMessage(messages.playerName)}
                                value={playerName}

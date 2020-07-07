@@ -88,8 +88,8 @@ export const joinAsync = (token: string, sessionId: string): AppThunk => dispatc
     stream = client.observeSession(observerReq);
     stream.on('data', (res) => {
         console.log("stream.data", res.toObject());
-        dispatch(replaceConnected(true));
         dispatch(replaceCurrentState(res.toObject()));
+        dispatch(replaceConnected(true));
     });
 
     stream.on("error", (err) => {

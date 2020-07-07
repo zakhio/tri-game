@@ -5,13 +5,10 @@ import styles from './GameField.module.css';
 import {Score} from "./score/Score";
 import {SessionShare} from "../session-share/SessionShare";
 import {FieldCell} from "./cell/FieldCell";
-import {useParams} from "react-router-dom";
 import {Grid} from '@material-ui/core';
 import {Settings} from '@material-ui/icons';
 
-export function GameField({onSettings}: { onSettings: Function }) {
-    const {sessionId} = useParams();
-
+export function GameField({onSettings, sessionId}: { onSettings: Function, sessionId: string }) {
     const token = useSelector(playerToken);
 
     const numOfColumns = Math.max(1, useSelector(sessionNumOfColumns));
