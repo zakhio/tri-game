@@ -33,8 +33,7 @@ export function GameField({onSettings, sessionId}: { onSettings: Function, sessi
         rows.push(cols)
     }
 
-    return <div className={styles.world_table}>
-        <Grid container direction="column">
+    return <Grid container direction="column">
             <Grid container item spacing={1} justify="center">
                 <Score/>
                 <Settings onClick={() => onSettings()}/>
@@ -50,5 +49,4 @@ export function GameField({onSettings, sessionId}: { onSettings: Function, sessi
                 <SessionShare/>
             </Grid>
         </Grid>
-    </div>
 }

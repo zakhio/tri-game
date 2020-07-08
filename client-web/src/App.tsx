@@ -18,19 +18,17 @@ function App() {
     return (
         <IntlProvider locale={language} messages={messages[language]}>
             <Router>
-                <div className="App" id="App">
-                    <Switch>
-                        <Route path="/create">
-                            <CreatePage/>
-                        </Route>
-                        <Route path="/:sessionId">
-                            <PlayPage/>
-                        </Route>
-                        <Route path="/">
-                            <JoinPage/>
-                        </Route>
-                    </Switch>
-                </div>
+                <Switch>
+                    <Route path="/create">
+                        <CreatePage/>
+                    </Route>
+                    <Route path="/:sessionId">
+                        <PlayPage/>
+                    </Route>
+                    <Route path="/">
+                        <JoinPage/>
+                    </Route>
+                </Switch>
             </Router>
         </IntlProvider>
     );
