@@ -46,7 +46,7 @@ func Convert(playerId string, gameState logic.GameState) *pb.GameSessionStream {
 
 	cells := make([]*pb.Cell, 0)
 	for _, c := range gameState.GetCells() {
-		cells = append(cells, convertCell(c, !gameState.IsCaptain(playerId) || !gameState.Started))
+		cells = append(cells, convertCell(c, !gameState.IsCaptain(playerId) && !gameState.Started))
 	}
 	result.Cells = cells
 	result.NumberOfColumns = int32(gameState.GetNumOfColumns())

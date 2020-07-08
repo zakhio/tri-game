@@ -33,7 +33,7 @@ export function GameField({onSettings, sessionId}: { onSettings: Function, sessi
         rows.push(cols)
     }
 
-    return <Grid container direction="column">
+    return <Grid container direction="column" spacing={1}>
             <Grid container item spacing={1} justify="center">
                 <Score/>
                 <Settings onClick={() => onSettings()}/>
@@ -45,7 +45,7 @@ export function GameField({onSettings, sessionId}: { onSettings: Function, sessi
                     </Grid>
                 )}
             </Grid>
-            <Grid container item spacing={1}>
+            <Grid container item>
                 <SessionShare/>
             </Grid>
         </Grid>
