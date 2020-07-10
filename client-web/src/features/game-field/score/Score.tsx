@@ -19,5 +19,5 @@ export function Score() {
         }
     });
 
-    return <Typography variant="h3">{r}</Typography>;
+    return <Typography variant="h3" align="center">{r}</Typography>;
 }

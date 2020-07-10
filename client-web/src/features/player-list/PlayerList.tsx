@@ -17,12 +17,6 @@ export function PlayerList() {
     const intl = useIntl();
     const players = useSelector(sessionPlayers);
 
-    const p = players.map((player, i) =>
-        <ListItem key={i}>
-            <ListItemText primary={player.alias || intl.formatMessage(messages.noname)}/>
-        </ListItem>
-    );
-
     return (
         <Grid container direction="column">
             <Grid item>
@@ -34,8 +28,12 @@ export function PlayerList() {
                 </Typography>
             </Grid>
             <Grid item>
-                <List>
-                    {p}
+                <List dense>
+                    {players.map((player, i) =>
+                        <ListItem key={i}>
+                            <ListItemText primary={player.alias || intl.formatMessage(messages.noname)}/>
+                        </ListItem>
+                    )}
                 </List>
             </Grid>
         </Grid>

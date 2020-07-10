@@ -27,6 +27,7 @@ interface GameState {
     teams: Team.AsObject[];
     cells: Cell.AsObject[];
     numOfColumns: number;
+    started: boolean;
 }
 
 const initialState: GameState = {
@@ -37,6 +38,7 @@ const initialState: GameState = {
     teams: [],
     cells: [],
     numOfColumns: 0,
+    started: false,
 };
 
 const client = new TRIGameClient(hostUrl(), null, null);
@@ -51,6 +53,7 @@ export const gameStateSlice = createSlice({
             state.cells = action.payload.cellsList
             state.numOfColumns = action.payload.numberofcolumns;
             state.teams = action.payload.teamsList
+            state.started = action.payload.started
 
             const myId = action.payload.playerid;
             const players = action.payload.playersList;
@@ -199,6 +202,7 @@ export const sessionNumOfColumns = (state: RootState) => state.gameState.numOfCo
 export const sessionCells = (state: RootState) => state.gameState.cells;
 export const sessionTeams = (state: RootState) => state.gameState.teams;
 export const sessionPlayers = (state: RootState) => state.gameState.players;
+export const sessionStarted = (state: RootState) => state.gameState.started;
 export const sessionMe = (state: RootState) => state.gameState.me;
 export const playerToken = (state: RootState) => state.gameState.token;
 export const sessionConnected = (state: RootState) => state.gameState.connected;

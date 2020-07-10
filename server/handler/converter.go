@@ -16,7 +16,7 @@ func Convert(playerId string, gameState logic.GameState) *pb.GameSessionStream {
 		picked, _ := gameState.GetPicked(pId)
 
 		for _, c := range picked {
-			words = append(words, convertCell(c, false))
+			words = append(words, convertCell(c, true))
 		}
 
 		teamId, _ := gameState.GetTeam(pId)
@@ -46,7 +46,7 @@ func Convert(playerId string, gameState logic.GameState) *pb.GameSessionStream {
 
 	cells := make([]*pb.Cell, 0)
 	for _, c := range gameState.GetCells() {
-		cells = append(cells, convertCell(c, !gameState.IsCaptain(playerId) && !gameState.Started))
+		cells = append(cells, convertCell(c, gameState.IsCaptain(playerId) || !gameState.Started))
 	}
 	result.Cells = cells
 	result.NumberOfColumns = int32(gameState.GetNumOfColumns())
@@ -55,13 +55,13 @@ func Convert(playerId string, gameState logic.GameState) *pb.GameSessionStream {
 	return result
 }
 
-func convertCell(c entities.WordCell, hideSensitive bool) *pb.Cell {
+func convertCell(c entities.WordCell, showSensitive bool) *pb.Cell {
 	cell := &pb.Cell{
 		Word: c.Word,
 		Open: c.Open,
 	}
 
-	if !hideSensitive || c.Open {
+	if showSensitive || c.Open {
 		switch c.Type {
 		case entities.REGULAR:
 			cell.Type = pb.Cell_REGULAR

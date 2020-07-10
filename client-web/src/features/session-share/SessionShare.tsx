@@ -19,11 +19,11 @@ export function SessionShare() {
     const intl = useIntl();
     const link = gameSessionUrl(sessionId!);
 
-    return <Grid container spacing={1} justify="center">
-        <Grid item alignItems="center">
+    return <Grid container justify="center" alignItems="center">
+        <Grid item>
             <Typography variant="body2">
                 <FormattedMessage id="feature.invite.text"
-                                  defaultMessage="Invite friends"
+                                  defaultMessage="Invite friends to current session:"
                                   description="Text for inviting friend for the game session"
                                   values={{sessionId}}/>
             </Typography>
@@ -32,7 +32,7 @@ export function SessionShare() {
             <TelegramShareButton
                 url={link}
                 title={intl.formatMessage(messages.provider_title)}>
-                <TelegramIcon size={20} round/>
+                <TelegramIcon size={22} round/>
             </TelegramShareButton>
         </Grid>
     </Grid>

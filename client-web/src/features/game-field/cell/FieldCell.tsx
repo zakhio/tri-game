@@ -52,29 +52,49 @@ export function FieldCell({cell, onClick, showColor}: { cell: Cell.AsObject, onC
     return <Box
         onClick={(event) => {
             event.preventDefault()
+            if (showColor) {
+                return
+            }
             if (prevVal.current === 1) {
                 onClick();
             }
         }}
 
         onMouseOver={(event) => {
+            if (showColor) {
+                return
+            }
+
             onHover(true);
         }}
 
         onMouseOut={(event) => {
+            if (showColor) {
+                return
+            }
             onHover(false);
         }}
 
         onTouchStart={(event) => {
+            if (showColor) {
+                return
+            }
             onHover(true);
         }}
         onTouchEnd={(event) => {
             event.preventDefault()
+            if (showColor) {
+                return
+            }
             if (prevVal.current === 1) {
                 onClick();
             }
         }}
         onTouchMove={(event) => {
+            if (showColor) {
+                return
+            }
+
             let myLocation = event.changedTouches[0];
             let rect = event.currentTarget.getBoundingClientRect();
             if (rect.left <= myLocation.clientX && myLocation.clientX <= rect.right

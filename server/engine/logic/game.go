@@ -15,7 +15,10 @@ type GameInfo interface {
 }
 
 func (g *GameState) Start(numberOfTeams, numberOrRows, numberOfColumns int) error {
+	g.Started = false
+
 	g.ClearTeams()
+	g.ClearCaptains()
 
 	if numberOfTeams < 2 {
 		numberOfTeams = 2

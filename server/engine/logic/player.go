@@ -9,6 +9,7 @@ type PlayerInfo interface {
 	GetPlayers() []string
 	IsCaptain(playerId string) bool
 	PromoteToCaptain(playerId string, captain bool)
+	ClearCaptains()
 }
 
 func (g *GameState) NewPlayer() (string, error) {
@@ -25,6 +26,10 @@ func (g *GameState) IsCaptain(playerId string) bool {
 
 func (g *GameState) PromoteToCaptain(playerId string, captain bool) {
 	g.Captains[playerId] = captain
+}
+
+func (g *GameState) ClearCaptains() {
+	g.Captains = make(map[string]bool)
 }
 
 func (g *GameState) GetScore(playerId string) int {

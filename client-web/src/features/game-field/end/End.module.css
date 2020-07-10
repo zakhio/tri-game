@@ -1,0 +1,6 @@
+.gameScore {
+    font-size: 3em;
+}
+.gameScore > span{
+    padding: 0 4px;
+}
