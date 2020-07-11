@@ -20,6 +20,6 @@
   "popup.missingName.cancelButton": "Пропустить",
   "popup.missingName.field": "Ваше имя",
   "popup.missingName.saveButton": "Сохранить",
-  "popup.missingName.text": "Введите свое имя, что бы другие игроки знали кто вы:",
+  "popup.missingName.text": "Введите свое имя, чтобы другие игроки знали, кто вы:",
   "popup.missingName.title": "Представьтесь"
 }

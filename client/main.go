@@ -2,20 +2,18 @@ package main
 
 import (
 	"context"
+	"crypto/tls"
 	"flag"
 	"fmt"
 	"github.com/google/uuid"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 	"io"
 	"log"
 	"math/rand"
 	"time"
 
-	"google.golang.org/grpc"
 	pb "zakh.io/tri/proto"
-)
-
-const (
-	address = "localhost:50053"
 )
 
 func joinSession(client *pb.TRIGameClient, sessionID string, token string) {
@@ -45,6 +43,8 @@ func main() {
 	var token string
 	var sessionID string
 	var startFlag bool
+	var prodSetup bool
+	flag.BoolVar(&prodSetup, "prod", false, "connect to production setup")
 	flag.StringVar(&token, "token", "", "the player's token")
 	flag.StringVar(&sessionID, "sessionID", "", "the session id")
 	flag.BoolVar(&startFlag, "start", false, "the flag to start the game")
@@ -56,7 +56,18 @@ func main() {
 		log.Printf("new token generated: %v", token)
 	}
 
-	conn, err := grpc.Dial(address, grpc.WithInsecure())
+	var conn *grpc.ClientConn
+	var err error
+
+	if prodSetup {
+		config := &tls.Config{
+			InsecureSkipVerify: true,
+		}
+		conn, err = grpc.Dial("zakh.io:8080", grpc.WithTransportCredentials(credentials.NewTLS(config)))
+	} else {
+		conn, err = grpc.Dial("localhost:50053", grpc.WithInsecure())
+	}
+
 	if err != nil {
 		log.Fatalf("failed to connect: %v", err)
 	}

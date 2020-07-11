@@ -17,7 +17,7 @@ const language = 'ru';//navigator.language.split(/[-_]/)[0];
 function App() {
     return (
         <IntlProvider locale={language} messages={messages[language]}>
-            <Router>
+            <Router basename="/tri/">
                 <Switch>
                     <Route path="/create">
                         <CreatePage/>
