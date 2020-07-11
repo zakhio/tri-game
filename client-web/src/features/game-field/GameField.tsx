@@ -88,9 +88,9 @@ export function GameField({onSettings, sessionId}: { onSettings: Function, sessi
                                   description="Button on restart game session page"/>
             </Button>
             <Button
-                variant="text"
+                variant={me!.captain ? "outlined" : "text"}
                 color="primary"
-                onClick={() => dispatch(setSettings(token!, sessionId!, undefined, true))}>
+                onClick={() => dispatch(setSettings(token!, sessionId!, undefined, !(me!.captain)))}>
                 <FormattedMessage id="page.game.becameCaptain"
                                   defaultMessage="Play as captain"
                                   description="Button on play as a captain"/>
