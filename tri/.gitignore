@@ -1,2 +1,2 @@
-# deploy tmp folder
-tmp-deploy
+# Exclude tmp folder
+tmp
