@@ -40,7 +40,7 @@ func (g *GameState) Start(numberOfTeams, numberOrRows, numberOfColumns int) erro
 	g.CurrentTeam = teams[rand.Intn(len(teams))]
 
 	// configure cells
-	dict, err := dictionary.ReadLines("server/words.txt")
+	dict, err := dictionary.ReadLines("dictionary/ru.txt")
 	log.Print(err)
 
 	wordsCount := numberOrRows * numberOfColumns
