@@ -45,6 +45,7 @@ const initialState: GameState = {
 
 const client = new TRIGameClient(hostUrl(), null, null);
 let stream: ClientReadableStream<GameSessionStream>;
+let numberOfTries = 0;
 
 export const gameStateSlice = createSlice({
     name: 'gameState',
@@ -88,6 +89,13 @@ export const joinAsync = (token: string, sessionId: string): AppThunk => dispatc
     if (stream) {
         stream.cancel();
     }
+
+    numberOfTries++;
+    if (numberOfTries > 5)  {
+        numberOfTries = 0;
+        return;
+    }
+
 
     localStorage.setItem("token", token);
     const observerReq = new ObserveSessionRequest();
