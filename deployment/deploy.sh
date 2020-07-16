@@ -12,4 +12,6 @@ echo
 )
 
 echo "Uploading envoy settings"
-rsync -avzh ./envoy.production.yaml $DEPLOY_SERVER_SSH:~/envoy/envoy.yaml
+rsync -avzh ./envoy.production.yaml $DEPLOY_SERVER_SSH:/etc/envoy/envoy.yaml
+
+# setsid envoy -c /etc/envoy/envoy.yaml --log-path /var/log/envoy/envoy.log >/dev/null 2>&1 < /dev/null &

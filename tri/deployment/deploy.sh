@@ -18,3 +18,10 @@ echo "-- Build and deploy the client"
   yarn build)
 
 rsync -avzh ../client-web/build/ "$DEPLOY_SERVER_SSH":/var/www/tri.zakh.io/
+
+#echo "-- Upload configuration and restart nginx"
+#rsync -avzh ./tri.zakh.io.conf "$DEPLOY_SERVER_SSH":/etc/nginx/sites-available/tri.zakh.io.conf
+#ssh "$DEPLOY_SERVER_SSH" "service nginx restart"
+#
+#echo "-- Restart the server"
+#ssh "$DEPLOY_SERVER_SSH" "setsid ./tri/tri-server >/dev/null 2>&1 < /dev/null &"
