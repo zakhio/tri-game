@@ -16,6 +16,11 @@ import (
 	pb "zakh.io/tri/proto"
 )
 
+const (
+	localServiceAddress = "localhost:50053"
+	prodServiceAddress  = "tri.zakh.io:8080"
+)
+
 func joinSession(client *pb.TRIGameClient, sessionID string, token string) {
 	var stream pb.TRIGame_ObserveSessionClient
 	var err error
@@ -63,9 +68,9 @@ func main() {
 		config := &tls.Config{
 			InsecureSkipVerify: true,
 		}
-		conn, err = grpc.Dial("zakh.io:8080", grpc.WithTransportCredentials(credentials.NewTLS(config)))
+		conn, err = grpc.Dial(prodServiceAddress, grpc.WithTransportCredentials(credentials.NewTLS(config)))
 	} else {
-		conn, err = grpc.Dial("localhost:50053", grpc.WithInsecure())
+		conn, err = grpc.Dial(localServiceAddress, grpc.WithInsecure())
 	}
 
 	if err != nil {
