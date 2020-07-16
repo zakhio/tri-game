@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	port = ":50053"
+	port = "localhost:50053"
 )
 
 func main() {
