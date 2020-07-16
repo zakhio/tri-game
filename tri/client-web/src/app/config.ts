@@ -9,5 +9,5 @@ export function hostUrl(): string {
 }
 
 export function gameSessionUrl(sessionId: string): string {
-    return 'http://' + window.location.host + "/tri/" + sessionId;
+    return window.location.protocol + '//' + window.location.host + "/" + sessionId;
 }
