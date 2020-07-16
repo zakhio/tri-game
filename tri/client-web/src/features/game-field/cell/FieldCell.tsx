@@ -47,7 +47,7 @@ export function FieldCell({cell, onClick, showColor}: { cell: Cell.AsObject, onC
     }
 
     const kind_front_style = showColor ? kind_style : fieldStyles.cell_closed;
-    const cell_overlay = showColor && !cell.open ? styles.cell_overlay : "";
+    const cell_overlay = showColor && cell.open ? styles.cell_overlay : "";
 
     return <Box
         onClick={(event) => {
