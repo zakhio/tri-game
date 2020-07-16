@@ -5,7 +5,9 @@ import {
     sessionCells,
     sessionMe,
     sessionNumOfColumns,
-    sessionStarted, setSettings,
+    sessionStarted,
+    sessionStreamStatus,
+    setSettings,
     startGame,
     turn
 } from "../../app/gameStateSlice";
@@ -23,6 +25,7 @@ export function GameField({onSettings, sessionId}: { onSettings: Function, sessi
     const cells = useSelector(sessionCells);
     const started = useSelector(sessionStarted);
     const me = useSelector(sessionMe);
+
     const dispatch = useDispatch();
 
     function turnWord(position: number) {

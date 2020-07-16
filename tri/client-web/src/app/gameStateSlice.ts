@@ -28,6 +28,7 @@ interface GameState {
     cells: Cell.AsObject[];
     numOfColumns: number;
     started: boolean;
+    streamStatus: string;
 }
 
 const initialState: GameState = {
@@ -39,6 +40,7 @@ const initialState: GameState = {
     cells: [],
     numOfColumns: 0,
     started: false,
+    streamStatus: "disconnected"
 };
 
 const client = new TRIGameClient(hostUrl(), null, null);
@@ -69,10 +71,14 @@ export const gameStateSlice = createSlice({
         replaceConnected: (state, action: PayloadAction<boolean>) => {
             state.connected = action.payload;
         },
+        // Use the PayloadAction type to declare the contents of `action.payload`
+        replaceStreamStatus: (state, action: PayloadAction<string>) => {
+            state.streamStatus = action.payload;
+        },
     },
 });
 
-export const {replaceCurrentState, replaceConnected} = gameStateSlice.actions;
+export const {replaceCurrentState, replaceConnected, replaceStreamStatus} = gameStateSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
@@ -90,17 +96,18 @@ export const joinAsync = (token: string, sessionId: string): AppThunk => dispatc
 
     stream = client.observeSession(observerReq);
     stream.on('data', (res) => {
-        console.log("stream.data", res.toObject());
         dispatch(replaceCurrentState(res.toObject()));
         dispatch(replaceConnected(true));
+        dispatch(replaceStreamStatus("data"))
     });
 
     stream.on("error", (err) => {
-        console.log("stream.error", err);
+        dispatch(replaceStreamStatus("error" + err))
+        dispatch(joinAsync(token, sessionId));
     });
 
     stream.on("end", () => {
-        console.log("stream.end");
+        dispatch(replaceStreamStatus("end"))
     });
 };
 
@@ -126,10 +133,12 @@ export const tryJoinAsync = (token: string, sessionId: string, playerName:string
     });
 
     stream.on("error", (err) => {
+        // show error
         console.log("stream.error", err);
     });
 
     stream.on("end", () => {
+        // show error
         console.log("stream.end");
     });
 };
@@ -204,6 +213,7 @@ export const sessionTeams = (state: RootState) => state.gameState.teams;
 export const sessionPlayers = (state: RootState) => state.gameState.players;
 export const sessionStarted = (state: RootState) => state.gameState.started;
 export const sessionMe = (state: RootState) => state.gameState.me;
+export const sessionStreamStatus = (state: RootState) => state.gameState.streamStatus;
 export const playerToken = (state: RootState) => state.gameState.token;
 export const sessionConnected = (state: RootState) => state.gameState.connected;
 
