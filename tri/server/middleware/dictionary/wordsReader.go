@@ -11,10 +11,14 @@ import (
 // readLines reads a whole file into memory
 // and returns a slice of its lines.
 func ReadLines(path string) ([]string, error) {
-	//root, err := os.Getwd()
-	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
-	if err != nil {
-		log.Fatal(err)
+	var err error
+	var dir = "."
+
+	if !strings.Contains(os.Args[0], "go-build") {
+		dir, err = filepath.Abs(filepath.Dir(os.Args[0]))
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	file, err := os.Open(dir + "/" + path)
