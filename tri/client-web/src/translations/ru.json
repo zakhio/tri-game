@@ -21,5 +21,15 @@
   "popup.missingName.field": "Ваше имя",
   "popup.missingName.saveButton": "Сохранить",
   "popup.missingName.text": "Введите свое имя, чтобы другие игроки знали, кто вы:",
-  "popup.missingName.title": "Представьтесь"
+  "popup.missingName.title": "Представьтесь",
+  "popup.startRound.actionText": "Выберете вашу роль нажав на соотвествующую кнопку ниже что бы начать игру. Удачи!",
+  "popup.startRound.captainButton": "Играть как капитан",
+  "popup.startRound.description": "Добро пожаловать в новый раунд! Решите кто в какой команде играет и выберете капитнов.",
+  "popup.startRound.regularButton": "Обычная роль",
+  "popup.startRound.settings": "Вы можете поменять вашу роль нажав на кнопку ",
+  "popup.startRound.title": "Начать новый раунд",
+  "settings.captain.primary": "Роль капитана",
+  "settings.captain.secondary": "Цвета всех слов видимы",
+  "settings.title.primary": "Игра TRI",
+  "settings.title.secondary": "Сессия #{sessionId}"
 }

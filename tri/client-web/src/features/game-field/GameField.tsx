@@ -6,14 +6,10 @@ import {
     sessionMe,
     sessionNumOfColumns,
     sessionStarted,
-    setSettings,
-    startGame,
     turn
 } from "../../app/gameStateSlice";
-import {SessionShare} from "../session-share/SessionShare";
 import {FieldCell} from "./cell/FieldCell";
-import {Button, Grid} from '@material-ui/core';
-import {FormattedMessage} from "react-intl";
+import {Grid} from '@material-ui/core';
 import {FieldHeader} from "./header/FieldHeader";
 
 export function GameField({onSettingsClick, sessionId}: { onSettingsClick: Function, sessionId: string }) {
@@ -54,27 +50,6 @@ export function GameField({onSettingsClick, sessionId}: { onSettingsClick: Funct
                     {r}
                 </Grid>
             )}
-        </Grid>
-        <Grid item xs={12}>
-            <SessionShare/>
-        </Grid>
-        <Grid container item xs={12} justify="center">
-            <Button
-                variant="text"
-                color="secondary"
-                onClick={() => dispatch(startGame(token!, sessionId!))}>
-                <FormattedMessage id="page.game.restart"
-                                  defaultMessage="Restart"
-                                  description="Button on restart game session page"/>
-            </Button>
-            <Button
-                variant={me!.captain ? "outlined" : "text"}
-                color="primary"
-                onClick={() => dispatch(setSettings(token!, sessionId!, undefined, !(me!.captain)))}>
-                <FormattedMessage id="page.game.becameCaptain"
-                                  defaultMessage="Play as captain"
-                                  description="Button on play as a captain"/>
-            </Button>
         </Grid>
     </Grid>
 }
