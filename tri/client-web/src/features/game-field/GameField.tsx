@@ -6,17 +6,15 @@ import {
     sessionMe,
     sessionNumOfColumns,
     sessionStarted,
-    sessionStreamStatus,
     setSettings,
     startGame,
     turn
 } from "../../app/gameStateSlice";
-import {Score} from "./score/Score";
 import {SessionShare} from "../session-share/SessionShare";
 import {FieldCell} from "./cell/FieldCell";
 import {Button, Grid} from '@material-ui/core';
 import {FormattedMessage} from "react-intl";
-import {End} from "./end/End";
+import {FieldHeader} from "./header/FieldHeader";
 
 export function GameField({onSettings, sessionId}: { onSettings: Function, sessionId: string }) {
     const token = useSelector(playerToken);
@@ -46,30 +44,8 @@ export function GameField({onSettings, sessionId}: { onSettings: Function, sessi
     }
 
     return <Grid container direction="column" spacing={1} style={{paddingTop: "10px"}}>
-        <Grid container item xs={12} spacing={2} justify="center" alignItems="center">
-            <Grid item xs>
-                <Score/>
-            </Grid>
-            {!started &&
-            <Grid item xs={8}>
-                <End/>
-            </Grid>
-            }
-            {!started &&
-            <Grid item container xs direction="row-reverse">
-                <Grid item>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => dispatch(startGame(token!, sessionId!))}>
-                        <FormattedMessage id="page.game.nextRound"
-                                          defaultMessage="Play Another"
-                                          description="Button on start game session page"/>
-                    </Button>
-                </Grid>
-            </Grid>
-            }
-            {/*<Settings onClick={() => onSettings()}/>*/}
+        <Grid item xs={12}>
+            <FieldHeader sessionId={sessionId}/>
         </Grid>
         <Grid container item xs={12} spacing={1}>
             {rows.map((r, index) =>

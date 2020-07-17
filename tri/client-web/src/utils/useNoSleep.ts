@@ -10,7 +10,9 @@ export const useNoSleep = (enabled: boolean) => {
             return;
         }
 
-        if (enabled) {
+        let isMobile = navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i)
+
+        if (isMobile && enabled) {
             document.addEventListener('click', function enableNoSleep() {
                 document.removeEventListener('click', enableNoSleep, false);
                 noSleep.enable();
