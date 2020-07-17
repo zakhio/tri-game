@@ -12,7 +12,7 @@ export function PlayerSettings() {
     const me = useSelector(sessionMe)
     const dispatch = useDispatch();
 
-    const [captain, setCaptain] = useState(me!.captain);
+    const [captain, setCaptain] = useState(me!.captain!.value);
     const [alias, setAlias] = useState(me!.alias);
     const [teamId, setTeamId] = useState(me!.teamid);
     if (!teamId) {

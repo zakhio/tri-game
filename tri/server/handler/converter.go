@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/golang/protobuf/ptypes/wrappers"
 	pb "zakh.io/tri/proto"
 	"zakh.io/tri/server/engine/entities"
 	"zakh.io/tri/server/engine/logic"
@@ -20,11 +21,17 @@ func Convert(playerId string, gameState logic.GameState) *pb.GameSessionStream {
 		}
 
 		teamId, _ := gameState.GetTeam(pId)
+		var captainWrapper *wrappers.BoolValue = nil
+		captain := gameState.IsCaptain(pId)
+		if captain != nil {
+			captainWrapper = &wrappers.BoolValue{Value: *captain}
+		}
+
 		player := &pb.Player{
 			Id:      pId,
 			Alias:   gameState.GetAlias(pId),
 			TeamId:  teamId,
-			Captain: gameState.IsCaptain(pId),
+			Captain: captainWrapper,
 			Score:   int32(gameState.GetScore(pId)),
 		}
 
@@ -44,9 +51,10 @@ func Convert(playerId string, gameState logic.GameState) *pb.GameSessionStream {
 	}
 	result.Teams = teams
 
+	captain := gameState.IsCaptain(playerId)
 	cells := make([]*pb.Cell, 0)
 	for _, c := range gameState.GetCells() {
-		cells = append(cells, convertCell(c, gameState.IsCaptain(playerId) || !gameState.Started))
+		cells = append(cells, convertCell(c, (captain != nil && *captain) || !gameState.Started))
 	}
 	result.Cells = cells
 	result.NumberOfColumns = int32(gameState.GetNumOfColumns())

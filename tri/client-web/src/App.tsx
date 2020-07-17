@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
-import {PlayPage} from "./routes/player-route/PlayPage";
+import {PlayPage} from "./routes/play-route/PlayPage";
 import {CreatePage} from "./routes/creator-route/CreatePage";
 import {IntlProvider} from "react-intl";
 

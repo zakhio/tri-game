@@ -35,8 +35,9 @@ export function GameField({onSettings, sessionId}: { onSettings: Function, sessi
     const rows = [];
     for (let i = 0; i < cells.length; i += numOfColumns) {
         const cols = cells.slice(i, i + numOfColumns).map((c, index) => {
+                const showColor = !started || (me!.captain !== undefined && me!.captain.value);
                 return <Grid item xs key={i + index}>
-                    <FieldCell cell={c} onClick={() => turnWord(i + index)} showColor={!started || me!.captain}/>
+                    <FieldCell cell={c} onClick={() => turnWord(i + index)} showColor={showColor}/>
                 </Grid>
             }
         );

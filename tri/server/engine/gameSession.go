@@ -44,7 +44,7 @@ func (g *gameSession) SetSettings(playerId, teamId, alias string, captain bool) 
 		}
 	}
 
-	g.state.PromoteToCaptain(playerId, captain)
+	g.state.SetCaptainFlag(playerId, captain)
 
 	if alias != "" {
 		g.state.SetAlias(playerId, alias)

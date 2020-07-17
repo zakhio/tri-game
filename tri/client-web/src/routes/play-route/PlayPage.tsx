@@ -8,7 +8,7 @@ import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import {PlayerName} from "../../features/player-name/PlayerName";
+import {BeCaptain} from "../../features/be-captain/BeCaptain";
 import useNoSleep from "../../utils/useNoSleep";
 
 
@@ -33,7 +33,7 @@ export function PlayPage() {
 
     return <>
         {connected &&
-        <PlayerName sessionId={sessionId}/>
+        <BeCaptain sessionId={sessionId}/>
         }
         {connected && words.length === 0 &&
         <GameIntro sessionId={sessionId}/>

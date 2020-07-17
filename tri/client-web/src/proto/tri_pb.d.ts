@@ -1,6 +1,7 @@
 import * as jspb from "google-protobuf"
 
 import * as google_protobuf_empty_pb from 'google-protobuf/google/protobuf/empty_pb';
+import * as google_protobuf_wrappers_pb from 'google-protobuf/google/protobuf/wrappers_pb';
 
 export class Player extends jspb.Message {
   getId(): string;
@@ -15,8 +16,10 @@ export class Player extends jspb.Message {
   getScore(): number;
   setScore(value: number): Player;
 
-  getCaptain(): boolean;
-  setCaptain(value: boolean): Player;
+  getCaptain(): google_protobuf_wrappers_pb.BoolValue | undefined;
+  setCaptain(value?: google_protobuf_wrappers_pb.BoolValue): Player;
+  hasCaptain(): boolean;
+  clearCaptain(): Player;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Player.AsObject;
@@ -32,7 +35,7 @@ export namespace Player {
     alias: string,
     teamid: string,
     score: number,
-    captain: boolean,
+    captain?: google_protobuf_wrappers_pb.BoolValue.AsObject,
   }
 }
 

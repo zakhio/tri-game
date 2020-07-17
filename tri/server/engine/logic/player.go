@@ -7,8 +7,8 @@ import (
 type PlayerInfo interface {
 	AddPlayer(player string) error
 	GetPlayers() []string
-	IsCaptain(playerId string) bool
-	PromoteToCaptain(playerId string, captain bool)
+	IsCaptain(playerId string) *bool
+	SetCaptainFlag(playerId string, captain bool)
 	ClearCaptains()
 }
 
@@ -20,11 +20,16 @@ func (g *GameState) NewPlayer() (string, error) {
 	return playerId, nil
 }
 
-func (g *GameState) IsCaptain(playerId string) bool {
-	return g.Captains[playerId]
+func (g *GameState) IsCaptain(playerId string) *bool {
+	v, ok := g.Captains[playerId]
+
+	if !ok {
+		return nil
+	}
+	return &v
 }
 
-func (g *GameState) PromoteToCaptain(playerId string, captain bool) {
+func (g *GameState) SetCaptainFlag(playerId string, captain bool) {
 	g.Captains[playerId] = captain
 }
 

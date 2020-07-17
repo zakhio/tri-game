@@ -16,6 +16,8 @@ var global = Function('return this')();
 
 var google_protobuf_empty_pb = require('google-protobuf/google/protobuf/empty_pb.js');
 goog.object.extend(proto, google_protobuf_empty_pb);
+var google_protobuf_wrappers_pb = require('google-protobuf/google/protobuf/wrappers_pb.js');
+goog.object.extend(proto, google_protobuf_wrappers_pb);
 goog.exportSymbol('proto.Cell', null, global);
 goog.exportSymbol('proto.Cell.Type', null, global);
 goog.exportSymbol('proto.CreateSessionReply', null, global);
@@ -295,7 +297,7 @@ proto.Player.toObject = function(includeInstance, msg) {
     alias: jspb.Message.getFieldWithDefault(msg, 2, ""),
     teamid: jspb.Message.getFieldWithDefault(msg, 3, ""),
     score: jspb.Message.getFieldWithDefault(msg, 4, 0),
-    captain: jspb.Message.getBooleanFieldWithDefault(msg, 5, false)
+    captain: (f = msg.getCaptain()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -349,7 +351,8 @@ proto.Player.deserializeBinaryFromReader = function(msg, reader) {
       msg.setScore(value);
       break;
     case 5:
-      var value = /** @type {boolean} */ (reader.readBool());
+      var value = new google_protobuf_wrappers_pb.BoolValue;
+      reader.readMessage(value,google_protobuf_wrappers_pb.BoolValue.deserializeBinaryFromReader);
       msg.setCaptain(value);
       break;
     default:
@@ -410,10 +413,11 @@ proto.Player.serializeBinaryToWriter = function(message, writer) {
     );
   }
   f = message.getCaptain();
-  if (f) {
-    writer.writeBool(
+  if (f != null) {
+    writer.writeMessage(
       5,
-      f
+      f,
+      google_protobuf_wrappers_pb.BoolValue.serializeBinaryToWriter
     );
   }
 };
@@ -492,20 +496,39 @@ proto.Player.prototype.setScore = function(value) {
 
 
 /**
- * optional bool captain = 5;
- * @return {boolean}
+ * optional google.protobuf.BoolValue captain = 5;
+ * @return {?proto.google.protobuf.BoolValue}
  */
 proto.Player.prototype.getCaptain = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 5, false));
+  return /** @type{?proto.google.protobuf.BoolValue} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.BoolValue, 5));
 };
 
 
 /**
- * @param {boolean} value
+ * @param {?proto.google.protobuf.BoolValue|undefined} value
+ * @return {!proto.Player} returns this
+*/
+proto.Player.prototype.setCaptain = function(value) {
+  return jspb.Message.setWrapperField(this, 5, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
  * @return {!proto.Player} returns this
  */
-proto.Player.prototype.setCaptain = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 5, value);
+proto.Player.prototype.clearCaptain = function() {
+  return this.setCaptain(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.Player.prototype.hasCaptain = function() {
+  return jspb.Message.getField(this, 5) != null;
 };
 
 
