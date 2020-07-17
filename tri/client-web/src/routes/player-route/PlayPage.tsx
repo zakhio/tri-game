@@ -9,9 +9,12 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import {PlayerName} from "../../features/player-name/PlayerName";
+import useNoSleep from "../../utils/useNoSleep";
 
 
 export function PlayPage() {
+    useNoSleep(true);
+
     const {sessionId} = useParams();
 
     const [showSettings, setShowSettings] = useState(false);
