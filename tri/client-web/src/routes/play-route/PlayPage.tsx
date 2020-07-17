@@ -51,7 +51,7 @@ export function PlayPage() {
                     </List>
                 </Drawer>
             </React.Fragment>
-            <GameField sessionId={sessionId} onSettings={() => setShowSettings(true)}/>
+            <GameField sessionId={sessionId} onSettingsClick={() => setShowSettings(true)}/>
         </>
         }
     </>

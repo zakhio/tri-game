@@ -5,14 +5,15 @@ import {playerToken, sessionStarted, startGame} from "../../../app/gameStateSlic
 import {FormattedMessage} from "react-intl";
 import React from "react";
 import {useDispatch, useSelector} from "react-redux";
+import {Settings} from "@material-ui/icons";
 
-export function FieldHeader({sessionId}: { sessionId: string }) {
+export function FieldHeader({sessionId, onSettingsClick}: { sessionId: string, onSettingsClick: Function }) {
     const dispatch = useDispatch();
 
     const token = useSelector(playerToken);
     const started = useSelector(sessionStarted);
 
-    return <Grid container spacing={2} justify="center" alignItems="center">
+    return <Grid container xs={12} spacing={2} justify="center" alignItems="center">
         <Grid item xs>
             <Score/>
         </Grid>
@@ -35,7 +36,10 @@ export function FieldHeader({sessionId}: { sessionId: string }) {
             </Grid>
         </Grid>
         }
-        {/*<Settings onClick={() => onSettings()}/>*/
-        }
+        <Grid container item xs={1} alignItems="flex-start" justify="flex-end">
+            <Button onClick={() => onSettingsClick()}>
+                <Settings fontSize="large"/>
+            </Button>
+        </Grid>
     </Grid>
 }

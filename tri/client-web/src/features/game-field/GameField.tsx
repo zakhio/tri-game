@@ -16,7 +16,7 @@ import {Button, Grid} from '@material-ui/core';
 import {FormattedMessage} from "react-intl";
 import {FieldHeader} from "./header/FieldHeader";
 
-export function GameField({onSettings, sessionId}: { onSettings: Function, sessionId: string }) {
+export function GameField({onSettingsClick, sessionId}: { onSettingsClick: Function, sessionId: string }) {
     const token = useSelector(playerToken);
 
     const numOfColumns = Math.max(1, useSelector(sessionNumOfColumns));
@@ -46,7 +46,7 @@ export function GameField({onSettings, sessionId}: { onSettings: Function, sessi
 
     return <Grid container direction="column" spacing={1} style={{paddingTop: "10px"}}>
         <Grid item xs={12}>
-            <FieldHeader sessionId={sessionId}/>
+            <FieldHeader sessionId={sessionId} onSettingsClick={onSettingsClick}/>
         </Grid>
         <Grid container item xs={12} spacing={1}>
             {rows.map((r, index) =>
