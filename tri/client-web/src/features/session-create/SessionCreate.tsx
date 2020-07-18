@@ -26,7 +26,7 @@ export function SessionCreate() {
             <Grid item xs={12}>
                 <Button
                     variant="contained"
-                    color="primary"
+                    color="secondary"
                     onClick={() => dispatch(createSession(token, history))}>
                     {intl.formatMessage(messages.button)}
                 </Button>

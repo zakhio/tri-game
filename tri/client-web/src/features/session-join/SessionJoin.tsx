@@ -44,7 +44,7 @@ export function SessionJoin({sessionId}: { sessionId?: string }) {
                 <Grid item xs>
                     <Button
                         variant="contained"
-                        color="primary"
+                        color="secondary"
                         onClick={() => {
                             dispatch(tryJoinAsync(token, _sessionId, playerName, history));
                         }}>

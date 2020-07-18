@@ -12,7 +12,7 @@ import {JoinPage} from "./routes/join-route/JoinPage";
 const messages: Record<string, Record<string, string>> = {
     'ru': messages_ru
 };
-const language = 'ru';//navigator.language.split(/[-_]/)[0];
+const language = navigator.language.split(/[-_]/)[0];
 
 function App() {
     return (

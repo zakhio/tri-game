@@ -3,7 +3,7 @@ import {defineMessages} from 'react-intl';
 const messages = defineMessages({
     titlePrimary: {
         id: 'settings.title.primary',
-        defaultMessage: 'TRI Game',
+        defaultMessage: 'Game TRI',
         description: 'Title for share window in provider window',
     },
     titleSecondary: {

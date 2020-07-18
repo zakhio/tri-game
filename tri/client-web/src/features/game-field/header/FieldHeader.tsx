@@ -29,7 +29,7 @@ export function FieldHeader({sessionId, onSettingsClick}: { sessionId: string, o
             <Grid item style={{paddingRight: "10px"}}>
                 <Button
                     variant="contained"
-                    color="primary"
+                    color="secondary"
                     onClick={() => dispatch(startGame(token!, sessionId!))}>
                     {intl.formatMessage(messages.playAnotherOne)}
                 </Button>

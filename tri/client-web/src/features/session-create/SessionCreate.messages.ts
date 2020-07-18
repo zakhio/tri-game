@@ -3,7 +3,7 @@ import {defineMessages} from 'react-intl';
 const messages = defineMessages({
     title: {
         id: 'page.create.title',
-        defaultMessage: 'Welcome to TRI game',
+        defaultMessage: 'Welcome to Game TRI',
         description: 'Welcome title on create game session page',
     },
     button: {

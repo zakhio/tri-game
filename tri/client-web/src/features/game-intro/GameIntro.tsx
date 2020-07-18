@@ -31,7 +31,7 @@ export function GameIntro({sessionId}: { sessionId: string }) {
                 <Grid container justify="center">
                     <Button
                         variant="contained"
-                        color="primary"
+                        color="secondary"
                         onClick={() => dispatch(startGame(token!, sessionId!))}>
                         {intl.formatMessage(messages.button)}
                     </Button>
