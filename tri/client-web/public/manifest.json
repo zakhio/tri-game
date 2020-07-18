@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Game TRI",
+  "name": "Online game where people need to guess words that belongs to their team.",
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,14 +8,8 @@
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "logo512.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "src": "logo.svg",
+      "sizes": "156x122"
     }
   ],
   "start_url": ".",
