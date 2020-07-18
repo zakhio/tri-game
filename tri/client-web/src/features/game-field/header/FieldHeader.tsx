@@ -24,7 +24,7 @@ export function FieldHeader({sessionId, onSettingsClick}: { sessionId: string, o
         </Grid>
         {!started &&
         <Grid item container xs={6} sm={4} alignItems="center" direction="row-reverse">
-            <Grid item>
+            <Grid item style={{paddingRight:"10px"}}>
                 <Button
                     variant="contained"
                     color="primary"
