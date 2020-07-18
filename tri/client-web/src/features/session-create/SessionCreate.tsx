@@ -12,7 +12,7 @@ export function SessionCreate() {
     const dispatch = useDispatch();
 
     return (
-        <Grid container xs={12} direction="column" alignItems="center" spacing={3}>
+        <Grid container direction="column" alignItems="center" spacing={3}>
             <Grid item xs={12}>
                 <img src="icon.svg" alt="Game TRI logo"/>
             </Grid>

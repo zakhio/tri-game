@@ -3,18 +3,17 @@ import {useDispatch, useSelector} from 'react-redux';
 import {playerToken, startGame,} from '../../app/gameStateSlice';
 import {FormattedMessage} from "react-intl";
 import {Button, Grid, Typography} from "@material-ui/core";
-import {PlayerList} from "../player-list/PlayerList";
 
 export function GameIntro({sessionId}: { sessionId: string }) {
     const token = useSelector(playerToken);
     const dispatch = useDispatch();
 
     return (
-        <Grid container xs={12} spacing={3}>
+        <Grid container spacing={3}>
             <Grid item xs={12} sm={2}>
                 <img src="icon.svg" alt="Game TRI logo"/>
             </Grid>
-            <Grid item xs={12} sm={10} wrap="nowrap" >
+            <Grid item xs={12} sm={10} wrap="nowrap">
                 <Typography variant="body1" gutterBottom>
                     <FormattedMessage id="page.start.intro.p1"
                                       defaultMessage="Captains know the secret identities of 25 agents. Players know agents only by their code names."
