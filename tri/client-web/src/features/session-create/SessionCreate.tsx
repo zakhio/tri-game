@@ -12,15 +12,18 @@ export function SessionCreate() {
     const dispatch = useDispatch();
 
     return (
-        <Grid container direction="column" alignItems="center" spacing={3}>
-            <Grid item xs>
+        <Grid container xs={12} direction="column" alignItems="center" spacing={3}>
+            <Grid item xs={12}>
+                <img src="icon.svg" alt="Game TRI logo"/>
+            </Grid>
+            <Grid item xs={12}>
                 <Typography variant="h4" align="center">
                     <FormattedMessage id="page.create.title"
                                       defaultMessage="Welcome to TRI game"
                                       description="Welcome title on create game session page"/>
                 </Typography>
             </Grid>
-            <Grid item xs>
+            <Grid item xs={12}>
                 <Button
                     variant="contained"
                     color="primary"

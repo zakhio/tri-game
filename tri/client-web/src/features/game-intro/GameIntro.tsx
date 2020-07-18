@@ -10,8 +10,11 @@ export function GameIntro({sessionId}: { sessionId: string }) {
     const dispatch = useDispatch();
 
     return (
-        <Grid container spacing={3}>
-            <Grid item xs={12} sm={8} wrap="nowrap" >
+        <Grid container xs={12} spacing={3}>
+            <Grid item xs={12} sm={2}>
+                <img src="icon.svg" alt="Game TRI logo"/>
+            </Grid>
+            <Grid item xs={12} sm={10} wrap="nowrap" >
                 <Typography variant="body1" gutterBottom>
                     <FormattedMessage id="page.start.intro.p1"
                                       defaultMessage="Captains know the secret identities of 25 agents. Players know agents only by their code names."
@@ -28,10 +31,7 @@ export function GameIntro({sessionId}: { sessionId: string }) {
                                       description="Intro text Pt.3 on start game session page"/>
                 </Typography>
             </Grid>
-            <Grid item xs={12} sm={4}>
-                <PlayerList/>
-            </Grid>
-            <Grid item xs={12} sm={12}>
+            <Grid item xs={12}>
                 <Grid container justify="center">
                     <Button
                         variant="contained"
