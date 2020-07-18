@@ -1,4 +1,4 @@
-import {Button, Grid} from "@material-ui/core";
+import {Box, Button, Grid} from "@material-ui/core";
 import {Score} from "../score/Score";
 import {End} from "../end/End";
 import {playerToken, sessionStarted, startGame} from "../../../app/gameStateSlice";
@@ -13,17 +13,17 @@ export function FieldHeader({sessionId, onSettingsClick}: { sessionId: string, o
     const token = useSelector(playerToken);
     const started = useSelector(sessionStarted);
 
-    return <Grid container xs={12} spacing={2} justify="center" alignItems="center">
+    return <Grid container xs={11} sm={12} spacing={2} justify="center">
+        {!started &&
+        <Grid item xs={12} sm={6}>
+            <End/>
+        </Grid>
+        }
         <Grid item xs>
             <Score/>
         </Grid>
         {!started &&
-        <Grid item xs={7}>
-            <End/>
-        </Grid>
-        }
-        {!started &&
-        <Grid item container xs direction="row-reverse">
+        <Grid item container xs={6} sm={4} alignItems="center" direction="row-reverse">
             <Grid item>
                 <Button
                     variant="contained"
@@ -36,10 +36,10 @@ export function FieldHeader({sessionId, onSettingsClick}: { sessionId: string, o
             </Grid>
         </Grid>
         }
-        <Grid container item xs={1} alignItems="flex-start" justify="flex-end">
+        <Box position="absolute" top={10} right={10}>
             <Button onClick={() => onSettingsClick()}>
                 <Settings fontSize="large"/>
             </Button>
-        </Grid>
+        </Box>
     </Grid>
 }

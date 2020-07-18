@@ -41,7 +41,7 @@ export function GameField({onSettingsClick, sessionId}: { onSettingsClick: Funct
     }
 
     return <Grid container direction="column" spacing={1} style={{paddingTop: "10px"}}>
-        <Grid item xs={12}>
+        <Grid container item xs={12}>
             <FieldHeader sessionId={sessionId} onSettingsClick={onSettingsClick}/>
         </Grid>
         <Grid container item xs={12} spacing={1}>

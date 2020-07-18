@@ -6,7 +6,7 @@ import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import {Button, Divider, Switch} from "@material-ui/core";
+import {Box, Button, Divider, Switch} from "@material-ui/core";
 import {defineMessages, FormattedMessage, useIntl} from "react-intl";
 import {
     FacebookIcon,
@@ -92,7 +92,7 @@ export function SettingsDrawer({open, onClose}: { open?: boolean, onClose: Funct
                                               values={{sessionId}}/>
                         }
                         secondary={
-                            <span>
+                            <Box component="span">
                                 <TelegramShareButton url={link} title={"test"} style={{marginRight: "4px"}}>
                                     <TelegramIcon size={30} round/>
                                 </TelegramShareButton>
@@ -105,7 +105,7 @@ export function SettingsDrawer({open, onClose}: { open?: boolean, onClose: Funct
                                 <WeiboShareButton url={link} style={{marginRight: "4px"}}>
                                     <WeiboIcon size={30} round/>
                                 </WeiboShareButton>
-                            </span>
+                            </Box>
                         }/>
                 </ListItem>
             </List>
