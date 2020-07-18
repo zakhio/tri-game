@@ -14,13 +14,12 @@ export function PlayPage() {
 
     const {sessionId} = useParams();
 
-    const [showSettings, setShowSettings] = useState(false);
-
     const dispatch = useDispatch();
-
     const token = useSelector(playerToken);
     const connected = useSelector(sessionConnected);
     const words = useSelector(sessionCells);
+
+    const [showSettings, setShowSettings] = useState(false);
 
     useEffect(() => {
         if (!connected) {

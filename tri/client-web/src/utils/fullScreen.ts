@@ -9,10 +9,9 @@ export function toggleFullScreen() {
     console.log(requestFullScreen)
 
     // @ts-ignore
-    if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+    if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
         requestFullScreen.call(docEl);
-    }
-    else {
+    } else {
         cancelFullScreen.call(doc);
     }
 }

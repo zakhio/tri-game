@@ -5,8 +5,9 @@ import {sessionTeams,} from '../../../app/gameStateSlice';
 import Typography from '@material-ui/core/Typography';
 
 export function Score() {
-    const teams = useSelector(sessionTeams)
-    const r:JSX.Element[] = [];
+    const teams = useSelector(sessionTeams);
+
+    const r: JSX.Element[] = [];
     teams.forEach((t, i) => {
         const teamStyle = fieldStyles["score_owned_" + t.id];
         r.push(<span key={2 * i}

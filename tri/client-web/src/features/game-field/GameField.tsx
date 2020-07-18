@@ -13,14 +13,13 @@ import {Grid} from '@material-ui/core';
 import {FieldHeader} from "./header/FieldHeader";
 
 export function GameField({onSettingsClick, sessionId}: { onSettingsClick: Function, sessionId: string }) {
-    const token = useSelector(playerToken);
+    const dispatch = useDispatch();
 
-    const numOfColumns = Math.max(1, useSelector(sessionNumOfColumns));
+    const token = useSelector(playerToken);
     const cells = useSelector(sessionCells);
     const started = useSelector(sessionStarted);
     const me = useSelector(sessionMe);
-
-    const dispatch = useDispatch();
+    const numOfColumns = Math.max(1, useSelector(sessionNumOfColumns));
 
     function turnWord(position: number) {
         if (sessionId && token) {

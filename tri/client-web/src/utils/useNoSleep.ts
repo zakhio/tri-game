@@ -1,5 +1,5 @@
 import NoSleep from "nosleep.js";
-import { useEffect, useMemo, useState } from "react";
+import {useEffect, useMemo, useState} from "react";
 
 export const useNoSleep = (enabled: boolean) => {
     const [alreadyEnabled, setAlreadyEnabled] = useState(false);

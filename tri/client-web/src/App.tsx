@@ -4,7 +4,7 @@ import './App.css';
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import {PlayPage} from "./routes/play-route/PlayPage";
 import {CreatePage} from "./routes/creator-route/CreatePage";
-import {IntlProvider} from "react-intl";
+import {IntlProvider} from 'react-intl';
 
 import messages_ru from "./translations/ru.json";
 import {JoinPage} from "./routes/join-route/JoinPage";

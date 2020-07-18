@@ -1,15 +1,17 @@
 import React from 'react';
-// @ts-ignore
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from "react-router-dom";
 import {createSession, playerToken,} from '../../app/gameStateSlice';
-import {FormattedMessage} from "react-intl";
+import {useIntl} from 'react-intl';
 import {Button, Grid, Typography} from "@material-ui/core";
+import messages from "./SessionCreate.messages";
 
 export function SessionCreate() {
-    const history = useHistory();
-    const token = useSelector(playerToken)
+    const intl = useIntl();
     const dispatch = useDispatch();
+    const history = useHistory();
+
+    const token = useSelector(playerToken);
 
     return (
         <Grid container direction="column" alignItems="center" spacing={3}>
@@ -18,9 +20,7 @@ export function SessionCreate() {
             </Grid>
             <Grid item xs={12}>
                 <Typography variant="h4" align="center">
-                    <FormattedMessage id="page.create.title"
-                                      defaultMessage="Welcome to TRI game"
-                                      description="Welcome title on create game session page"/>
+                    {intl.formatMessage(messages.title)}
                 </Typography>
             </Grid>
             <Grid item xs={12}>
@@ -28,9 +28,7 @@ export function SessionCreate() {
                     variant="contained"
                     color="primary"
                     onClick={() => dispatch(createSession(token, history))}>
-                    <FormattedMessage id="page.create.button"
-                                      defaultMessage="Create Game Session"
-                                      description="Button on create game session page"/>
+                    {intl.formatMessage(messages.button)}
                 </Button>
             </Grid>
         </Grid>

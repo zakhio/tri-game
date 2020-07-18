@@ -1,5 +1,5 @@
-import { equal as isEqual } from '@wry/equality'
-import { useRef } from 'react'
+import {equal as isEqual} from '@wry/equality'
+import {useRef} from 'react'
 
 // * Gracefully copied from https://github.com/apollographql/react-apollo/blob/master/packages/hooks/src/utils/useDeepMemo.ts
 
@@ -17,7 +17,7 @@ export function useDeepMemo<TKey, TValue>(
     const ref = useRef<{ key: TKey; value: TValue }>()
 
     if (!ref.current || !isEqual(key, ref.current.key)) {
-        ref.current = { key, value: memoFn() }
+        ref.current = {key, value: memoFn()}
     }
 
     return ref.current.value

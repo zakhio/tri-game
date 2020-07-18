@@ -2,12 +2,14 @@ import {Box, Button, Grid} from "@material-ui/core";
 import {Score} from "../score/Score";
 import {End} from "../end/End";
 import {playerToken, sessionStarted, startGame} from "../../../app/gameStateSlice";
-import {FormattedMessage} from "react-intl";
+import {useIntl} from 'react-intl';
 import React from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Settings} from "@material-ui/icons";
+import messages from "./FieldHeader.messages";
 
 export function FieldHeader({sessionId, onSettingsClick}: { sessionId: string, onSettingsClick: Function }) {
+    const intl = useIntl();
     const dispatch = useDispatch();
 
     const token = useSelector(playerToken);
@@ -24,14 +26,12 @@ export function FieldHeader({sessionId, onSettingsClick}: { sessionId: string, o
         </Grid>
         {!started &&
         <Grid item container xs={6} sm={4} alignItems="center" direction="row-reverse">
-            <Grid item style={{paddingRight:"10px"}}>
+            <Grid item style={{paddingRight: "10px"}}>
                 <Button
                     variant="contained"
                     color="primary"
                     onClick={() => dispatch(startGame(token!, sessionId!))}>
-                    <FormattedMessage id="page.game.nextRound"
-                                      defaultMessage="Play Another"
-                                      description="Button on start game session page"/>
+                    {intl.formatMessage(messages.playAnotherOne)}
                 </Button>
             </Grid>
         </Grid>

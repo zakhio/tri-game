@@ -1,30 +1,17 @@
 import React, {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {playerToken, tryJoinAsync,} from '../../app/gameStateSlice';
-import {defineMessages, FormattedMessage, useIntl} from 'react-intl';
+import {useIntl} from 'react-intl';
 import {useHistory} from "react-router-dom";
 import {Button, Grid, TextField, Typography} from "@material-ui/core";
-
-const messages = defineMessages({
-    sessionId: {
-        id: 'page.join.sessionId',
-        defaultMessage: 'Session ID',
-        description: 'Title for session id input on join session page',
-    },
-    playerName: {
-        id: 'page.join.playerName',
-        defaultMessage: 'Player Name',
-        description: 'Title for player name input on join session page',
-    },
-});
+import messages from "./SessionJoin.messages";
 
 export function SessionJoin({sessionId}: { sessionId?: string }) {
+    const intl = useIntl();
+    const dispatch = useDispatch();
     const history = useHistory();
 
-    const intl = useIntl();
-
     const token = useSelector(playerToken)
-    const dispatch = useDispatch();
 
     const [_sessionId, _setSessionId] = useState(sessionId || "");
     const [playerName, setPlayerName] = useState("");
@@ -34,9 +21,7 @@ export function SessionJoin({sessionId}: { sessionId?: string }) {
             <Grid container direction="column" alignItems="center" spacing={3}>
                 <Grid item xs>
                     <Typography variant="h4" align="center">
-                        <FormattedMessage id="page.join.title"
-                                          defaultMessage="Join to session"
-                                          description="Welcome title on join game session page"/>
+                        {intl.formatMessage(messages.title)}
                     </Typography>
                 </Grid>
                 <Grid item xs>
@@ -63,9 +48,7 @@ export function SessionJoin({sessionId}: { sessionId?: string }) {
                         onClick={() => {
                             dispatch(tryJoinAsync(token, _sessionId, playerName, history));
                         }}>
-                        <FormattedMessage id="page.join.button"
-                                          defaultMessage="Join"
-                                          description="Button on join game session page"/>
+                        {intl.formatMessage(messages.button)}
                     </Button>
                 </Grid>
             </Grid>

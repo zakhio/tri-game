@@ -91,7 +91,7 @@ export const joinAsync = (token: string, sessionId: string): AppThunk => dispatc
     }
 
     numberOfTries++;
-    if (numberOfTries > 5)  {
+    if (numberOfTries > 5) {
         numberOfTries = 0;
         return;
     }
@@ -123,7 +123,7 @@ export const joinAsync = (token: string, sessionId: string): AppThunk => dispatc
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
 // will call the thunk with the `dispatch` function as the first argument. Async
 // code can then be executed and other actions can be dispatched
-export const tryJoinAsync = (token: string, sessionId: string, playerName:string, history: History<LocationState>): AppThunk => dispatch => {
+export const tryJoinAsync = (token: string, sessionId: string, playerName: string, history: History<LocationState>): AppThunk => dispatch => {
     if (stream) {
         stream.cancel();
     }
