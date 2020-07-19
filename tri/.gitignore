@@ -1,3 +1,4 @@
 # Exclude tmp folder
+proto/
 tmp
 deployment/secret
