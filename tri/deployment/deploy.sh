@@ -18,7 +18,7 @@ echo "-- Build and deploy the client"
 (cd ../client-web &&
   yarn build)
 
-rsync -avzh ../client-web/build/ "$DEPLOY_SERVER_SSH":/var/www/tri.zakh.io/
+rsync -avzh --delete ../client-web/build/ "$DEPLOY_SERVER_SSH":/var/www/tri.zakh.io/
 
 #echo "-- Upload configuration and restart nginx"
 #rsync -avzh ./tri.zakh.io.conf "$DEPLOY_SERVER_SSH":/etc/nginx/sites-available/tri.zakh.io.conf

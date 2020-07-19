@@ -14,4 +14,6 @@ echo
 echo "Uploading envoy settings"
 rsync -avzh ./envoy.production.yaml $DEPLOY_SERVER_SSH:/etc/envoy/envoy.yaml
 
-# setsid envoy -c /etc/envoy/envoy.yaml --log-path /var/log/envoy/envoy.log >/dev/null 2>&1 < /dev/null &
+echo "Restart envoy"
+ssh "$DEPLOY_SERVER_SSH" "kill -9 \$(pidof envoy)"
+ssh "$DEPLOY_SERVER_SSH" "setsid envoy -c /etc/envoy/envoy.yaml --log-path /var/log/envoy/envoy.log >/dev/null 2>&1 < /dev/null &"
