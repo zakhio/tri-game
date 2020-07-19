@@ -140,7 +140,7 @@ func (s *triGameServer) SetSettings(ctx context.Context, req *pb.SetSettingsRequ
 		return new(empty.Empty), err
 	}
 
-	return new(empty.Empty), status.Errorf(codes.OK, "turned")
+	return new(empty.Empty), status.Errorf(codes.OK, "settings updated")
 }
 
 func NewTRIGameServer() pb.TRIGameServer {
