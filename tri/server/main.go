@@ -38,7 +38,7 @@ func main() {
 			influxDBConfig.AlignTimestamps,
 		)
 	}
-	go metrics.Log(metrics.DefaultRegistry, time.Minute, log.New(os.Stderr, "metrics: ", log.Lmicroseconds))
+	go metrics.Log(metrics.DefaultRegistry, 10*time.Minute, log.New(os.Stderr, "metrics: ", log.Lmicroseconds))
 
 	listener, err := net.Listen("tcp", port)
 	if err != nil {
