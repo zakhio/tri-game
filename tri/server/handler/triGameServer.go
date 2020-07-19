@@ -12,6 +12,14 @@ import (
 	"zakh.io/tri/server/engine/logic"
 )
 
+var (
+	sessionCreateCounter   = metrics.GetOrRegisterCounter("sessions_create", nil)
+	observerFailCounter    = metrics.GetOrRegisterCounter("observe_fail", nil)
+	observerSuccessCounter = metrics.GetOrRegisterCounter("observe_success", nil)
+	gamesStartCounter      = metrics.GetOrRegisterCounter("games_start", nil)
+	turnsSuccessCounter    = metrics.GetOrRegisterCounter("turns_success", nil)
+)
+
 type triGameServer struct {
 	pb.UnimplementedTRIGameServer
 	sessionManager controller.SessionManager
@@ -21,8 +29,7 @@ func (s *triGameServer) CreateSession(ctx context.Context, req *pb.CreateSession
 	token := req.GetToken()
 	sessionId := s.sessionManager.Create(token)
 
-	g := metrics.GetOrRegisterCounter("sessions_create", nil)
-	g.Inc(1)
+	sessionCreateCounter.Inc(1)
 
 	return &pb.CreateSessionReply{SessionId: sessionId}, nil
 }
@@ -33,13 +40,10 @@ func (s *triGameServer) ObserveSession(req *pb.ObserveSessionRequest, stream pb.
 
 	observable, playerId, err := s.sessionManager.Join(token, sessionId)
 	if err != nil {
-		g := metrics.GetOrRegisterCounter("observe_fail", nil)
-		g.Inc(1)
-
+		observerFailCounter.Inc(1)
 		return err
 	}
-	g := metrics.GetOrRegisterCounter("observe_success", nil)
-	g.Inc(1)
+	observerSuccessCounter.Inc(1)
 
 	value := observable.Value()
 
@@ -87,8 +91,7 @@ func (s *triGameServer) Start(ctx context.Context, req *pb.StartGameRequest) (*e
 		return nil, err
 	}
 
-	g := metrics.GetOrRegisterCounter("games_start", nil)
-	g.Inc(1)
+	gamesStartCounter.Inc(1)
 
 	return new(empty.Empty), status.Errorf(codes.OK, "started")
 }
@@ -110,8 +113,7 @@ func (s *triGameServer) Turn(ctx context.Context, req *pb.TurnGameRequest) (*emp
 		return new(empty.Empty), err
 	}
 
-	g := metrics.GetOrRegisterCounter("turns_success", nil)
-	g.Inc(1)
+	turnsSuccessCounter.Inc(1)
 
 	return new(empty.Empty), status.Errorf(codes.OK, "turned")
 }
