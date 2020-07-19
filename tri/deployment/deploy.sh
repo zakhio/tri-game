@@ -12,6 +12,7 @@ GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o ../tmp/tri-server ../server/ma
 
 rsync -avzh ../tmp/tri-server "$DEPLOY_SERVER_SSH":~/tri/
 rsync -avzh ../dictionary "$DEPLOY_SERVER_SSH":~/tri/
+rsync -avzh ./secret/influxdb-config.yaml "$DEPLOY_SERVER_SSH":~/tri/
 
 echo "-- Build and deploy the client"
 (cd ../client-web &&
@@ -25,4 +26,4 @@ rsync -avzh ../client-web/build/ "$DEPLOY_SERVER_SSH":/var/www/tri.zakh.io/
 
 echo "-- Restart the server"
 ssh "$DEPLOY_SERVER_SSH" "kill -9 \$(pidof tri-server)"
-ssh "$DEPLOY_SERVER_SSH" "setsid ~/tri/tri-server >/dev/null 2>&1 < /dev/null &"
+ssh "$DEPLOY_SERVER_SSH" "setsid ~/tri/tri-server -enableMetrics >/var/log/tri-server/all.\$(date -u +%s).log 2>&1 < /dev/null &"
