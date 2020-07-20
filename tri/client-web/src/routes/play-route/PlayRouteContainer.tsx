@@ -9,7 +9,7 @@ import useNoSleep from "../../utils/useNoSleep";
 import {SettingsDrawer} from "../../features/settings-drawer/SettingsDrawer";
 
 
-export function PlayPage() {
+export function PlayRouteContainer() {
     useNoSleep(true);
 
     const {sessionId} = useParams();

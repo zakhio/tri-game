@@ -2,12 +2,11 @@ import React from 'react';
 import './App.css';
 
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
-import {PlayPage} from "./routes/play-route/PlayPage";
-import {CreatePage} from "./routes/creator-route/CreatePage";
+import {PlayRouteContainer} from "./routes/play-route/PlayRouteContainer";
 import {IntlProvider} from 'react-intl';
 
 import messages_ru from "./translations/ru.json";
-import {JoinPage} from "./routes/join-route/JoinPage";
+import {JoinRouteContainer} from "./routes/join-route/JoinRouteContainer";
 
 const messages: Record<string, Record<string, string>> = {
     'ru': messages_ru
@@ -19,14 +18,11 @@ function App() {
         <IntlProvider locale={language} messages={messages[language]}>
             <Router>
                 <Switch>
-                    <Route path="/create">
-                        <CreatePage/>
-                    </Route>
                     <Route path="/:sessionId">
-                        <PlayPage/>
+                        <PlayRouteContainer/>
                     </Route>
                     <Route path="/">
-                        <JoinPage/>
+                        <JoinRouteContainer/>
                     </Route>
                 </Switch>
             </Router>
