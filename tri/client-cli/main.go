@@ -5,15 +5,15 @@ import (
 	"crypto/tls"
 	"flag"
 	"fmt"
-	"github.com/google/uuid"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials"
 	"io"
 	"log"
 	"math/rand"
 	"time"
 
-	pb "zakh.io/tri/proto"
+	"github.com/google/uuid"
+	pb "github.com/zakhio/online-games/tri/proto"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 )
 
 const (

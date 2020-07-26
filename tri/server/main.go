@@ -2,17 +2,18 @@ package main
 
 import (
 	"flag"
-	"github.com/rcrowley/go-metrics"
-	"github.com/zakhio/go-metrics-influxdb"
-	"google.golang.org/grpc"
 	"log"
 	"math/rand"
 	"net"
 	"os"
 	"time"
-	pb "zakh.io/tri/proto"
-	"zakh.io/tri/server/config/influxdb"
-	"zakh.io/tri/server/handler"
+
+	"github.com/rcrowley/go-metrics"
+	"github.com/zakhio/go-metrics-influxdb"
+	pb "github.com/zakhio/online-games/tri/proto"
+	"github.com/zakhio/online-games/tri/server/config/influxdb"
+	"github.com/zakhio/online-games/tri/server/handler"
+	"google.golang.org/grpc"
 )
 
 const (

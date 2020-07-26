@@ -1,8 +1,8 @@
 package engine
 
 import (
-	"zakh.io/tri/server/engine/logic"
-	"zakh.io/tri/server/middleware/observable"
+	"github.com/zakhio/online-games/tri/server/engine/logic"
+	"github.com/zakhio/online-games/tri/server/middleware/observable"
 )
 
 // RASGame TODO

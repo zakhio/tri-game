@@ -2,7 +2,8 @@ package logic
 
 import (
 	"fmt"
-	"zakh.io/tri/server/engine/entities"
+
+	"github.com/zakhio/online-games/tri/server/engine/entities"
 )
 
 // CellsInfo structure for player

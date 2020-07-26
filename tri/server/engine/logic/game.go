@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
-	"zakh.io/tri/server/engine/entities"
-	"zakh.io/tri/server/middleware/dictionary"
+
+	"github.com/zakhio/online-games/tri/server/engine/entities"
+	"github.com/zakhio/online-games/tri/server/middleware/dictionary"
 )
 
 // GameInfo structure for player

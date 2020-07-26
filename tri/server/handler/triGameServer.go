@@ -2,14 +2,15 @@ package handler
 
 import (
 	"context"
+	"log"
+
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/rcrowley/go-metrics"
+	pb "github.com/zakhio/online-games/tri/proto"
+	"github.com/zakhio/online-games/tri/server/controller"
+	"github.com/zakhio/online-games/tri/server/engine/logic"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"log"
-	pb "zakh.io/tri/proto"
-	"zakh.io/tri/server/controller"
-	"zakh.io/tri/server/engine/logic"
 )
 
 var (

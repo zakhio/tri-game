@@ -3,9 +3,10 @@ package controller
 import (
 	"fmt"
 	"log"
-	"zakh.io/tri/server/engine"
-	"zakh.io/tri/server/middleware/observable"
-	"zakh.io/tri/server/middleware/random"
+
+	"github.com/zakhio/online-games/tri/server/engine"
+	"github.com/zakhio/online-games/tri/server/middleware/observable"
+	"github.com/zakhio/online-games/tri/server/middleware/random"
 )
 
 var Manager = NewSessionManager()

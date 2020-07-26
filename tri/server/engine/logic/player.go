@@ -1,7 +1,7 @@
 package logic
 
 import (
-	"zakh.io/tri/server/engine/entities"
+	"github.com/zakhio/online-games/tri/server/engine/entities"
 )
 
 type PlayerInfo interface {

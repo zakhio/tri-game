@@ -2,9 +2,9 @@ package handler
 
 import (
 	"github.com/golang/protobuf/ptypes/wrappers"
-	pb "zakh.io/tri/proto"
-	"zakh.io/tri/server/engine/entities"
-	"zakh.io/tri/server/engine/logic"
+	pb "github.com/zakhio/online-games/tri/proto"
+	"github.com/zakhio/online-games/tri/server/engine/entities"
+	"github.com/zakhio/online-games/tri/server/engine/logic"
 )
 
 func Convert(playerId string, gameState logic.GameState) *pb.GameSessionStream {

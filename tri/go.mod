@@ -1,4 +1,4 @@
-module zakh.io/tri
+module github.com/zakhio/online-games/tri
 
 go 1.14
 
