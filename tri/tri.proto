@@ -80,6 +80,8 @@ message StartGameRequest {
     int32 numberOfTeams = 3;
     int32 numberOfRows = 4;
     int32 numberOfColumns = 5;
+    string language = 6;
+    repeated string dictionary = 7;
 }
 
 service TRIGame {
