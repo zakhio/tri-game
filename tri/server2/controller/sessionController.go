@@ -21,7 +21,7 @@ type sessionController struct {
 
 func (c *sessionController) Create() game.TRISession {
 	c.mu.RLock()
-	defer c.mu.Unlock()
+	defer c.mu.RUnlock()
 
 	id := c.nextSessionId()
 	session := c.pool.Get().(game.TRISession)

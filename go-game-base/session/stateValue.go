@@ -1,4 +1,5 @@
 package session
 
-type StateValue interface {
+type StateValue struct {
+	Active bool
 }

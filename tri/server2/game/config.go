@@ -1,9 +1,9 @@
 package game
 
 type TRIConfig struct {
-	Columns    int32
-	Rows       int32
-	Teams      int32
+	Columns    int
+	Rows       int
+	Teams      int
 	Language   string
 	Dictionary []string
 }

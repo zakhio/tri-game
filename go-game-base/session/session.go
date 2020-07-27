@@ -2,12 +2,9 @@ package session
 
 import (
 	"context"
-
-	"github.com/zakhio/online-games/go-game-base/validator"
 )
 
 type Session interface {
-	Observe(ctx context.Context, token string, callback func(StateValue) error) error
 	Reset()
 
 	SetID(id string)
@@ -15,21 +12,15 @@ type Session interface {
 }
 
 type BaseSession struct {
-	ID        string
-	State     State
-	Validator validator.Validator
+	ID    string
+	State State
 }
 
-func (s *BaseSession) Observe(ctx context.Context, token string, callback func(StateValue) error) error {
-	s.Validator.Permit(token, true)
-	err := s.State.Subscribe(ctx, token, callback)
-	s.Validator.Permit(token, false)
-
-	return err
+func (s *BaseSession) Observe(ctx context.Context, token string, callback interface{}) error {
+	return s.State.Subscribe(ctx, token, callback)
 }
 
 func (s *BaseSession) Reset() {
-	s.Validator.Reset()
 	s.State.Reset()
 }
 

@@ -103,11 +103,13 @@ func (o *observable) SubscribeSync(context context.Context, subscriber string, f
 	h := o.createHandler(subscriber, fn)
 	defer o.deleteHandler(fn)
 
-	// send current value
-	res := h.callback.Call(o.value)
-	if v := res[0].Interface(); v != nil {
-		err = v.(error)
-		return err
+	// send current value if exists
+	if o.value != nil {
+		res := h.callback.Call(o.value)
+		if v := res[0].Interface(); v != nil {
+			err = v.(error)
+			return err
+		}
 	}
 
 	for {
@@ -192,7 +194,7 @@ func isValidHandler(fn interface{}) error {
 }
 
 func buildHandlerArgs(args []interface{}) []reflect.Value {
-	reflectedArgs := make([]reflect.Value, 0)
+	reflectedArgs := make([]reflect.Value, 0, len(args))
 
 	for _, arg := range args {
 		reflectedArgs = append(reflectedArgs, reflect.ValueOf(arg))
@@ -201,9 +203,9 @@ func buildHandlerArgs(args []interface{}) []reflect.Value {
 	return reflectedArgs
 }
 
-// New creates new Observable
+// NewObservable creates new Observable
 // handlerQueueSize sets buffered channel length per subscriber
-func New(handlerQueueSize int) Observable {
+func NewObservable(handlerQueueSize int) Observable {
 	if handlerQueueSize <= 0 {
 		panic("handlerQueueSize has to be greater then 0")
 	}

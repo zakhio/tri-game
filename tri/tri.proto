@@ -1,7 +1,6 @@
 syntax = "proto3";
 
 import "google/protobuf/empty.proto";
-import "google/protobuf/wrappers.proto";
 
 option go_package = "zakh.io/tri/proto";
 
@@ -10,7 +9,8 @@ message Player {
     string alias = 2;
     string teamId = 3;
     int32 score = 4;
-    google.protobuf.BoolValue captain = 5;
+    bool captain = 5;
+    bool initialized = 6;
 }
 
 message Team {

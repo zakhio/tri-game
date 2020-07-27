@@ -2,11 +2,10 @@ package handler
 
 import (
 	"context"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/golang/protobuf/ptypes/empty"
-	"github.com/labstack/gommon/log"
 	"github.com/rcrowley/go-metrics"
-	"github.com/zakhio/online-games/go-game-base/session"
 	"github.com/zakhio/online-games/tri/proto"
 	"github.com/zakhio/online-games/tri/server2/controller"
 	"github.com/zakhio/online-games/tri/server2/game"
@@ -51,8 +50,9 @@ func (h *handler) ObserveSession(req *proto.ObserveSessionRequest, stream proto.
 	}
 	observerSuccessCounter.Inc(1)
 
-	err := s.Observe(stream.Context(), token, func(state session.StateValue) error {
-		res := protoConverter.FromStateValue(token, state.(game.TRIStateValue))
+	err := s.Observe(stream.Context(), token, func(state *game.TRIStateValue) error {
+		// looks ugly but cannot find a way how to make state.(*game.TRIStateValue) work
+		res := protoConverter.FromStateValue(token, state)
 		if err := stream.Send(res); err != nil {
 			log.Printf("[%v] cannot stream: %v", token, err)
 			return err
@@ -77,9 +77,9 @@ func (h *handler) Start(ctx context.Context, req *proto.StartGameRequest) (*empt
 	}
 
 	err := s.Start(token, &game.TRIConfig{
-		Columns:    req.GetNumberOfColumns(),
-		Rows:       req.GetNumberOfRows(),
-		Teams:      req.GetNumberOfTeams(),
+		Columns:    int(req.GetNumberOfColumns()),
+		Rows:       int(req.GetNumberOfRows()),
+		Teams:      int(req.GetNumberOfTeams()),
 		Language:   req.GetLanguage(),
 		Dictionary: req.GetDictionary(),
 	})
@@ -102,7 +102,7 @@ func (h *handler) Turn(ctx context.Context, req *proto.TurnGameRequest) (*empty.
 		return nil, status.Errorf(codes.NotFound, "[%v] session %v doesn't exist", token, sessionID)
 	}
 
-	err := s.Turn(token, req.GetPosition())
+	err := s.Turn(token, int(req.GetPosition()))
 	if err != nil {
 		return nil, err
 	}
