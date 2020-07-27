@@ -43,6 +43,7 @@ func (s *triState) Activate(token string) {
 		player.ID = strconv.Itoa(int(atomic.AddInt32(&s.latestPlayerID, 1)))
 		player.Active = true
 	}
+	s.updateStateValue()
 }
 
 func (s *triState) SetCaptainRole(token string, active bool) {
@@ -50,6 +51,7 @@ func (s *triState) SetCaptainRole(token string, active bool) {
 	player := d.(*TRIPlayer)
 	player.Captain = active
 	player.Initialized = true
+	s.updateStateValue()
 }
 
 func (s *triState) Start(numberOfTeams, numberOrRows, numberOfColumns int) error {

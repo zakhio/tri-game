@@ -29,7 +29,7 @@ export function SettingsDrawer({open, onClose}: { open?: boolean, onClose: Funct
     const token = useSelector(playerToken)
     const me = useSelector(sessionMe)
 
-    const captain = me!.captain !== undefined && me!.captain.value;
+    const captain = me!.initialized && me!.captain;
     const link = gameSessionUrl(sessionId);
 
     return (

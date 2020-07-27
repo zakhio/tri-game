@@ -16,7 +16,7 @@ export function GameIntro({sessionId}: { sessionId: string }) {
             <Grid item xs={12} sm={2}>
                 <img src="logo.svg" alt="Game TRI logo"/>
             </Grid>
-            <Grid item xs={12} sm={10} wrap="nowrap">
+            <Grid container direction="column" item xs={12} sm={10} wrap="nowrap">
                 <Typography variant="body1" gutterBottom>
                     {intl.formatMessage(messages.p1)}
                 </Typography>

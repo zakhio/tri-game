@@ -15,7 +15,7 @@ export function FieldHeader({sessionId, onSettingsClick}: { sessionId: string, o
     const token = useSelector(playerToken);
     const started = useSelector(sessionStarted);
 
-    return <Grid container xs={started ? 12 : 11} sm={12} spacing={2} justify="center">
+    return <Grid item container xs={started ? 12 : 11} sm={12} spacing={2} justify="center">
         {!started &&
         <Grid item xs={12} sm={4}>
             <End/>
