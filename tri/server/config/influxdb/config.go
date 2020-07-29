@@ -1,11 +1,12 @@
 package influxdb
 
 import (
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"time"
+
+	"gopkg.in/yaml.v2"
 )
 
 type Config struct {

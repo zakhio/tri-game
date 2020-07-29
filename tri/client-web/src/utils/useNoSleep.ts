@@ -12,14 +12,14 @@ export const useNoSleep = (enabled: boolean) => {
 
         let isMobile = navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i)
 
-        if (isMobile && enabled) {
-            document.addEventListener('click', function enableNoSleep() {
-                document.removeEventListener('click', enableNoSleep, false);
-                noSleep.enable();
-            }, false);
-        } else {
-            noSleep.disable();
-        }
+        // if (isMobile && enabled) {
+        //     document.addEventListener('click', function enableNoSleep() {
+        //         document.removeEventListener('click', enableNoSleep, false);
+        //         noSleep.enable();
+        //     }, false);
+        // } else {
+        //     noSleep.disable();
+        // }
 
         setAlreadyEnabled(enabled);
     }, [alreadyEnabled, enabled, noSleep]);

@@ -3,8 +3,8 @@ package controller
 import (
 	"sync"
 
-	"github.com/zakhio/online-games/tri/server2/game"
-	"github.com/zakhio/online-games/tri/server2/middleware/random"
+	"github.com/zakhio/online-games/tri/server/game"
+	"github.com/zakhio/online-games/tri/server/middleware/random"
 )
 
 type SessionController interface {

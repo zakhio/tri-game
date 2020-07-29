@@ -8,7 +8,7 @@ import (
 	"sync/atomic"
 
 	"github.com/zakhio/online-games/go-game-base/session"
-	"github.com/zakhio/online-games/tri/server2/middleware/dictionary"
+	"github.com/zakhio/online-games/tri/server/middleware/dictionary"
 )
 
 type TRISession interface {

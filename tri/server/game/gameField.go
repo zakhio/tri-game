@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 
-	"github.com/zakhio/online-games/tri/server2/middleware/math"
+	"github.com/zakhio/online-games/tri/server/middleware/math"
 )
 
 type TRIGameField struct {

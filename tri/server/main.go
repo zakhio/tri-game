@@ -10,7 +10,7 @@ import (
 
 	"github.com/rcrowley/go-metrics"
 	"github.com/zakhio/go-metrics-influxdb"
-	pb "github.com/zakhio/online-games/tri/proto"
+	"github.com/zakhio/online-games/tri/proto"
 	"github.com/zakhio/online-games/tri/server/config/influxdb"
 	"github.com/zakhio/online-games/tri/server/handler"
 	"google.golang.org/grpc"
@@ -47,7 +47,7 @@ func main() {
 	}
 
 	grpcServer := grpc.NewServer()
-	pb.RegisterTRIGameServer(grpcServer, handler.NewTRIGameServer())
+	proto.RegisterTRIGameServer(grpcServer, handler.NewHandler())
 	if err := grpcServer.Serve(listener); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
