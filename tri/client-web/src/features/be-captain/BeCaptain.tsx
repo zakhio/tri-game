@@ -27,7 +27,7 @@ export function BeCaptain({sessionId}: { sessionId: string }) {
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
     return (
-        <Dialog fullScreen={fullScreen} open={started && me.captain === undefined} aria-labelledby="form-dialog-title">
+        <Dialog fullScreen={fullScreen} open={started && !me.initialized} aria-labelledby="form-dialog-title">
             <DialogTitle id="form-dialog-title">
                 {intl.formatMessage(messages.title)}
             </DialogTitle>

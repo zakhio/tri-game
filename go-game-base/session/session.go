@@ -1,7 +1,7 @@
 package session
 
 import (
-	"context"
+	"github.com/zakhio/online-games/go-game-base/observable"
 )
 
 type Session interface {
@@ -12,16 +12,10 @@ type Session interface {
 }
 
 type BaseSession struct {
-	ID    string
-	State State
-}
+	ID string
 
-func (s *BaseSession) Observe(ctx context.Context, token string, callback interface{}) error {
-	return s.State.Subscribe(ctx, token, callback)
-}
-
-func (s *BaseSession) Reset() {
-	s.State.Reset()
+	Active     bool
+	Observable observable.Observable
 }
 
 func (s *BaseSession) SetID(id string) {
@@ -30,4 +24,10 @@ func (s *BaseSession) SetID(id string) {
 
 func (s *BaseSession) GetID() string {
 	return s.ID
+}
+
+func NewBaseSession() BaseSession {
+	return BaseSession{
+		Observable: observable.NewObservable(1),
+	}
 }

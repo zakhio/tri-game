@@ -1,5 +1,6 @@
 package session
 
 type StateValue struct {
-	Active bool
+	SessionID string
+	Active    bool
 }

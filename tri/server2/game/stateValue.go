@@ -19,7 +19,7 @@ func (v *TRIStateValue) GetRemainCellsCount(teamID int) int {
 	count := 0
 
 	for _, c := range v.Cells {
-		if c.TeamId == teamID {
+		if !c.Open && c.TeamId == teamID {
 			count++
 		}
 	}

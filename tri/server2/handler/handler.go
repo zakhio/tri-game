@@ -41,12 +41,12 @@ func (h *handler) CreateSession(ctx context.Context, req *proto.CreateSessionReq
 func (h *handler) ObserveSession(req *proto.ObserveSessionRequest, stream proto.TRIGame_ObserveSessionServer) error {
 	token := req.GetToken()
 	sessionID := req.GetSessionId()
-	log.Infof("[%v] observe session %v\n", token, sessionID)
+	log.Infof("[%v][%v] observe session\n", token, sessionID)
 
 	s := h.sessionManager.GetSession(sessionID)
 	if s == nil {
 		observerFailCounter.Inc(1)
-		return status.Errorf(codes.NotFound, "[%v] session %v doesn't exist", token, sessionID)
+		return status.Errorf(codes.NotFound, "[%v][%v] session doesn't exist", token, sessionID)
 	}
 	observerSuccessCounter.Inc(1)
 
@@ -54,7 +54,7 @@ func (h *handler) ObserveSession(req *proto.ObserveSessionRequest, stream proto.
 		// looks ugly but cannot find a way how to make state.(*game.TRIStateValue) work
 		res := protoConverter.FromStateValue(token, state)
 		if err := stream.Send(res); err != nil {
-			log.Printf("[%v] cannot stream: %v", token, err)
+			log.Printf("[%v][%v] cannot stream", token, state.SessionID)
 			return err
 		}
 
@@ -69,11 +69,11 @@ func (h *handler) Start(ctx context.Context, req *proto.StartGameRequest) (*empt
 
 	token := req.GetToken()
 	sessionID := req.GetSessionId()
-	log.Infof("[%v] start game in session %v\n", token, sessionID)
+	log.Infof("[%v][%v] start game\n", token, sessionID)
 
 	s := h.sessionManager.GetSession(sessionID)
 	if s == nil {
-		return nil, status.Errorf(codes.NotFound, "[%v] session %v doesn't exist", token, sessionID)
+		return nil, status.Errorf(codes.NotFound, "[%v][%v] session doesn't exist", token, sessionID)
 	}
 
 	err := s.Start(token, &game.TRIConfig{
@@ -95,11 +95,11 @@ func (h *handler) Turn(ctx context.Context, req *proto.TurnGameRequest) (*empty.
 
 	token := req.GetToken()
 	sessionID := req.GetSessionId()
-	log.Infof("[%v] game turn in session %v\n", token, sessionID)
+	log.Infof("[%v][%v] game turn\n", token, sessionID)
 
 	s := h.sessionManager.GetSession(sessionID)
 	if s == nil {
-		return nil, status.Errorf(codes.NotFound, "[%v] session %v doesn't exist", token, sessionID)
+		return nil, status.Errorf(codes.NotFound, "[%v][%v] session doesn't exist", token, sessionID)
 	}
 
 	err := s.Turn(token, int(req.GetPosition()))
@@ -116,8 +116,24 @@ func (h *handler) SetAlias(context.Context, *proto.SetAliasRequest) (*empty.Empt
 	return nil, status.Errorf(codes.Unimplemented, "method SetAlias not implemented")
 }
 
-func (h *handler) SetSettings(context.Context, *proto.SetSettingsRequest) (*empty.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SetSettings not implemented")
+func (h *handler) SetSettings(ctx context.Context, req *proto.SetSettingsRequest) (*empty.Empty, error) {
+	defer latency.Measure("handler.SetSettings")()
+
+	token := req.GetToken()
+	sessionID := req.GetSessionId()
+	log.Infof("[%v][%v] set settings", token, sessionID)
+
+	s := h.sessionManager.GetSession(sessionID)
+	if s == nil {
+		return nil, status.Errorf(codes.NotFound, "[%v][%v] session doesn't exist", token, sessionID)
+	}
+
+	err := s.SetCaptainRole(token, req.GetCaptain())
+	if err != nil {
+		return nil, err
+	}
+
+	return new(empty.Empty), nil
 }
 
 func NewHandler() proto.TRIGameServer {
