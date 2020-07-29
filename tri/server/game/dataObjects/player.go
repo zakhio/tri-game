@@ -1,4 +1,4 @@
-package game
+package dataObjects
 
 type TRIPlayer struct {
 	ID          string

@@ -1,6 +1,6 @@
-package game
+package dataObjects
 
-type TRIConfig struct {
+type TRIGameConfig struct {
 	Columns    int
 	Rows       int
 	Teams      int

@@ -1,4 +1,4 @@
-package game
+package dataObjects
 
 import "github.com/zakhio/online-games/go-game-base/session"
 

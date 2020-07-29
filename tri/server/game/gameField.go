@@ -2,19 +2,20 @@ package game
 
 import (
 	"fmt"
+	"github.com/zakhio/online-games/tri/server/game/dataObjects"
 	"math/rand"
 
 	"github.com/zakhio/online-games/tri/server/middleware/math"
 )
 
 type TRIGameField struct {
-	cells        []*WordCell
+	cells        []*dataObjects.WordCell
 	teamsCount   int
 	rowsCount    int
 	columnsCount int
 }
 
-func (f *TRIGameField) Pick(absoluteIndex int) (*WordCell, error) {
+func (f *TRIGameField) Pick(absoluteIndex int) (*dataObjects.WordCell, error) {
 	if absoluteIndex < 0 || absoluteIndex >= len(f.cells) {
 		return nil, fmt.Errorf("cannot pick: absoluteIndex %v is out gamefiled %v*%v", absoluteIndex, f.rowsCount, f.columnsCount)
 	}
@@ -52,16 +53,16 @@ func NewTRIGameField(numberOfTeams, numberOrRows, numberOfColumns int, dict []st
 		wordsDict[word] = false
 	}
 
-	f.cells = make([]*WordCell, 0, wordsCount)
+	f.cells = make([]*dataObjects.WordCell, 0, wordsCount)
 	for k, _ := range wordsDict {
-		cell := NewWordCell(k, WordCellTypeRegular, -1)
+		cell := dataObjects.NewWordCell(k, dataObjects.WordCellTypeRegular, -1)
 		f.cells = append(f.cells, cell)
 	}
 
 	// configure ownership
 	teamWordSize := wordsCount / (f.teamsCount + 1)
 	endPosition := rand.Intn(wordsCount)
-	f.cells[endPosition].Type = WordCellTypeEndGame
+	f.cells[endPosition].Type = dataObjects.WordCellTypeEndGame
 	wordsDict[f.cells[endPosition].Word] = true
 
 	startingTeam := rand.Intn(f.teamsCount)
@@ -76,7 +77,7 @@ func NewTRIGameField(numberOfTeams, numberOrRows, numberOfColumns int, dict []st
 			for wordsDict[f.cells[pos].Word] == true {
 				pos = rand.Intn(wordsCount)
 			}
-			f.cells[pos].Type = WordCellTypeTeamOwned
+			f.cells[pos].Type = dataObjects.WordCellTypeTeamOwned
 			f.cells[pos].TeamId = tId
 			wordsDict[f.cells[pos].Word] = true
 		}

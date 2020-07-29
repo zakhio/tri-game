@@ -2,11 +2,11 @@ package protoConverter
 
 import (
 	"github.com/zakhio/online-games/tri/proto"
-	"github.com/zakhio/online-games/tri/server/game"
+	"github.com/zakhio/online-games/tri/server/game/dataObjects"
 	"strconv"
 )
 
-func FromStateValue(token string, state *game.TRIStateValue) *proto.GameSessionStream {
+func FromStateValue(token string, state *dataObjects.TRIStateValue) *proto.GameSessionStream {
 	result := &proto.GameSessionStream{}
 	result.PlayerId = state.IDs[token]
 
@@ -45,7 +45,7 @@ func FromStateValue(token string, state *game.TRIStateValue) *proto.GameSessionS
 	return result
 }
 
-func convertCell(c *game.WordCell, showSensitive bool) *proto.Cell {
+func convertCell(c *dataObjects.WordCell, showSensitive bool) *proto.Cell {
 	cell := &proto.Cell{
 		Word: c.Word,
 		Open: c.Open,
@@ -53,11 +53,11 @@ func convertCell(c *game.WordCell, showSensitive bool) *proto.Cell {
 
 	if showSensitive || c.Open {
 		switch c.Type {
-		case game.WordCellTypeRegular:
+		case dataObjects.WordCellTypeRegular:
 			cell.Type = proto.Cell_REGULAR
-		case game.WordCellTypeEndGame:
+		case dataObjects.WordCellTypeEndGame:
 			cell.Type = proto.Cell_END_GAME
-		case game.WordCellTypeTeamOwned:
+		case dataObjects.WordCellTypeTeamOwned:
 			cell.Type = proto.Cell_TEAM_OWNED
 			cell.OwnerTeamId = strconv.Itoa(c.TeamId)
 		}
