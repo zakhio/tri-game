@@ -2,8 +2,8 @@ package dataObjects
 
 import "github.com/zakhio/online-games/go-game-base/session"
 
-type TRIStateValue struct {
-	session.StateValue
+type StateValue struct {
+	session.BaseStateValue
 
 	Players     []string
 	Initialized map[string]bool
@@ -15,7 +15,7 @@ type TRIStateValue struct {
 	NumOfTeams   int
 }
 
-func (v *TRIStateValue) GetRemainCellsCount(teamID int) int {
+func (v *StateValue) GetRemainCellsCount(teamID int) int {
 	count := 0
 
 	for _, c := range v.Cells {
@@ -27,8 +27,8 @@ func (v *TRIStateValue) GetRemainCellsCount(teamID int) int {
 	return count
 }
 
-func NewTRIStateValue() *TRIStateValue {
-	return &TRIStateValue{
+func NewTRIStateValue() *StateValue {
+	return &StateValue{
 		Players:     make([]string, 0),
 		Initialized: make(map[string]bool),
 		IDs:         make(map[string]string),

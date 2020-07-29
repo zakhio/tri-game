@@ -1,6 +1,6 @@
 package dataObjects
 
-type TRIPlayer struct {
+type Player struct {
 	ID          string
 	Active      bool
 	Captain     bool

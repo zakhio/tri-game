@@ -1,22 +1,22 @@
-package game
+package triGame
 
 import (
 	"context"
 	"fmt"
-	"github.com/zakhio/online-games/tri/server/game/dataObjects"
 	"strconv"
 	"sync"
 	"sync/atomic"
 
 	"github.com/zakhio/online-games/go-game-base/session"
 	"github.com/zakhio/online-games/tri/server/middleware/dictionary"
+	"github.com/zakhio/online-games/tri/server/tri-game/data-objects"
 )
 
 type TRISession interface {
 	session.Session
 
-	Observe(ctx context.Context, token string, callback func(*dataObjects.TRIStateValue) error) error
-	Start(token string, config *dataObjects.TRIGameConfig) error
+	Observe(ctx context.Context, token string, callback func(*dataObjects.StateValue) error) error
+	Start(token string, config *dataObjects.GameConfig) error
 	Turn(token string, position int) error
 	SetCaptainRole(token string, active bool) error
 }
@@ -27,12 +27,12 @@ type triSession struct {
 	playersMap     *sync.Map
 	latestPlayerID int32
 
-	gameField TRIGameField
+	gameField GameField
 
-	stateValue *dataObjects.TRIStateValue
+	stateValue *dataObjects.StateValue
 }
 
-func (s *triSession) Observe(ctx context.Context, token string, callback func(*dataObjects.TRIStateValue) error) error {
+func (s *triSession) Observe(ctx context.Context, token string, callback func(*dataObjects.StateValue) error) error {
 	player := s.playerByToken(token)
 	if !player.Active {
 		player.ID = strconv.Itoa(int(atomic.AddInt32(&s.latestPlayerID, 1)))
@@ -43,7 +43,7 @@ func (s *triSession) Observe(ctx context.Context, token string, callback func(*d
 	return s.Observable.SubscribeSync(ctx, token, callback)
 }
 
-func (s *triSession) Start(token string, config *dataObjects.TRIGameConfig) error {
+func (s *triSession) Start(token string, config *dataObjects.GameConfig) error {
 	if !s.Observable.IsSubscribed(token) {
 		return fmt.Errorf("[%v] cannot start: must observe session", token)
 	}
@@ -106,9 +106,9 @@ func (s *triSession) Reset() {
 	panic("implement me")
 }
 
-func (s *triSession) playerByToken(token string) *dataObjects.TRIPlayer {
-	d, _ := s.playersMap.LoadOrStore(token, &dataObjects.TRIPlayer{})
-	return d.(*dataObjects.TRIPlayer)
+func (s *triSession) playerByToken(token string) *dataObjects.Player {
+	d, _ := s.playersMap.LoadOrStore(token, &dataObjects.Player{})
+	return d.(*dataObjects.Player)
 }
 
 func (s *triSession) updateStateValue() {
@@ -121,7 +121,7 @@ func (s *triSession) updateStateValue() {
 
 	s.playersMap.Range(func(key interface{}, value interface{}) bool {
 		token := key.(string)
-		player := value.(*dataObjects.TRIPlayer)
+		player := value.(*dataObjects.Player)
 
 		s.stateValue.Players = append(s.stateValue.Players, token)
 		s.stateValue.Captains[token] = player.Captain

@@ -3,7 +3,7 @@ package handler
 import (
 	"context"
 	log "github.com/sirupsen/logrus"
-	"github.com/zakhio/online-games/tri/server/game/dataObjects"
+	"github.com/zakhio/online-games/tri/server/tri-game/data-objects"
 
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/rcrowley/go-metrics"
@@ -50,8 +50,8 @@ func (h *handler) ObserveSession(req *proto.ObserveSessionRequest, stream proto.
 	}
 	observerSuccessCounter.Inc(1)
 
-	err := s.Observe(stream.Context(), token, func(state *dataObjects.TRIStateValue) error {
-		// looks ugly but cannot find a way how to make state.(*game.TRIStateValue) work
+	err := s.Observe(stream.Context(), token, func(state *dataObjects.StateValue) error {
+		// looks ugly but cannot find a way how to make state.(*game.StateValue) work
 		res := protoConverter.FromStateValue(token, state)
 		if err := stream.Send(res); err != nil {
 			log.Printf("[%v][%v] cannot stream", token, state.SessionID)
@@ -76,7 +76,7 @@ func (h *handler) Start(ctx context.Context, req *proto.StartGameRequest) (*empt
 		return nil, status.Errorf(codes.NotFound, "[%v][%v] session doesn't exist", token, sessionID)
 	}
 
-	err := s.Start(token, &dataObjects.TRIGameConfig{
+	err := s.Start(token, &dataObjects.GameConfig{
 		Columns:    int(req.GetNumberOfColumns()),
 		Rows:       int(req.GetNumberOfRows()),
 		Teams:      int(req.GetNumberOfTeams()),

@@ -2,11 +2,11 @@ package protoConverter
 
 import (
 	"github.com/zakhio/online-games/tri/proto"
-	"github.com/zakhio/online-games/tri/server/game/dataObjects"
+	"github.com/zakhio/online-games/tri/server/tri-game/data-objects"
 	"strconv"
 )
 
-func FromStateValue(token string, state *dataObjects.TRIStateValue) *proto.GameSessionStream {
+func FromStateValue(token string, state *dataObjects.StateValue) *proto.GameSessionStream {
 	result := &proto.GameSessionStream{}
 	result.PlayerId = state.IDs[token]
 

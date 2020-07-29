@@ -1,21 +1,21 @@
-package game
+package triGame
 
 import (
 	"fmt"
-	"github.com/zakhio/online-games/tri/server/game/dataObjects"
 	"math/rand"
 
 	"github.com/zakhio/online-games/tri/server/middleware/math"
+	"github.com/zakhio/online-games/tri/server/tri-game/data-objects"
 )
 
-type TRIGameField struct {
+type GameField struct {
 	cells        []*dataObjects.WordCell
 	teamsCount   int
 	rowsCount    int
 	columnsCount int
 }
 
-func (f *TRIGameField) Pick(absoluteIndex int) (*dataObjects.WordCell, error) {
+func (f *GameField) Pick(absoluteIndex int) (*dataObjects.WordCell, error) {
 	if absoluteIndex < 0 || absoluteIndex >= len(f.cells) {
 		return nil, fmt.Errorf("cannot pick: absoluteIndex %v is out gamefiled %v*%v", absoluteIndex, f.rowsCount, f.columnsCount)
 	}
@@ -29,7 +29,7 @@ func (f *TRIGameField) Pick(absoluteIndex int) (*dataObjects.WordCell, error) {
 	return cell, nil
 }
 
-func (f *TRIGameField) GetRemainCellsCount(teamId int) int {
+func (f *GameField) GetRemainCellsCount(teamId int) int {
 	count := 0
 	for _, c := range f.cells {
 		if c.TeamId == teamId && !c.Open {
@@ -39,8 +39,8 @@ func (f *TRIGameField) GetRemainCellsCount(teamId int) int {
 	return count
 }
 
-func NewTRIGameField(numberOfTeams, numberOrRows, numberOfColumns int, dict []string) TRIGameField {
-	f := TRIGameField{}
+func NewTRIGameField(numberOfTeams, numberOrRows, numberOfColumns int, dict []string) GameField {
+	f := GameField{}
 	f.teamsCount = math.Max(numberOfTeams, 2)
 	f.rowsCount = math.Max(numberOrRows, 5)
 	f.columnsCount = math.Max(numberOfColumns, 5)
