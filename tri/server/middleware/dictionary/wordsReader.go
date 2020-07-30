@@ -10,7 +10,7 @@ import (
 
 // readLines reads a whole file into memory
 // and returns a slice of its lines.
-func ReadLines(path string) ([]string, error) {
+func ReadLines(filename string) ([]string, error) {
 	var err error
 	var dir = "."
 
@@ -21,16 +21,18 @@ func ReadLines(path string) ([]string, error) {
 		}
 	}
 
-	file, err := os.Open(dir + "/" + path)
+	path := filepath.Join(dir, filename)
+	file, err := os.Open(filepath.Clean(path))
 	if err != nil {
 		return nil, err
 	}
-	defer file.Close()
 
 	var lines []string
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		lines = append(lines, strings.Split(scanner.Text(), ",")...)
 	}
+
+	_ = file.Close()
 	return lines, scanner.Err()
 }

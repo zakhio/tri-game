@@ -10,6 +10,7 @@ require (
 	github.com/zakhio/go-metrics-influxdb v0.3.0
 	github.com/zakhio/online-games/go-game-base v0.0.0
 	google.golang.org/grpc v1.30.0
+	google.golang.org/grpc/examples v0.0.0-20200729200327-d6c4e49aab24 // indirect
 	google.golang.org/protobuf v1.25.0
 	gopkg.in/yaml.v2 v2.2.5
 )

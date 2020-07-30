@@ -25,8 +25,8 @@ func ParseConfig(filename string) *Config {
 		panic(err)
 	}
 
-	path := dir + "/" + filename
-	yamlFile, err := ioutil.ReadFile(path)
+	path := filepath.Join(dir, filename)
+	yamlFile, err := ioutil.ReadFile(filepath.Clean(path))
 
 	if err != nil {
 		panic(err)
