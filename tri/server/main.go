@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"github.com/zakhio/online-games/tri/server/config"
 	"log"
 	"math/rand"
 	"net"
@@ -11,7 +12,6 @@ import (
 	"github.com/rcrowley/go-metrics"
 	"github.com/zakhio/go-metrics-influxdb"
 	"github.com/zakhio/online-games/tri/proto"
-	"github.com/zakhio/online-games/tri/server/config/influxdb"
 	"github.com/zakhio/online-games/tri/server/handler"
 	"google.golang.org/grpc"
 )
@@ -28,7 +28,7 @@ func main() {
 	flag.Parse()
 
 	if enableMetrics {
-		influxDBConfig := influxdb.ParseConfig("influxdb-config.yaml")
+		influxDBConfig := config.ParseInfluxDBConfig("config/influxdb-config.yaml")
 		go reporter.InfluxDB(metrics.DefaultRegistry,
 			influxDBConfig.Interval,
 			influxDBConfig.URL,
@@ -41,13 +41,15 @@ func main() {
 	}
 	go metrics.Log(metrics.DefaultRegistry, 10*time.Minute, log.New(os.Stderr, "metrics: ", log.Lmicroseconds))
 
+	d := config.ParseDictionaryConfig("config/dictionary.json")
+
 	listener, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
 	grpcServer := grpc.NewServer()
-	proto.RegisterTRIGameServer(grpcServer, handler.NewHandler())
+	proto.RegisterTRIGameServer(grpcServer, handler.NewHandler(d))
 	if err := grpcServer.Serve(listener); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}

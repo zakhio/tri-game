@@ -11,8 +11,8 @@ mkdir -p ../tmp
 GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o ../tmp/tri-server ../server/main.go
 
 rsync -avzh ../tmp/tri-server "$DEPLOY_SERVER_SSH":~/tri/
-rsync -avzh ../dictionary "$DEPLOY_SERVER_SSH":~/tri/
-rsync -avzh ./secret/influxdb-config.yaml "$DEPLOY_SERVER_SSH":~/tri/
+rsync -avzh ../config/dictionary.json "$DEPLOY_SERVER_SSH":~/tri/config/
+rsync -avzh ./secret/influxdb-config.yaml "$DEPLOY_SERVER_SSH":~/tri/config/
 
 echo "-- Build and deploy the client"
 (cd ../client-web &&

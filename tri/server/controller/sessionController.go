@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/zakhio/online-games/tri/server/config"
 	"sync"
 
 	"github.com/zakhio/online-games/tri/server/middleware/random"
@@ -56,11 +57,11 @@ func (c *sessionController) nextSessionId() string {
 	return id
 }
 
-func NewSessionController() SessionController {
+func NewSessionController(d *config.Dictionary) SessionController {
 	sessions := &sync.Map{}
 	pool := &sync.Pool{
 		New: func() interface{} {
-			return triGame.NewTRISession()
+			return triGame.NewTRISession(d)
 		},
 	}
 

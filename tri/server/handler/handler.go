@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	log "github.com/sirupsen/logrus"
+	"github.com/zakhio/online-games/tri/server/config"
 	"github.com/zakhio/online-games/tri/server/tri-game/data-objects"
 
 	"github.com/golang/protobuf/ptypes/empty"
@@ -136,8 +137,8 @@ func (h *handler) SetSettings(ctx context.Context, req *proto.SetSettingsRequest
 	return new(empty.Empty), nil
 }
 
-func NewHandler() proto.TRIGameServer {
+func NewHandler(d *config.Dictionary) proto.TRIGameServer {
 	server := &handler{}
-	server.sessionManager = controller.NewSessionController()
+	server.sessionManager = controller.NewSessionController(d)
 	return server
 }

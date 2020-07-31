@@ -8,7 +8,7 @@ import (
 	"sync/atomic"
 
 	"github.com/zakhio/online-games/go-game-base/session"
-	"github.com/zakhio/online-games/tri/server/middleware/dictionary"
+	"github.com/zakhio/online-games/tri/server/config"
 	"github.com/zakhio/online-games/tri/server/tri-game/data-objects"
 )
 
@@ -23,6 +23,8 @@ type TRISession interface {
 
 type triSession struct {
 	session.BaseSession
+
+	dict *config.Dictionary
 
 	playersMap     *sync.Map
 	latestPlayerID int32
@@ -48,17 +50,11 @@ func (s *triSession) Start(token string, config *dataObjects.GameConfig) error {
 		return fmt.Errorf("[%v] cannot start: must observe session", token)
 	}
 
-	// configure cells
-	dict, err := dictionary.ReadLines("dictionary/ru.txt")
-	if err != nil {
-		return err
-	}
-
-	s.gameField = NewTRIGameField(config.Teams, config.Rows, config.Columns, dict)
+	s.gameField = NewTRIGameField(config.Teams, config.Rows, config.Columns, s.dict.Words["ru"])
 	s.Active = true
 	s.updateStateValue()
 
-	return err
+	return nil
 }
 
 func (s *triSession) Turn(token string, position int) error {
@@ -133,11 +129,12 @@ func (s *triSession) updateStateValue() {
 	s.Observable.Publish(s.stateValue)
 }
 
-func NewTRISession() TRISession {
+func NewTRISession(d *config.Dictionary) TRISession {
 	s := &triSession{}
 	s.BaseSession = session.NewBaseSession()
 	s.playersMap = &sync.Map{}
 	s.stateValue = dataObjects.NewTRIStateValue()
+	s.dict = d
 
 	return s
 }
