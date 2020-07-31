@@ -2,7 +2,6 @@ package config
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -37,8 +36,6 @@ func ParseDictionaryConfig(filename string) *Dictionary {
 	if err != nil {
 		panic(err)
 	}
-
-	fmt.Print(config)
 
 	return &config
 }
