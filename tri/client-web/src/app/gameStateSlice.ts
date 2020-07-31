@@ -127,7 +127,7 @@ export const joinAsync = (token: string, sessionId: string): AppThunk => dispatc
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
 // will call the thunk with the `dispatch` function as the first argument. Async
 // code can then be executed and other actions can be dispatched
-export const tryJoinAsync = (token: string, sessionId: string, history: History<LocationState>, playerName?: string): AppThunk => dispatch => {
+export const tryJoinAsync = (token: string, sessionId: string, history: History<LocationState>): AppThunk => dispatch => {
     if (stream) {
         stream.cancel();
     }
@@ -140,9 +140,6 @@ export const tryJoinAsync = (token: string, sessionId: string, history: History<
     stream = client.observeSession(observerReq);
     stream.on('data', (res) => {
         stream.cancel();
-        if (playerName) {
-            dispatch(setSettings(token, sessionId, playerName));
-        }
         history.push("/" + sessionId);
     });
 
@@ -201,18 +198,12 @@ export const turn = (token: string, sessionId: string, position: number): AppThu
     });
 };
 
-export const setSettings = (token: string, sessionId: string, alias?: string, captain?: boolean, teamId?: string): AppThunk => dispatch => {
+export const setSettings = (token: string, sessionId: string, captain?: boolean): AppThunk => dispatch => {
     const req = new SetSettingsRequest();
     req.setToken(token)
     req.setSessionid(sessionId);
-    if (alias) {
-        req.setAlias(alias);
-    }
     if (captain) {
         req.setCaptain(captain);
-    }
-    if (teamId) {
-        req.setTeamid(teamId);
     }
     client.setSettings(req, null, (err: Error, response: Empty) => {
     });

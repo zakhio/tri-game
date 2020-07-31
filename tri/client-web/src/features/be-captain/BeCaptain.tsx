@@ -46,13 +46,13 @@ export function BeCaptain({sessionId}: { sessionId: string }) {
             <DialogActions>
                 <Button
                     color="secondary"
-                    onClick={() => dispatch(setSettings(token, sessionId!, undefined, true))}>
+                    onClick={() => dispatch(setSettings(token, sessionId!, true))}>
                     {intl.formatMessage(messages.captainRole)}
                 </Button>
                 <Button
                     variant="contained"
                     color="secondary"
-                    onClick={() => dispatch(setSettings(token, sessionId!, undefined, false))}>
+                    onClick={() => dispatch(setSettings(token, sessionId!, false))}>
                     {intl.formatMessage(messages.regularRole)}
                 </Button>
             </DialogActions>

@@ -33,6 +33,7 @@ message Cell {
 
 message CreateSessionRequest {
     string token = 1;
+    string defaultLanguage = 2;
 }
 
 message CreateSessionReply {
@@ -53,19 +54,10 @@ message ObserveSessionRequest {
     string sessionId = 2;
 }
 
-message SetAliasRequest {
-    string token = 1;
-    string sessionId = 2;
-    string anyId = 3;
-    string alias = 4;
-}
-
 message SetSettingsRequest {
     string token = 1;
     string sessionId = 2;
-    string teamId = 3;
-    string alias = 4;
-    bool captain = 5;
+    bool captain = 3;
 }
 
 message TurnGameRequest {
@@ -93,8 +85,6 @@ service TRIGame {
     rpc Start (StartGameRequest) returns (google.protobuf.Empty) {
     }
     rpc Turn (TurnGameRequest) returns (google.protobuf.Empty) {
-    }
-    rpc SetAlias (SetAliasRequest) returns (google.protobuf.Empty) {
     }
     rpc SetSettings (SetSettingsRequest) returns (google.protobuf.Empty) {
     }

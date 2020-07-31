@@ -111,12 +111,6 @@ func (h *handler) Turn(ctx context.Context, req *proto.TurnGameRequest) (*empty.
 	return new(empty.Empty), nil
 }
 
-func (h *handler) SetAlias(context.Context, *proto.SetAliasRequest) (*empty.Empty, error) {
-	defer latency.Measure("handler.CreateSession")()
-
-	return nil, status.Errorf(codes.Unimplemented, "method SetAlias not implemented")
-}
-
 func (h *handler) SetSettings(ctx context.Context, req *proto.SetSettingsRequest) (*empty.Empty, error) {
 	defer latency.Measure("handler.SetSettings")()
 

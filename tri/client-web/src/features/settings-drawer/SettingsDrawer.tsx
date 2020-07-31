@@ -52,7 +52,7 @@ export function SettingsDrawer({open, onClose}: { open?: boolean, onClose: Funct
                         secondary={intl.formatMessage(messages.captainSecondary)}/>
                     <Switch
                         checked={captain}
-                        onChange={e => dispatch(setSettings(token!, sessionId!, undefined, e.target.checked))}
+                        onChange={e => dispatch(setSettings(token!, sessionId!, e.target.checked))}
                         color="secondary"
                         inputProps={{'aria-label': 'captain checkbox'}}
                     />
