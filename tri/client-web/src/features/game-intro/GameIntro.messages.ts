@@ -16,6 +16,11 @@ const messages = defineMessages({
         defaultMessage: 'The team that was the first to find all of its agents wins.',
         description: 'Intro text Pt.3 on start game session page',
     },
+    selectLanguage: {
+        id: 'page.start.intro.selectLanguage',
+        defaultMessage: 'Select language for words:',
+        description: 'Text that invites to select language of the game',
+    },
     ruButton: {
         id: 'page.start.ruButton',
         defaultMessage: 'Russian',

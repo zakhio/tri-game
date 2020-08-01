@@ -26,6 +26,9 @@ export function GameIntro({sessionId}: { sessionId: string }) {
                 <Typography variant="body1" gutterBottom>
                     {intl.formatMessage(messages.p3)}
                 </Typography>
+                <Typography variant="body1" gutterBottom>
+                    {intl.formatMessage(messages.selectLanguage)}
+                </Typography>
             </Grid>
             <Grid item xs={12}>
                 <Grid container justify="center">
