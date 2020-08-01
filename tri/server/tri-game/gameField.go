@@ -4,26 +4,23 @@ import (
 	"fmt"
 	"math/rand"
 
-	"github.com/zakhio/online-games/tri/server/middleware/math"
 	"github.com/zakhio/online-games/tri/server/tri-game/data-objects"
 )
 
 type GameField struct {
-	cells        []*dataObjects.WordCell
-	teamsCount   int
-	rowsCount    int
-	columnsCount int
+	cells      []*dataObjects.WordCell
+	teamsCount int
 }
 
-func (f *GameField) Pick(absoluteIndex int) (*dataObjects.WordCell, error) {
-	if absoluteIndex < 0 || absoluteIndex >= len(f.cells) {
-		return nil, fmt.Errorf("cannot pick: absoluteIndex %v is out gamefiled %v*%v", absoluteIndex, f.rowsCount, f.columnsCount)
+func (f *GameField) Pick(index int) (*dataObjects.WordCell, error) {
+	if index < 0 || index >= len(f.cells) {
+		return nil, fmt.Errorf("cannot pick: index %v is out gamefiled %v", index, len(f.cells))
 	}
 
-	cell := f.cells[absoluteIndex]
+	cell := f.cells[index]
 	if !cell.Open {
 		cell.Open = true
-		f.cells[absoluteIndex] = cell
+		f.cells[index] = cell
 	}
 
 	return cell, nil
@@ -39,47 +36,39 @@ func (f *GameField) GetRemainCellsCount(teamId int) int {
 	return count
 }
 
-func NewTRIGameField(numberOfTeams, numberOrRows, numberOfColumns int, dict []string) GameField {
+func NewTRIGameField(teamsCount int, words []string) GameField {
 	f := GameField{}
-	f.teamsCount = math.Max(numberOfTeams, 2)
-	f.rowsCount = math.Max(numberOrRows, 5)
-	f.columnsCount = math.Max(numberOfColumns, 5)
+	f.teamsCount = teamsCount
 
-	wordsCount := f.rowsCount * f.columnsCount
-	wordsDict := make(map[string]bool, wordsCount)
-
-	for len(wordsDict) < wordsCount {
-		word := dict[rand.Intn(len(dict))]
-		wordsDict[word] = false
-	}
-
-	f.cells = make([]*dataObjects.WordCell, 0, wordsCount)
-	for k, _ := range wordsDict {
-		cell := dataObjects.NewWordCell(k, dataObjects.WordCellTypeRegular, -1)
+	// generate cells from words
+	f.cells = make([]*dataObjects.WordCell, 0, len(words))
+	for _, w := range words {
+		cell := dataObjects.NewWordCell(w)
 		f.cells = append(f.cells, cell)
 	}
 
-	// configure ownership
-	teamWordSize := wordsCount / (f.teamsCount + 1)
-	endPosition := rand.Intn(wordsCount)
-	f.cells[endPosition].Type = dataObjects.WordCellTypeEndGame
-	wordsDict[f.cells[endPosition].Word] = true
+	cellsCount := len(f.cells)
 
-	startingTeam := rand.Intn(f.teamsCount)
-	for tId := 0; tId < f.teamsCount; tId++ {
-		size := teamWordSize
-		if tId == startingTeam {
-			size++
+	// configure end game cell
+	idx := rand.Intn(cellsCount)
+	f.cells[idx].Type = dataObjects.WordCellTypeEndGame
+
+	// configure cell owned by teams
+	cellsPerTeam := cellsCount / (f.teamsCount + 1)
+	startingTeamId := rand.Intn(f.teamsCount)
+	for teamId := 0; teamId < f.teamsCount; teamId++ {
+		count := cellsPerTeam
+		if teamId == startingTeamId {
+			count++
 		}
 
-		for i := 0; i < size; i++ {
-			pos := rand.Intn(wordsCount)
-			for wordsDict[f.cells[pos].Word] == true {
-				pos = rand.Intn(wordsCount)
+		for i := 0; i < count; i++ {
+			idx := rand.Intn(cellsCount)
+			for f.cells[idx].Type != dataObjects.WordCellTypeRegular {
+				idx = rand.Intn(cellsCount)
 			}
-			f.cells[pos].Type = dataObjects.WordCellTypeTeamOwned
-			f.cells[pos].TeamId = tId
-			wordsDict[f.cells[pos].Word] = true
+			f.cells[idx].Type = dataObjects.WordCellTypeTeamOwned
+			f.cells[idx].TeamId = teamId
 		}
 	}
 

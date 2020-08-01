@@ -6,9 +6,11 @@ import (
 	"strconv"
 	"sync"
 	"sync/atomic"
+	"time"
 
 	"github.com/zakhio/online-games/go-game-base/session"
 	"github.com/zakhio/online-games/tri/server/config"
+	"github.com/zakhio/online-games/tri/server/middleware/math"
 	"github.com/zakhio/online-games/tri/server/tri-game/data-objects"
 )
 
@@ -16,7 +18,7 @@ type TRISession interface {
 	session.Session
 
 	Observe(ctx context.Context, token string, callback func(*dataObjects.StateValue) error) error
-	Start(token string, config *dataObjects.GameConfig) error
+	Start(token string, teams, rows, columns int, language string, dictionary []string) error
 	Turn(token string, position int) error
 	SetCaptainRole(token string, active bool) error
 }
@@ -25,6 +27,12 @@ type triSession struct {
 	session.BaseSession
 
 	dict *config.Dictionary
+
+	canStartAt time.Time
+
+	currentDictionary string
+	rowsCount         int
+	columnsCount      int
 
 	playersMap     *sync.Map
 	latestPlayerID int32
@@ -36,21 +44,30 @@ type triSession struct {
 
 func (s *triSession) Observe(ctx context.Context, token string, callback func(*dataObjects.StateValue) error) error {
 	player := s.playerByToken(token)
-	if !player.Active {
+	if player.ID == "" {
 		player.ID = strconv.Itoa(int(atomic.AddInt32(&s.latestPlayerID, 1)))
-		player.Active = true
 		s.updateStateValue()
 	}
 
-	return s.Observable.SubscribeSync(ctx, token, callback)
+	err := s.Observable.SubscribeSync(ctx, token, callback)
+
+	return err
 }
 
-func (s *triSession) Start(token string, config *dataObjects.GameConfig) error {
+func (s *triSession) Start(token string, teams, rows, columns int, language string, dictionary []string) error {
 	if !s.Observable.IsSubscribed(token) {
 		return fmt.Errorf("[%v] cannot start: must observe session", token)
+	} else if time.Now().Before(s.canStartAt) {
+		return fmt.Errorf("[%v] cannot start: cooldown on start", token)
 	}
 
-	s.gameField = NewTRIGameField(config.Teams, config.Rows, config.Columns, s.dict.Words["ru"])
+	s.canStartAt = time.Now().Add(time.Duration(7) * time.Second)
+
+	s.cleanupPlayers()
+	s.rowsCount = math.Max(rows, 5)
+	s.columnsCount = math.Max(columns, 5)
+
+	s.gameField = NewTRIGameField(math.Max(teams, 2), s.dict.GetWords(language, s.rowsCount*s.columnsCount))
 	s.Active = true
 	s.updateStateValue()
 
@@ -110,8 +127,8 @@ func (s *triSession) playerByToken(token string) *dataObjects.Player {
 func (s *triSession) updateStateValue() {
 	s.stateValue.SessionID = s.ID
 	s.stateValue.Active = s.Active
+	s.stateValue.NumOfColumns = s.columnsCount
 	s.stateValue.NumOfTeams = s.gameField.teamsCount
-	s.stateValue.NumOfColumns = s.gameField.columnsCount
 	s.stateValue.Cells = s.gameField.cells
 	s.stateValue.Players = s.stateValue.Players[:0]
 
@@ -129,12 +146,33 @@ func (s *triSession) updateStateValue() {
 	s.Observable.Publish(s.stateValue)
 }
 
+func (s *triSession) cleanupPlayers() {
+	deleteList := make([]string, 0)
+	s.playersMap.Range(func(key interface{}, value interface{}) bool {
+		token := key.(string)
+		player := value.(*dataObjects.Player)
+
+		if !player.Initialized && !s.Observable.IsSubscribed(token) {
+			deleteList = append(deleteList, token)
+		}
+		player.Initialized = false
+		player.Captain = false
+
+		return true
+	})
+
+	for _, token := range deleteList {
+		s.playersMap.Delete(token)
+	}
+}
+
 func NewTRISession(d *config.Dictionary) TRISession {
 	s := &triSession{}
 	s.BaseSession = session.NewBaseSession()
 	s.playersMap = &sync.Map{}
 	s.stateValue = dataObjects.NewTRIStateValue()
 	s.dict = d
+	s.canStartAt = time.Now()
 
 	return s
 }

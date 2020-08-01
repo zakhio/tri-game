@@ -14,11 +14,11 @@ type WordCell struct {
 }
 
 // NewWordCell TODO
-func NewWordCell(word string, cellType int, teamId int) *WordCell {
-	tId := -1
-	if cellType == WordCellTypeTeamOwned {
-		tId = teamId
+func NewWordCell(word string) *WordCell {
+	return &WordCell{
+		Word:   word,
+		Type:   WordCellTypeRegular,
+		Open:   false,
+		TeamId: -1,
 	}
-
-	return &WordCell{Word: word, Open: false, TeamId: tId, Type: cellType}
 }

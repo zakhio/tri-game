@@ -22,7 +22,7 @@ func FromStateValue(token string, state *dataObjects.StateValue) *proto.GameSess
 	}
 	result.Players = players
 
-	teams := make([]*proto.Team, 0)
+	teams := make([]*proto.Team, 0, state.NumOfTeams)
 	for tId := 0; tId < state.NumOfTeams; tId++ {
 		team := &proto.Team{
 			Id:             strconv.Itoa(tId),
@@ -34,7 +34,7 @@ func FromStateValue(token string, state *dataObjects.StateValue) *proto.GameSess
 	result.Teams = teams
 
 	captain := state.Captains[token]
-	cells := make([]*proto.Cell, 0)
+	cells := make([]*proto.Cell, 0, len(state.Cells))
 	for _, c := range state.Cells {
 		cells = append(cells, convertCell(c, captain || !state.Active))
 	}

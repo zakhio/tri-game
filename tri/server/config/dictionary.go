@@ -3,13 +3,41 @@ package config
 import (
 	"encoding/json"
 	"io/ioutil"
+	"math/rand"
 	"os"
 	"path/filepath"
 	"strings"
 )
 
 type Dictionary struct {
-	Words map[string][]string
+	Words           map[string][]string
+	DefaultLanguage string
+}
+
+func (d *Dictionary) GetWords(language string, count int) []string {
+	allWords := d.getWordsWithFallbackToDefault(language)
+
+	used := make(map[int]bool, count)
+	words := make([]string, 0, count)
+
+	for len(used) < count {
+		index := rand.Intn(len(allWords))
+		if _, ok := used[index]; !ok {
+			word := allWords[index]
+			words = append(words, word)
+
+			used[index] = true
+		}
+	}
+
+	return words
+}
+
+func (d *Dictionary) getWordsWithFallbackToDefault(language string) []string {
+	if words, ok := d.Words[language]; ok {
+		return words
+	}
+	return d.Words[d.DefaultLanguage]
 }
 
 func ParseDictionaryConfig(filename string) *Dictionary {
@@ -32,7 +60,7 @@ func ParseDictionaryConfig(filename string) *Dictionary {
 
 	var config Dictionary
 
-	err = json.Unmarshal(jsonFile, &config.Words)
+	err = json.Unmarshal(jsonFile, &config)
 	if err != nil {
 		panic(err)
 	}

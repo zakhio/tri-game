@@ -2,16 +2,16 @@ package handler
 
 import (
 	"context"
-	log "github.com/sirupsen/logrus"
-	"github.com/zakhio/online-games/tri/server/config"
-	"github.com/zakhio/online-games/tri/server/tri-game/data-objects"
 
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/rcrowley/go-metrics"
+	log "github.com/sirupsen/logrus"
 	"github.com/zakhio/online-games/tri/proto"
+	"github.com/zakhio/online-games/tri/server/config"
 	"github.com/zakhio/online-games/tri/server/controller"
 	"github.com/zakhio/online-games/tri/server/middleware/latency"
 	protoConverter "github.com/zakhio/online-games/tri/server/proto-converter"
+	"github.com/zakhio/online-games/tri/server/tri-game/data-objects"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -77,13 +77,13 @@ func (h *handler) Start(ctx context.Context, req *proto.StartGameRequest) (*empt
 		return nil, status.Errorf(codes.NotFound, "[%v][%v] session doesn't exist", token, sessionID)
 	}
 
-	err := s.Start(token, &dataObjects.GameConfig{
-		Columns:    int(req.GetNumberOfColumns()),
-		Rows:       int(req.GetNumberOfRows()),
-		Teams:      int(req.GetNumberOfTeams()),
-		Language:   req.GetLanguage(),
-		Dictionary: req.GetDictionary(),
-	})
+	err := s.Start(token,
+		int(req.GetNumberOfTeams()),
+		int(req.GetNumberOfRows()),
+		int(req.GetNumberOfColumns()),
+		req.GetLanguage(),
+		req.GetDictionary(),
+	)
 	if err != nil {
 		return nil, err
 	}
