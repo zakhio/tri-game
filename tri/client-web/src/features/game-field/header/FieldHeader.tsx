@@ -1,7 +1,7 @@
 import {Box, Button, Grid} from "@material-ui/core";
 import {Score} from "../score/Score";
 import {End} from "../end/End";
-import {playerToken, gameStarted, startGame} from "../../../app/gameStateSlice";
+import {gameStarted, playerToken, startGame} from "../../../app/gameStateSlice";
 import {useIntl} from 'react-intl';
 import React from "react";
 import {useDispatch, useSelector} from "react-redux";

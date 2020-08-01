@@ -1,13 +1,6 @@
 import React from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {
-    playerToken,
-    gameCells,
-    gameMe,
-    gameNumOfColumns,
-    gameStarted,
-    turn
-} from "../../app/gameStateSlice";
+import {gameCells, gameMe, gameNumOfColumns, gameStarted, playerToken, turn} from "../../app/gameStateSlice";
 import {FieldCell} from "./cell/FieldCell";
 import {Grid} from '@material-ui/core';
 import {FieldHeader} from "./header/FieldHeader";

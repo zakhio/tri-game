@@ -1,6 +1,6 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {playerToken, gameMe, setSettings, startGame,} from '../../app/gameStateSlice';
+import {gameMe, playerToken, setSettings, startGame,} from '../../app/gameStateSlice';
 import {useParams} from "react-router-dom";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";

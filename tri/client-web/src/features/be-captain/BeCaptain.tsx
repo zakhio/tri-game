@@ -1,6 +1,6 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {playerToken, gameMe, gameStarted, setSettings,} from '../../app/gameStateSlice';
+import {gameMe, gameStarted, playerToken, setSettings,} from '../../app/gameStateSlice';
 import {useIntl} from 'react-intl';
 import {
     Button,

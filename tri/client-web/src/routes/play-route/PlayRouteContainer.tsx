@@ -1,8 +1,8 @@
 import {useDispatch, useSelector} from "react-redux";
 import {
     autoJoinSession,
-    playerToken,
     gameCells,
+    playerToken,
     sessionNotFound,
     sessionStatus,
     StreamStatus
