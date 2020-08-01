@@ -19,28 +19,41 @@ import {Empty} from "google-protobuf/google/protobuf/empty_pb";
 import {hostUrl} from "./config";
 import {History, LocationState} from "history";
 
+export enum StreamStatus {
+    Idle = 1,
+    Connecting,
+    Connected,
+    Failed,
+}
+
 interface GameState {
     token: string;
-    connected: boolean;
+
+    streamStatus: StreamStatus;
+    connectionStatus: Status | null;
+    notFound: boolean;
+    serverUnavailable: boolean;
+
+    started: boolean;
     me?: Player.AsObject;
     players: Player.AsObject[];
     teams: Team.AsObject[];
     cells: Cell.AsObject[];
     numOfColumns: number;
-    started: boolean;
-    streamError: Error | null;
 }
 
 const initialState: GameState = {
     token: localStorage.getItem("token") || v4(),
-    connected: false,
+    streamStatus: StreamStatus.Idle,
+    notFound: false,
+    serverUnavailable: false,
+    connectionStatus: null,
+    started: false,
     me: undefined,
     players: [],
     teams: [],
     cells: [],
     numOfColumns: 0,
-    started: false,
-    streamError: null
 };
 
 const client = new TRIGameClient(hostUrl(), null, null);
@@ -68,32 +81,45 @@ export const gameStateSlice = createSlice({
             }
         },
         // Use the PayloadAction type to declare the contents of `action.payload`
-        replaceConnected: (state, action: PayloadAction<boolean>) => {
-            state.connected = action.payload;
+        replaceStreamStatus: (state, action: PayloadAction<StreamStatus>) => {
+            state.streamStatus = action.payload;
         },
         // Use the PayloadAction type to declare the contents of `action.payload`
-        replaceStreamError: (state, action: PayloadAction<Error | null>) => {
-            state.streamError = action.payload;
+        replaceConnectionStatus: (state, action: PayloadAction<Status | null>) => {
+            let status = action.payload;
+
+            state.connectionStatus = status;
+            if (!status) {
+                state.notFound = false;
+                state.serverUnavailable = false;
+                state.streamStatus = StreamStatus.Idle;
+            } else if (status.code === StatusCode.UNAVAILABLE) {
+                state.serverUnavailable = true;
+                state.streamStatus = StreamStatus.Failed;
+            } else if (status.code === StatusCode.NOT_FOUND) {
+                state.notFound = true;
+                state.streamStatus = StreamStatus.Failed;
+            } else if (status.code === StatusCode.UNKNOWN) {
+                state.streamStatus = StreamStatus.Idle;
+            }
         },
     },
 });
 
-export const {replaceCurrentState, replaceConnected, replaceStreamError} = gameStateSlice.actions;
+export const {replaceCurrentState, replaceStreamStatus, replaceConnectionStatus} = gameStateSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
 // will call the thunk with the `dispatch` function as the first argument. Async
 // code can then be executed and other actions can be dispatched
 export const joinAsync = (token: string, sessionId: string, history?: History<LocationState>): AppThunk => (dispatch, getState) => {
-    if (stream && !getState().gameState.streamError) {
+    if (getState().gameState.streamStatus === StreamStatus.Connecting) {
         return
     }
 
     if (stream) {
         stream.cancel();
     }
-
-    replaceStreamError(null);
 
     localStorage.setItem("token", token);
     const observerReq = new ObserveSessionRequest();
@@ -102,8 +128,9 @@ export const joinAsync = (token: string, sessionId: string, history?: History<Lo
     console.log('join', token)
 
     stream = client.observeSession(observerReq);
+    dispatch(replaceStreamStatus(StreamStatus.Connecting));
     stream.on('status', (status: Status) => {
-        console.log('status', status);
+        dispatch(replaceConnectionStatus(status));
     })
 
     stream.on('data', (res) => {
@@ -112,20 +139,12 @@ export const joinAsync = (token: string, sessionId: string, history?: History<Lo
         }
 
         dispatch(replaceCurrentState(res.toObject()));
-        dispatch(replaceConnected(true));
-    });
-
-    stream.on("error", (err) => {
-        console.log('error', StatusCode.UNKNOWN, StatusCode.UNAVAILABLE, StatusCode.NOT_FOUND, err)
-        dispatch(replaceStreamError(err));
-        // if (!history) {
-        //     dispatch(joinAsync(token, sessionId));
-        // }
+        dispatch(replaceStreamStatus(StreamStatus.Connected));
     });
 
     stream.on("end", () => {
         console.log('end')
-        dispatch(replaceConnected(false));
+        dispatch(replaceStreamStatus(StreamStatus.Idle));
     });
 };
 
@@ -145,6 +164,7 @@ export const createSession = (token: string, history: History<LocationState>): A
         }
         const sessionId: string = res.getSessionid();
         history.push("/" + sessionId);
+        dispatch(replaceConnectionStatus(null))
     });
 };
 
@@ -192,9 +212,9 @@ export const sessionCells = (state: RootState) => state.gameState.cells;
 export const sessionTeams = (state: RootState) => state.gameState.teams;
 export const sessionPlayers = (state: RootState) => state.gameState.players;
 export const sessionStarted = (state: RootState) => state.gameState.started;
+export const sessionNotFound = (state: RootState) => state.gameState.notFound;
 export const sessionMe = (state: RootState) => state.gameState.me;
-export const sessionStreamError = (state: RootState) => state.gameState.streamError;
 export const playerToken = (state: RootState) => state.gameState.token;
-export const sessionConnected = (state: RootState) => state.gameState.connected;
+export const sessionStatus = (state: RootState) => state.gameState.streamStatus;
 
 export default gameStateSlice.reducer;

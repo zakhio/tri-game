@@ -1,5 +1,12 @@
 import {useDispatch, useSelector} from "react-redux";
-import {autoJoinSession, playerToken, sessionCells, sessionConnected} from "../../app/gameStateSlice";
+import {
+    autoJoinSession,
+    playerToken,
+    sessionCells,
+    sessionNotFound,
+    sessionStatus,
+    StreamStatus
+} from "../../app/gameStateSlice";
 import React, {useEffect, useState} from "react";
 import {GameField} from "../../features/game-field/GameField";
 import {useParams} from "react-router-dom";
@@ -7,6 +14,7 @@ import {GameIntro} from "../../features/game-intro/GameIntro";
 import {BeCaptain} from "../../features/be-captain/BeCaptain";
 import useNoSleep from "../../utils/useNoSleep";
 import {SettingsDrawer} from "../../features/settings-drawer/SettingsDrawer";
+import {NotFound} from "../../features/session-not-found/NotFound";
 
 
 export function PlayRouteContainer() {
@@ -16,22 +24,26 @@ export function PlayRouteContainer() {
 
     const dispatch = useDispatch();
     const token = useSelector(playerToken);
-    const connected = useSelector(sessionConnected);
+    const streamStatus = useSelector(sessionStatus);
     const words = useSelector(sessionCells);
+    const notFound = useSelector(sessionNotFound);
 
     const [showSettings, setShowSettings] = useState(false);
 
     useEffect(() => {
-        if (!connected) {
+        if (streamStatus === StreamStatus.Idle) {
             dispatch(autoJoinSession(token, sessionId));
         }
     });
 
     return <>
-        {connected &&
+        {notFound &&
+        <NotFound sessionId={sessionId}/>
+        }
+        {streamStatus === StreamStatus.Connected &&
         <BeCaptain sessionId={sessionId}/>
         }
-        {connected && words.length === 0 &&
+        {streamStatus === StreamStatus.Connected && words.length === 0 &&
         <GameIntro sessionId={sessionId}/>
         }
         {words.length > 0 &&

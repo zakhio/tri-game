@@ -18,10 +18,7 @@ func (f *GameField) Pick(index int) (*dataObjects.WordCell, error) {
 	}
 
 	cell := f.cells[index]
-	if !cell.Open {
-		cell.Open = true
-		f.cells[index] = cell
-	}
+	cell.Open = true
 
 	return cell, nil
 }
