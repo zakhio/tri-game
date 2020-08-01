@@ -108,9 +108,7 @@ func main() {
 				client.SetSettings(context.Background(), &pb.SetSettingsRequest{
 					Token:     token,
 					SessionId: sessionID,
-					TeamId:    "tdsw",
 					Captain:   true,
-					Alias:     "diysha",
 				})
 			default:
 				client.Turn(context.Background(), &pb.TurnGameRequest{

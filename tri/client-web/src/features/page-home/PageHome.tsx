@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {createSession, playerToken, tryJoinAsync,} from '../../app/gameStateSlice';
+import {createSession, joinAsync, playerToken,} from '../../app/gameStateSlice';
 import {useIntl} from 'react-intl';
 import {useHistory} from "react-router-dom";
 import {Button, Grid, TextField, Typography} from "@material-ui/core";
@@ -40,7 +40,7 @@ export function PageHome({sessionId}: { sessionId?: string }) {
                         variant="contained"
                         color="secondary"
                         onClick={() => {
-                            dispatch(tryJoinAsync(token, _sessionId, history));
+                            dispatch(joinAsync(token, _sessionId, history));
                         }}>
                         {intl.formatMessage(messages.join)}
                     </Button>

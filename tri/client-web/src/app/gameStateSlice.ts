@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {ClientReadableStream, Error} from 'grpc-web';
+import {ClientReadableStream, Error, Status, StatusCode} from 'grpc-web';
 import {AppThunk, RootState} from './store';
 import {TRIGameClient} from '../proto/TriServiceClientPb';
 import {v4} from 'uuid';
@@ -28,7 +28,7 @@ interface GameState {
     cells: Cell.AsObject[];
     numOfColumns: number;
     started: boolean;
-    streamStatus: string;
+    streamError: Error | null;
 }
 
 const initialState: GameState = {
@@ -40,12 +40,11 @@ const initialState: GameState = {
     cells: [],
     numOfColumns: 0,
     started: false,
-    streamStatus: "disconnected"
+    streamError: null
 };
 
 const client = new TRIGameClient(hostUrl(), null, null);
 let stream: ClientReadableStream<GameSessionStream>;
-let numberOfTries = 0;
 
 export const gameStateSlice = createSlice({
     name: 'gameState',
@@ -73,29 +72,28 @@ export const gameStateSlice = createSlice({
             state.connected = action.payload;
         },
         // Use the PayloadAction type to declare the contents of `action.payload`
-        replaceStreamStatus: (state, action: PayloadAction<string>) => {
-            state.streamStatus = action.payload;
+        replaceStreamError: (state, action: PayloadAction<Error | null>) => {
+            state.streamError = action.payload;
         },
     },
 });
 
-export const {replaceCurrentState, replaceConnected, replaceStreamStatus} = gameStateSlice.actions;
+export const {replaceCurrentState, replaceConnected, replaceStreamError} = gameStateSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
 // will call the thunk with the `dispatch` function as the first argument. Async
 // code can then be executed and other actions can be dispatched
-export const joinAsync = (token: string, sessionId: string): AppThunk => dispatch => {
+export const joinAsync = (token: string, sessionId: string, history?: History<LocationState>): AppThunk => (dispatch, getState) => {
+    if (stream && !getState().gameState.streamError) {
+        return
+    }
+
     if (stream) {
         stream.cancel();
     }
 
-    numberOfTries++;
-    if (numberOfTries > 5) {
-        numberOfTries = 0;
-        return;
-    }
-
+    replaceStreamError(null);
 
     localStorage.setItem("token", token);
     const observerReq = new ObserveSessionRequest();
@@ -104,53 +102,30 @@ export const joinAsync = (token: string, sessionId: string): AppThunk => dispatc
     console.log('join', token)
 
     stream = client.observeSession(observerReq);
+    stream.on('status', (status: Status) => {
+        console.log('status', status);
+    })
+
     stream.on('data', (res) => {
-        console.log('data', res)
+        if (history) {
+            history.push("/" + sessionId);
+        }
+
         dispatch(replaceCurrentState(res.toObject()));
         dispatch(replaceConnected(true));
-        dispatch(replaceStreamStatus("data"))
     });
 
     stream.on("error", (err) => {
-        console.log('error', err)
-        dispatch(replaceStreamStatus("error" + err))
-        dispatch(joinAsync(token, sessionId));
+        console.log('error', StatusCode.UNKNOWN, StatusCode.UNAVAILABLE, StatusCode.NOT_FOUND, err)
+        dispatch(replaceStreamError(err));
+        // if (!history) {
+        //     dispatch(joinAsync(token, sessionId));
+        // }
     });
 
     stream.on("end", () => {
         console.log('end')
-        dispatch(replaceStreamStatus("end"))
-    });
-};
-
-// The function below is called a thunk and allows us to perform async logic. It
-// can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
-// will call the thunk with the `dispatch` function as the first argument. Async
-// code can then be executed and other actions can be dispatched
-export const tryJoinAsync = (token: string, sessionId: string, history: History<LocationState>): AppThunk => dispatch => {
-    if (stream) {
-        stream.cancel();
-    }
-
-    localStorage.setItem("token", token);
-    const observerReq = new ObserveSessionRequest();
-    observerReq.setSessionid(sessionId);
-    observerReq.setToken(token);
-
-    stream = client.observeSession(observerReq);
-    stream.on('data', (res) => {
-        stream.cancel();
-        history.push("/" + sessionId);
-    });
-
-    stream.on("error", (err) => {
-        // show error
-        console.log("stream.error", err);
-    });
-
-    stream.on("end", () => {
-        // show error
-        console.log("stream.end");
+        dispatch(replaceConnected(false));
     });
 };
 
@@ -218,7 +193,7 @@ export const sessionTeams = (state: RootState) => state.gameState.teams;
 export const sessionPlayers = (state: RootState) => state.gameState.players;
 export const sessionStarted = (state: RootState) => state.gameState.started;
 export const sessionMe = (state: RootState) => state.gameState.me;
-export const sessionStreamStatus = (state: RootState) => state.gameState.streamStatus;
+export const sessionStreamError = (state: RootState) => state.gameState.streamError;
 export const playerToken = (state: RootState) => state.gameState.token;
 export const sessionConnected = (state: RootState) => state.gameState.connected;
 
