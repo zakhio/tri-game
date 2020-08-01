@@ -1,6 +1,6 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {playerToken, sessionMe, setSettings, startGame,} from '../../app/gameStateSlice';
+import {playerToken, gameMe, setSettings, startGame,} from '../../app/gameStateSlice';
 import {useParams} from "react-router-dom";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
@@ -27,7 +27,7 @@ export function SettingsDrawer({open, onClose}: { open?: boolean, onClose: Funct
     const {sessionId} = useParams();
 
     const token = useSelector(playerToken)
-    const me = useSelector(sessionMe)
+    const me = useSelector(gameMe)
 
     const captain = me!.initialized && me!.captain;
     const link = gameSessionUrl(sessionId);

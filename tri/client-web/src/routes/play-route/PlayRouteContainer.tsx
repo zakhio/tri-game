@@ -2,7 +2,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {
     autoJoinSession,
     playerToken,
-    sessionCells,
+    gameCells,
     sessionNotFound,
     sessionStatus,
     StreamStatus
@@ -25,7 +25,7 @@ export function PlayRouteContainer() {
     const dispatch = useDispatch();
     const token = useSelector(playerToken);
     const streamStatus = useSelector(sessionStatus);
-    const words = useSelector(sessionCells);
+    const words = useSelector(gameCells);
     const notFound = useSelector(sessionNotFound);
 
     const [showSettings, setShowSettings] = useState(false);

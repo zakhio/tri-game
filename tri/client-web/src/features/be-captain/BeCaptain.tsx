@@ -1,6 +1,6 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {playerToken, sessionMe, sessionStarted, setSettings,} from '../../app/gameStateSlice';
+import {playerToken, gameMe, gameStarted, setSettings,} from '../../app/gameStateSlice';
 import {useIntl} from 'react-intl';
 import {
     Button,
@@ -21,8 +21,8 @@ export function BeCaptain({sessionId}: { sessionId: string }) {
     const theme = useTheme();
 
     const token = useSelector(playerToken);
-    const me = useSelector(sessionMe)!;
-    const started = useSelector(sessionStarted);
+    const me = useSelector(gameMe)!;
+    const started = useSelector(gameStarted);
 
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 

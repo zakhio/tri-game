@@ -64,7 +64,7 @@ export const gameStateSlice = createSlice({
     initialState,
     reducers: {
         // Use the PayloadAction type to declare the contents of `action.payload`
-        replaceCurrentState: (state, action: PayloadAction<GameSessionStream.AsObject>) => {
+        replaceGameState: (state, action: PayloadAction<GameSessionStream.AsObject>) => {
             state.cells = action.payload.cellsList
             state.numOfColumns = action.payload.numberofcolumns;
             state.teams = action.payload.teamsList
@@ -106,7 +106,7 @@ export const gameStateSlice = createSlice({
     },
 });
 
-export const {replaceCurrentState, replaceStreamStatus, replaceConnectionStatus} = gameStateSlice.actions;
+export const {replaceGameState, replaceStreamStatus, replaceConnectionStatus} = gameStateSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
@@ -131,19 +131,18 @@ export const joinAsync = (token: string, sessionId: string, history?: History<Lo
     dispatch(replaceStreamStatus(StreamStatus.Connecting));
     stream.on('status', (status: Status) => {
         dispatch(replaceConnectionStatus(status));
-    })
+    });
 
     stream.on('data', (res) => {
         if (history) {
             history.push("/" + sessionId);
         }
 
-        dispatch(replaceCurrentState(res.toObject()));
+        dispatch(replaceGameState(res.toObject()));
         dispatch(replaceStreamStatus(StreamStatus.Connected));
     });
 
     stream.on("end", () => {
-        console.log('end')
         dispatch(replaceStreamStatus(StreamStatus.Idle));
     });
 };
@@ -207,13 +206,13 @@ export const setSettings = (token: string, sessionId: string, captain?: boolean)
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
-export const sessionNumOfColumns = (state: RootState) => state.gameState.numOfColumns;
-export const sessionCells = (state: RootState) => state.gameState.cells;
-export const sessionTeams = (state: RootState) => state.gameState.teams;
-export const sessionPlayers = (state: RootState) => state.gameState.players;
-export const sessionStarted = (state: RootState) => state.gameState.started;
+export const gameNumOfColumns = (state: RootState) => state.gameState.numOfColumns;
+export const gameCells = (state: RootState) => state.gameState.cells;
+export const gameTeams = (state: RootState) => state.gameState.teams;
+export const gamePlayers = (state: RootState) => state.gameState.players;
+export const gameStarted = (state: RootState) => state.gameState.started;
+export const gameMe = (state: RootState) => state.gameState.me;
 export const sessionNotFound = (state: RootState) => state.gameState.notFound;
-export const sessionMe = (state: RootState) => state.gameState.me;
 export const playerToken = (state: RootState) => state.gameState.token;
 export const sessionStatus = (state: RootState) => state.gameState.streamStatus;
 

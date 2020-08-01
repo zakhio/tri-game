@@ -2,10 +2,10 @@ import React from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {
     playerToken,
-    sessionCells,
-    sessionMe,
-    sessionNumOfColumns,
-    sessionStarted,
+    gameCells,
+    gameMe,
+    gameNumOfColumns,
+    gameStarted,
     turn
 } from "../../app/gameStateSlice";
 import {FieldCell} from "./cell/FieldCell";
@@ -16,10 +16,10 @@ export function GameField({onSettingsClick, sessionId}: { onSettingsClick: Funct
     const dispatch = useDispatch();
 
     const token = useSelector(playerToken);
-    const cells = useSelector(sessionCells);
-    const started = useSelector(sessionStarted);
-    const me = useSelector(sessionMe);
-    const numOfColumns = Math.max(1, useSelector(sessionNumOfColumns));
+    const cells = useSelector(gameCells);
+    const started = useSelector(gameStarted);
+    const me = useSelector(gameMe);
+    const numOfColumns = Math.max(1, useSelector(gameNumOfColumns));
 
     function turnWord(position: number) {
         if (sessionId && token) {

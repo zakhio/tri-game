@@ -1,7 +1,7 @@
 import {Box, Button, Grid} from "@material-ui/core";
 import {Score} from "../score/Score";
 import {End} from "../end/End";
-import {playerToken, sessionStarted, startGame} from "../../../app/gameStateSlice";
+import {playerToken, gameStarted, startGame} from "../../../app/gameStateSlice";
 import {useIntl} from 'react-intl';
 import React from "react";
 import {useDispatch, useSelector} from "react-redux";
@@ -13,7 +13,7 @@ export function FieldHeader({sessionId, onSettingsClick}: { sessionId: string, o
     const dispatch = useDispatch();
 
     const token = useSelector(playerToken);
-    const started = useSelector(sessionStarted);
+    const started = useSelector(gameStarted);
 
     return <Grid item container xs={started ? 12 : 11} sm={12} spacing={2} justify="center">
         {!started &&
