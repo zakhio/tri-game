@@ -41,6 +41,7 @@ func FromStateValue(token string, state *dataObjects.StateValue) *proto.GameSess
 	result.Cells = cells
 	result.NumberOfColumns = int32(state.NumOfColumns)
 	result.Started = state.Active
+	result.Language = state.Language
 
 	return result
 }

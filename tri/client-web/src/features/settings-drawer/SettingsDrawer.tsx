@@ -1,12 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {gameMe, playerToken, setSettings, startGame,} from '../../app/gameStateSlice';
+import {gameLanguage, gameMe, playerToken, setSettings, startGame,} from '../../app/gameStateSlice';
 import {useParams} from "react-router-dom";
-import Drawer from "@material-ui/core/Drawer";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import {Box, Button, Divider, Switch} from "@material-ui/core";
+import {Box, Button, Divider, Drawer, List, ListItem, ListItemText, MenuItem, Select, Switch} from "@material-ui/core";
 import {useIntl} from 'react-intl';
 import {
     FacebookIcon,
@@ -20,17 +16,22 @@ import {
 } from "react-share";
 import {gameSessionUrl} from "../../app/config";
 import messages from "./SettingsDrawer.messages";
+import {LanguageSelector} from "../selector-language/LanguageSelector";
+import {RestartPopup} from "../popup-restart/RestartPopup";
 
-export function SettingsDrawer({open, onClose}: { open?: boolean, onClose: Function }) {
+export function SettingsDrawer({open, onClose, setUILocale}: { open?: boolean, onClose: () => void, setUILocale: (locale: string) => void }) {
     const intl = useIntl();
     const dispatch = useDispatch();
     const {sessionId} = useParams();
 
     const token = useSelector(playerToken)
     const me = useSelector(gameMe)
+    const currentLanguage = useSelector(gameLanguage);
 
     const captain = me!.initialized && me!.captain;
     const link = gameSessionUrl(sessionId);
+
+    const [language, setLanguage] = useState(currentLanguage);
 
     return (
         <Drawer anchor="right" open={open} onClose={() => onClose()}>
@@ -42,9 +43,42 @@ export function SettingsDrawer({open, onClose}: { open?: boolean, onClose: Funct
                     <Button
                         variant="text"
                         color="secondary"
-                        onClick={() => dispatch(startGame(token!, sessionId!))}>
+                        onClick={() => {
+                            dispatch(startGame(token!, sessionId!));
+                            onClose();
+                        }}>
                         {intl.formatMessage(messages.restart)}
                     </Button>
+                </ListItem>
+                <ListItem>
+                    <ListItemText style={{marginRight: "5px"}}
+                                  primary={intl.formatMessage(messages.uiLanguagePrimary)}
+                                  secondary={intl.formatMessage(messages.uiLanguageSecondary)}/>
+                    <LanguageSelector setUILocale={setUILocale}/>
+                </ListItem>
+                <ListItem>
+                    <ListItemText
+                        primary={intl.formatMessage(messages.languagePrimary)}
+                        secondary={intl.formatMessage(messages.languageSecondary)}/>
+                    <Select
+                        labelId="language-select-label"
+                        id="language-select"
+                        value={language}
+                        onChange={(event) => {
+                            setLanguage(event.target.value as string);
+                            console.log(event)
+                        }}
+                    >
+                        <MenuItem value={'en'}>{intl.formatMessage(messages.english)}</MenuItem>
+                        <MenuItem value={'ru'}>{intl.formatMessage(messages.russian)}</MenuItem>
+                    </Select>
+                    <RestartPopup
+                        open={currentLanguage !== language}
+                        onAgree={() => {
+                            dispatch(startGame(token!, sessionId!, language));
+                            onClose();
+                        }}
+                        onDisagree={() => setLanguage(currentLanguage)}/>
                 </ListItem>
                 <ListItem>
                     <ListItemText
@@ -52,7 +86,10 @@ export function SettingsDrawer({open, onClose}: { open?: boolean, onClose: Funct
                         secondary={intl.formatMessage(messages.captainSecondary)}/>
                     <Switch
                         checked={captain}
-                        onChange={e => dispatch(setSettings(token!, sessionId!, e.target.checked))}
+                        onChange={e => {
+                            dispatch(setSettings(token!, sessionId!, e.target.checked));
+                            onClose();
+                        }}
                         color="secondary"
                         inputProps={{'aria-label': 'captain checkbox'}}
                     />

@@ -40,6 +40,7 @@ interface GameState {
     teams: Team.AsObject[];
     cells: Cell.AsObject[];
     numOfColumns: number;
+    language: string;
 }
 
 const initialState: GameState = {
@@ -54,6 +55,7 @@ const initialState: GameState = {
     teams: [],
     cells: [],
     numOfColumns: 0,
+    language: 'en'
 };
 
 const client = new TRIGameClient(hostUrl(), null, null);
@@ -65,10 +67,11 @@ export const gameStateSlice = createSlice({
     reducers: {
         // Use the PayloadAction type to declare the contents of `action.payload`
         replaceGameState: (state, action: PayloadAction<GameSessionStream.AsObject>) => {
-            state.cells = action.payload.cellsList
+            state.language = action.payload.language;
+            state.cells = action.payload.cellsList;
             state.numOfColumns = action.payload.numberofcolumns;
-            state.teams = action.payload.teamsList
-            state.started = action.payload.started
+            state.teams = action.payload.teamsList;
+            state.started = action.payload.started;
 
             const myId = action.payload.playerid;
             const players = action.payload.playersList;
@@ -130,6 +133,7 @@ export const joinAsync = (token: string, sessionId: string, history?: History<Lo
     stream = client.observeSession(observerReq);
     dispatch(replaceStreamStatus(StreamStatus.Connecting));
     stream.on('status', (status: Status) => {
+        console.log('status', status);
         dispatch(replaceConnectionStatus(status));
     });
 
@@ -143,6 +147,7 @@ export const joinAsync = (token: string, sessionId: string, history?: History<Lo
     });
 
     stream.on("end", () => {
+        console.log('end')
         dispatch(replaceStreamStatus(StreamStatus.Idle));
     });
 };
@@ -151,9 +156,12 @@ export const joinAsync = (token: string, sessionId: string, history?: History<Lo
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
 // will call the thunk with the `dispatch` function as the first argument. Async
 // code can then be executed and other actions can be dispatched
-export const createSession = (token: string, history: History<LocationState>): AppThunk => dispatch => {
+export const createSession = (token: string, history: History<LocationState>, language?: string): AppThunk => dispatch => {
     const req = new CreateSessionRequest();
     req.setToken(token);
+    if (language) {
+        req.setDefaultlanguage(language);
+    }
     localStorage.setItem("token", token);
 
     client.createSession(req, null, (err: Error, res: CreateSessionReply) => {
@@ -173,12 +181,17 @@ export const autoJoinSession = (token: string, sessionId: string): AppThunk => d
     }
 };
 
-export const startGame = (token: string, sessionId: string): AppThunk => dispatch => {
+export const startGame = (token: string, sessionId: string, language?: string): AppThunk => dispatch => {
     const req = new StartGameRequest();
     req.setToken(token);
     req.setSessionid(sessionId);
     req.setNumberofcolumns(5);
     req.setNumberofrows(5);
+    req.setNumberofteams(2);
+    if (language) {
+        req.setLanguage(language);
+    }
+
     client.start(req, null, (err: Error, response: Empty) => {
     });
 };
@@ -199,6 +212,7 @@ export const setSettings = (token: string, sessionId: string, captain?: boolean)
     if (captain) {
         req.setCaptain(captain);
     }
+
     client.setSettings(req, null, (err: Error, response: Empty) => {
     });
 };
@@ -210,6 +224,7 @@ export const gameNumOfColumns = (state: RootState) => state.gameState.numOfColum
 export const gameCells = (state: RootState) => state.gameState.cells;
 export const gameTeams = (state: RootState) => state.gameState.teams;
 export const gamePlayers = (state: RootState) => state.gameState.players;
+export const gameLanguage = (state: RootState) => state.gameState.language;
 export const gameStarted = (state: RootState) => state.gameState.started;
 export const gameMe = (state: RootState) => state.gameState.me;
 export const sessionNotFound = (state: RootState) => state.gameState.notFound;

@@ -16,9 +16,14 @@ const messages = defineMessages({
         defaultMessage: 'The team that was the first to find all of its agents wins.',
         description: 'Intro text Pt.3 on start game session page',
     },
-    button: {
-        id: 'page.start.button',
-        defaultMessage: 'Start',
+    ruButton: {
+        id: 'page.start.ruButton',
+        defaultMessage: 'Russian',
+        description: 'Button on start game session page',
+    },
+    enButton: {
+        id: 'page.start.enButton',
+        defaultMessage: 'English',
         description: 'Button on start game session page',
     },
 });

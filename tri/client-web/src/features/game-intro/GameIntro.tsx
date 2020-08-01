@@ -2,7 +2,7 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {playerToken, startGame,} from '../../app/gameStateSlice';
 import {useIntl} from 'react-intl';
-import {Button, Grid, Typography} from "@material-ui/core";
+import {Button, ButtonGroup, Grid, Typography} from "@material-ui/core";
 import messages from "./GameIntro.messages";
 
 export function GameIntro({sessionId}: { sessionId: string }) {
@@ -29,12 +29,16 @@ export function GameIntro({sessionId}: { sessionId: string }) {
             </Grid>
             <Grid item xs={12}>
                 <Grid container justify="center">
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        onClick={() => dispatch(startGame(token!, sessionId!))}>
-                        {intl.formatMessage(messages.button)}
-                    </Button>
+                    <ButtonGroup color="secondary" variant="contained" aria-label="outlined primary button group">
+                        <Button
+                            onClick={() => dispatch(startGame(token!, sessionId!, 'en'))}>
+                            {intl.formatMessage(messages.enButton)}
+                        </Button>
+                        <Button
+                            onClick={() => dispatch(startGame(token!, sessionId!, 'ru'))}>
+                            {intl.formatMessage(messages.ruButton)}
+                        </Button>
+                    </ButtonGroup>
                 </Grid>
             </Grid>
         </Grid>

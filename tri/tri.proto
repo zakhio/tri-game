@@ -42,11 +42,12 @@ message CreateSessionReply {
 
 message GameSessionStream {
     string playerId = 1;
-    repeated Player players = 2;
-    repeated Team teams = 3;
-    repeated Cell cells = 4;
-    int32 numberOfColumns = 5;
-    bool started = 6;
+    bool started = 2;
+    repeated Player players = 3;
+    repeated Team teams = 4;
+    repeated Cell cells = 5;
+    int32 numberOfColumns = 6;
+    string language = 7;
 }
 
 message ObserveSessionRequest {

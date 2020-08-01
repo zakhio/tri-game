@@ -6,6 +6,11 @@ const messages = defineMessages({
         defaultMessage: 'Welcome to Game TRI. Create new or join to existing session',
         description: 'Welcome title on join game session page',
     },
+    or: {
+        id: 'page.home.orJoin',
+        defaultMessage: 'Or join existing session',
+        description: 'Welcome title on join game session page',
+    },
     sessionId: {
         id: 'page.home.sessionId',
         defaultMessage: 'Session ID',

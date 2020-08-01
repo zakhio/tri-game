@@ -13,6 +13,7 @@ type StateValue struct {
 	Cells        []*WordCell
 	NumOfColumns int
 	NumOfTeams   int
+	Language     string
 }
 
 func (v *StateValue) GetRemainCellsCount(teamID int) int {

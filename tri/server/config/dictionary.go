@@ -15,7 +15,7 @@ type Dictionary struct {
 }
 
 func (d *Dictionary) GetWords(language string, count int) []string {
-	allWords := d.getWordsWithFallbackToDefault(language)
+	allWords := d.Words[d.GetLanguage(language)]
 
 	used := make(map[int]bool, count)
 	words := make([]string, 0, count)
@@ -33,11 +33,11 @@ func (d *Dictionary) GetWords(language string, count int) []string {
 	return words
 }
 
-func (d *Dictionary) getWordsWithFallbackToDefault(language string) []string {
-	if words, ok := d.Words[language]; ok {
-		return words
+func (d *Dictionary) GetLanguage(language string) string {
+	if _, ok := d.Words[language]; ok {
+		return language
 	}
-	return d.Words[d.DefaultLanguage]
+	return d.DefaultLanguage
 }
 
 func ParseDictionaryConfig(filename string) *Dictionary {

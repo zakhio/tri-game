@@ -30,9 +30,9 @@ type triSession struct {
 
 	canStartAt time.Time
 
-	currentDictionary string
-	rowsCount         int
-	columnsCount      int
+	language     string
+	rowsCount    int
+	columnsCount int
 
 	playersMap     *sync.Map
 	latestPlayerID int32
@@ -66,6 +66,7 @@ func (s *triSession) Start(token string, teams, rows, columns int, language stri
 	s.cleanupPlayers()
 	s.rowsCount = math.Max(rows, 5)
 	s.columnsCount = math.Max(columns, 5)
+	s.language = s.dict.GetLanguage(language)
 
 	s.gameField = NewTRIGameField(math.Max(teams, 2), s.dict.GetWords(language, s.rowsCount*s.columnsCount))
 	s.Active = true
@@ -130,6 +131,7 @@ func (s *triSession) updateStateValue() {
 	s.stateValue.NumOfColumns = s.columnsCount
 	s.stateValue.NumOfTeams = s.gameField.teamsCount
 	s.stateValue.Cells = s.gameField.cells
+	s.stateValue.Language = s.language
 	s.stateValue.Players = s.stateValue.Players[:0]
 
 	s.playersMap.Range(func(key interface{}, value interface{}) bool {

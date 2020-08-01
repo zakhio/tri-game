@@ -17,7 +17,7 @@ import {SettingsDrawer} from "../../features/settings-drawer/SettingsDrawer";
 import {NotFound} from "../../features/session-not-found/NotFound";
 
 
-export function PlayRouteContainer() {
+export function PlayRouteContainer({setLocale}: { setLocale: (locale: string) => void }) {
     useNoSleep(true);
 
     const {sessionId} = useParams();
@@ -49,7 +49,7 @@ export function PlayRouteContainer() {
         {words.length > 0 &&
         <>
             <React.Fragment key="right">
-                <SettingsDrawer open={showSettings} onClose={() => setShowSettings(false)}/>
+                <SettingsDrawer open={showSettings} setUILocale={setLocale} onClose={() => setShowSettings(false)}/>
             </React.Fragment>
             <GameField sessionId={sessionId} onSettingsClick={() => setShowSettings(true)}/>
         </>
