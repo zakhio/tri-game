@@ -4,7 +4,7 @@
 
 # golang
 if [ -n "$INSTALL_GO_GRPC" ]; then
-  GRPC_GO_VERSION=v1.31.0
+  GRPC_GO_VERSION=v1.37.0
   GRPC_GO_PATH=tmp/grpc-go
 
   echo "go install github.com/golang/protobuf/protoc-gen-go"
