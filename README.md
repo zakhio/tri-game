@@ -1,4 +1,2 @@
-# Online Games Monorepo
-
-This is a mono repository for online games, where 
-* [TRI](tri/README.md) - Guess game influenced by Codenames  
+# Guess game TRI
+Guess game TRI influenced by Codenames
