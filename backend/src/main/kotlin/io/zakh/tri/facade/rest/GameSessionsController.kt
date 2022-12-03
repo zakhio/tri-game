@@ -1,5 +1,10 @@
 package io.zakh.tri.facade.rest
 
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.zakh.tri.facade.rest.dto.GameSessionDTO
 import io.zakh.tri.facade.rest.dto.toDTO
 import io.zakh.tri.service.GameSessionsService
@@ -28,6 +33,20 @@ class GameSessionsController(
         return service.getAll().map { it.toDTO() }
     }
 
+    @Operation(
+        summary = "Start a new session.",
+        description = "Starts a new game session with http session holder as a player."
+    )
+    @ApiResponses(
+        value = [ApiResponse(
+            responseCode = "201",
+            description = "Session created"
+        ), ApiResponse(
+            responseCode = "500",
+            description = "Internal server error",
+            content = [Content(schema = Schema(implementation = String::class))]
+        )]
+    )
     @PostMapping
     fun newSession(session: HttpSession): GameSessionDTO {
         val gameSession = service.newSession(session.id)
