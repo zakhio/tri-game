@@ -10,6 +10,6 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @EnableWebSocket
 class WebSocketConfig : WebSocketConfigurer {
     override fun registerWebSocketHandlers(registry: WebSocketHandlerRegistry) {
-        registry.addHandler(ChatMessageHandler(), "/chat").setAllowedOrigins("*")
+        registry.addHandler(ChatMessageHandler(), "socket/sessions").setAllowedOrigins("*")
     }
 }
