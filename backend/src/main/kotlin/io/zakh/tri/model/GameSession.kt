@@ -16,10 +16,23 @@ data class GameSession(
     val players: List<Player>,
 
     val state: State = State.IDLE,
-    val config: GameConfig? = null,
+    val config: Config? = null,
     val cells: List<GameFieldCell>? = null,
 ) {
     enum class State {
         IDLE, IN_PROGRESS, FINISHED
     }
+
+    /**
+     * Configuration for square game field of TRI Game, its sizes, language and number of playing teams.
+     */
+    data class Config(
+        val columnCount: Int,
+        val rowsCount: Int,
+
+        val teamsCount: Int,
+
+        // if null default language will be played
+        val language: String? = null,
+    )
 }

@@ -8,5 +8,8 @@ data class PlayerDTO(
 )
 
 fun Player.toDTO(sessionID: String): PlayerDTO {
-    return PlayerDTO(this.id, this.captainSessions.contains(sessionID))
+    return PlayerDTO(
+        this.id,
+        this.captainSessions.contains(sessionID)
+    )
 }

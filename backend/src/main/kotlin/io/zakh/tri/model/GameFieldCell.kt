@@ -10,10 +10,10 @@ package io.zakh.tri.model
 data class GameFieldCell(
     val word: String,
     val type: Type = Type.REGULAR,
-    val ownerTeamId: Int?,
+    val ownerTeamId: Int? = null,
 
-    val open: Boolean,
-    val openTeamId: Int?
+    val open: Boolean = false,
+    val openTeamId: Int? = null
 ) {
     enum class Type {
         REGULAR,

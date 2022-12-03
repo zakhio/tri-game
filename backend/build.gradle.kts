@@ -4,8 +4,9 @@ plugins {
 	war
 	id("org.springframework.boot") version "3.0.0"
 	id("io.spring.dependency-management") version "1.1.0"
-	kotlin("jvm") version "1.7.21"
-	kotlin("plugin.spring") version "1.7.21"
+	kotlin("jvm") version "1.7.22"
+	kotlin("plugin.spring") version "1.7.22"
+	kotlin("plugin.serialization") version "1.7.22"
 }
 
 group = "io.zakh"
@@ -18,6 +19,8 @@ repositories {
 dependencies {
 	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 
+	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
+
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-websocket")
@@ -25,14 +28,16 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 	implementation("org.springframework.session:spring-session-data-redis")
 
-	implementation("org.springdoc:springdoc-openapi-ui:1.6.13")
-	implementation("org.springdoc:springdoc-openapi-kotlin:1.6.13")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.0")
+	implementation("org.springdoc:springdoc-openapi-starter-common:2.0.0")
 
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
 	runtimeOnly("io.micrometer:micrometer-registry-influx")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
 }
 
 tasks.withType<KotlinCompile> {

@@ -5,14 +5,12 @@ import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.zakh.tri.facade.rest.dto.GameConfigDTO
 import io.zakh.tri.facade.rest.dto.GameSessionDTO
 import io.zakh.tri.facade.rest.dto.toDTO
 import io.zakh.tri.service.GameSessionsService
 import jakarta.servlet.http.HttpSession
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
@@ -48,8 +46,33 @@ class GameSessionsController(
         )]
     )
     @PostMapping
-    fun newSession(session: HttpSession): GameSessionDTO {
-        val gameSession = service.newSession(session.id)
+    fun newSession(httpSession: HttpSession): GameSessionDTO {
+        val gameSession = service.newSession(httpSession.id)
+        return gameSession.toDTO()
+    }
+
+    @Operation(
+        summary = "Start a new game for the specified session.",
+        description = "Starts a new game for a session with http session holder as a player."
+    )
+    @ApiResponses(
+        value = [ApiResponse(
+            responseCode = "201",
+            description = "Session created"
+        ), ApiResponse(
+            responseCode = "500",
+            description = "Internal server error",
+            content = [Content(schema = Schema(implementation = String::class))]
+        )]
+    )
+    @PutMapping("{id}/config")
+//    @ResponseStatus(HttpStatus.ACCEPTED)
+    fun newGame(
+        httpSession: HttpSession,
+        @PathVariable("id") sessionID: String,
+        @RequestBody config: GameConfigDTO
+    ): GameSessionDTO {
+        val gameSession = service.newGame(httpSession.id, sessionID, config.toEntity())
         return gameSession.toDTO()
     }
 }
