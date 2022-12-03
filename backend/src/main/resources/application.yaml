@@ -1,4 +1,10 @@
 management:
-  health:
-    influxdb:
-      enabled: false
+  influx:
+    metrics:
+      export:
+        enabled: false
+
+server:
+  servlet:
+    session:
+      tracking-modes: cookie
