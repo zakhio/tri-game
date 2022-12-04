@@ -80,7 +80,7 @@ class GameSessionsServiceTest {
 
         val playerID = Random.nextInt().toString()
         val sessionID = Random.nextInt().toString()
-        val config = GameSession.Config(3, 3, 0)
+        val config = GameSession.Config(4, 3, 1)
         val session = GameSession(sessionID, listOf(Player(playerID)))
 
         whenever(service.sessionsRepo.findById(sessionID)).thenReturn(Optional.of(session))
@@ -92,5 +92,14 @@ class GameSessionsServiceTest {
         assertNotNull(sessionWithGame.cells)
         assertEquals(sessionWithGame.cells?.size, config.rowsCount * config.columnCount)
         assertEquals(sessionWithGame.cells?.count { it.type == GameFieldCell.Type.END_GAME }, 1)
+        assertEquals(
+            sessionWithGame.cells?.count { it.type == GameFieldCell.Type.TEAM_OWNED },
+            (config.rowsCount * config.columnCount) / (config.teamsCount + 1)
+        )
+        assertEquals(
+            sessionWithGame.cells?.filter { it.ownerTeamId != null }?.map { it.ownerTeamId }
+                ?.toSet()?.size,
+            config.teamsCount
+        )
     }
 }

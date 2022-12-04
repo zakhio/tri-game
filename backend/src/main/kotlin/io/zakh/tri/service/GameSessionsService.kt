@@ -19,6 +19,9 @@ import kotlin.random.Random
  *
  * Rectangular game field consists unique words of picked language:
  * * One of them is end game so the team who picked it loses automatically.
+ * * Equal number of word belonging to each team
+ *
+ * Game ends when all words of one team are open.
  *
  * The configuration of words per langauge is in resources/dictionary.json file
  * (uses ExperimentalSerializationApi for deserializing).
@@ -77,20 +80,34 @@ class GameSessionsService(
             throw UnauthorizedPlayerException("player $playerID is not part of session $sessionID")
         }
 
-        val language =
-            if (config.language in gameWordsConfig.words) config.language else gameWordsConfig.defaultLanguage
+        val dictionary = gameWordsConfig.words[config.language]
+            ?: gameWordsConfig.words[gameWordsConfig.defaultLanguage]!!
 
-        val dictionary = gameWordsConfig.words[language]!!
-        val totalCount = config.rowsCount * config.columnCount
+        val totalCellCount = config.rowsCount * config.columnCount
+        val teamSize = totalCellCount / (config.teamsCount + 1)
 
         val words = mutableSetOf<String>()
-        while (words.size < totalCount) {
+        while (words.size < totalCellCount) {
             words.add(dictionary.random())
         }
 
-        val cells = words.map { GameFieldCell(it) }.toMutableList()
-        val engGameIndex = Random.nextInt(0, totalCount)
-        cells[engGameIndex] = cells[engGameIndex].copy(type = GameFieldCell.Type.END_GAME)
+        // This code creates a pair of a random number and the cell configuration, then sorts it
+        // by the first number, the resulted order of cell configurations is the game field.
+        val cells = words.mapIndexed { index, word ->
+            var teamID: Int? = null
+            var cellType = GameFieldCell.Type.REGULAR
+
+            if (index / teamSize < config.teamsCount) {
+                teamID = index / teamSize
+                cellType = GameFieldCell.Type.TEAM_OWNED
+            }
+
+            if (index == totalCellCount - 1) {
+                cellType = GameFieldCell.Type.END_GAME
+            }
+
+            Random.nextInt(totalCellCount * 10) to GameFieldCell(word, cellType, teamID)
+        }.sortedBy { it.first }.map { it.second }.toList()
 
         return sessionsRepo.save(
             session.copy(

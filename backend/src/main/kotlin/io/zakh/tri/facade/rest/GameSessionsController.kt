@@ -71,8 +71,7 @@ class GameSessionsController(
         httpSession: HttpSession,
         @PathVariable("id") sessionID: String,
         @RequestBody config: GameConfigDTO
-    ): GameSessionDTO {
-        val gameSession = service.newGame(httpSession.id, sessionID, config.toEntity())
-        return gameSession.toDTO()
+    ) {
+        service.newGame(httpSession.id, sessionID, config.toEntity())
     }
 }
