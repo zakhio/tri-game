@@ -5,14 +5,15 @@ import jakarta.validation.constraints.Positive
 
 data class GameConfigDTO(
     @Positive
-    val columnCount: Int,
-    @Positive
-    val rowsCount: Int,
+    val columnCount: Int = 0,
 
     @Positive
-    val teamsCount: Int,
+    val rowsCount: Int = 0,
 
-    val language: String?,
+    @Positive
+    val teamsCount: Int = 0,
+
+    val language: String? = null,
 ) {
     fun toEntity(): GameSession.Config {
         return GameSession.Config(

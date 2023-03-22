@@ -5,7 +5,7 @@ import org.springframework.web.socket.WebSocketMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
 
-class ChatMessageHandler : TextWebSocketHandler() {
+class GameSessionHandler() : TextWebSocketHandler() {
     private val webSocketSessions = mutableListOf<WebSocketSession>()
 
     override fun afterConnectionEstablished(session: WebSocketSession) {
@@ -15,6 +15,7 @@ class ChatMessageHandler : TextWebSocketHandler() {
 
     override fun handleMessage(session: WebSocketSession, message: WebSocketMessage<*>) {
         super.handleMessage(session, message)
+
         for (webSocketSession in webSocketSessions) {
             webSocketSession.sendMessage(message)
         }

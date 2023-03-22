@@ -1,13 +1,13 @@
 # Step 1: Frontend Builder
 FROM node:19-alpine as frontend-builder
-COPY frontend /frontend
+COPY tri-game-frontend /frontend
 WORKDIR /frontend
 RUN npm install
 RUN npm run build
 
 # Step 2: Backend Builder
-FROM gradle:7.5-jdk17 as backend-builder
-COPY backend /backend
+FROM gradle:7.6-jdk17 as backend-builder
+COPY tri-game-backend /backend
 COPY --from=frontend-builder /frontend/dist /backend/src/main/resources/public
 WORKDIR /backend
 RUN gradle build -x check

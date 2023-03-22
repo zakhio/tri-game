@@ -4,7 +4,7 @@ import io.zakh.tri.model.GameFieldCell
 
 data class GameFieldCellDTO(
     val word: String,
-    val type: String,
+    val type: GameFieldCell.Type,
     val ownerTeamId: Int? = null,
 
     val open: Boolean = false,
@@ -14,7 +14,7 @@ data class GameFieldCellDTO(
 fun GameFieldCell.toDTO(): GameFieldCellDTO {
     return GameFieldCellDTO(
         this.word,
-        this.type.name,
+        this.type,
         this.ownerTeamId,
         this.open,
         this.openTeamId

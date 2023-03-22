@@ -17,7 +17,7 @@ import kotlin.random.Random
 class GameSessionsServiceTest {
     @Test
     fun newSession() {
-        val service = GameSessionsService(mock(), mock())
+        val service = GameSessionsService(mock(), mock(), mock())
 
         val playerID = Random.nextInt().toString()
 
@@ -34,7 +34,7 @@ class GameSessionsServiceTest {
 
     @Test
     fun newGame() {
-        val service = GameSessionsService(mock(), mock())
+        val service = GameSessionsService(mock(), mock(), mock())
 
         val playerID = Random.nextInt().toString()
 
@@ -51,7 +51,7 @@ class GameSessionsServiceTest {
 
     @Test
     fun newGame_sessionNotFound() {
-        val service = GameSessionsService(mock(), mock())
+        val service = GameSessionsService(mock(), mock(), mock())
 
         val playerID = Random.nextInt().toString()
         val sessionID = Random.nextInt().toString()
@@ -62,7 +62,7 @@ class GameSessionsServiceTest {
 
     @Test
     fun newGame_userWhichIsNotPlayerStartsTheGame() {
-        val service = GameSessionsService(mock(), mock())
+        val service = GameSessionsService(mock(), mock(), mock())
 
         val playerID = Random.nextInt().toString()
         val sessionID = Random.nextInt().toString()
@@ -76,7 +76,7 @@ class GameSessionsServiceTest {
 
     @Test
     fun newGame_success() {
-        val service = GameSessionsService(mock(), mock())
+        val service = GameSessionsService(mock(), mock(), mock())
 
         val playerID = Random.nextInt().toString()
         val sessionID = Random.nextInt().toString()

@@ -8,11 +8,10 @@ import org.springframework.data.keyvalue.annotation.KeySpace
  *
  * Note: There is no notion of teams to reduce complexity of queries to the persistence layer.
  */
-@KeySpace("player")
+@KeySpace("players")
 data class Player(
     @Id
     val id: String,
-    var sessions: Set<String> = emptySet(),
-    var captainSessions: Set<String> = emptySet(),
-    var teamIdInSession: Map<String, Int> = emptyMap(),
+
+    val initialized: Boolean = false
 )

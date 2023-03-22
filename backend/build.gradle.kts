@@ -1,14 +1,15 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	war
-	kotlin("jvm") version "1.8.0"
-	kotlin("plugin.spring") version "1.8.0"
-	kotlin("plugin.serialization") version "1.8.0"
+	kotlin("jvm") version "1.8.10"
+	kotlin("plugin.spring") version "1.8.10"
+	kotlin("plugin.serialization") version "1.8.10"
 
-	id("org.springframework.boot") version "3.0.2"
+	id("org.springframework.boot") version "3.0.4"
 	id("io.spring.dependency-management") version "1.1.0"
 	id("org.springdoc.openapi-gradle-plugin") version "1.6.0"
+
+	war
 }
 
 group = "io.zakh"
@@ -21,7 +22,7 @@ repositories {
 dependencies {
 	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 
-	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
+	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
 
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-web")
@@ -30,8 +31,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 	implementation("org.springframework.session:spring-session-data-redis")
 
-	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
-	implementation("org.springdoc:springdoc-openapi-starter-common:2.0.2")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4")
+	implementation("org.springdoc:springdoc-openapi-starter-common:2.0.4")
 
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")

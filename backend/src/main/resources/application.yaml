@@ -8,3 +8,4 @@ server:
   servlet:
     session:
       tracking-modes: cookie
+      persistent: true

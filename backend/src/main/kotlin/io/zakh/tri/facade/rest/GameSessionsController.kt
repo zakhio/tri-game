@@ -5,9 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
-import io.zakh.tri.facade.rest.dto.GameConfigDTO
-import io.zakh.tri.facade.rest.dto.GameSessionDTO
-import io.zakh.tri.facade.rest.dto.toDTO
+import io.zakh.tri.facade.rest.dto.*
 import io.zakh.tri.service.GameSessionsService
 import jakarta.servlet.http.HttpSession
 import org.springframework.web.bind.annotation.*
@@ -47,8 +45,15 @@ class GameSessionsController(
     )
     @PostMapping
     fun newSession(httpSession: HttpSession): GameSessionDTO {
-        val gameSession = service.newSession(httpSession.id)
-        return gameSession.toDTO()
+        return service.newSession(httpSession.id).toDTO()
+    }
+
+    @GetMapping("{id}")
+    fun getSession(
+        httpSession: HttpSession,
+        @PathVariable("id") sessionID: String
+    ): GameSessionDTO? {
+        return service.getSession(sessionID)?.toDTO()
     }
 
     @Operation(
@@ -66,12 +71,41 @@ class GameSessionsController(
         )]
     )
     @PutMapping("{id}/config")
-//    @ResponseStatus(HttpStatus.ACCEPTED)
     fun newGame(
         httpSession: HttpSession,
         @PathVariable("id") sessionID: String,
         @RequestBody config: GameConfigDTO
     ) {
         service.newGame(httpSession.id, sessionID, config.toEntity())
+    }
+
+    @Operation(
+        summary = "Update the state of the cell.",
+        description = "Updates the state of the game for a session with http session holder as a player."
+    )
+    @ApiResponses(
+        value = [ApiResponse(
+            responseCode = "200",
+            description = "Cell updated"
+        ), ApiResponse(
+            responseCode = "500",
+            description = "Internal server error",
+            content = [Content(schema = Schema(implementation = String::class))]
+        )]
+    )
+    @PutMapping("{id}/cells/{cellIndex}")
+    fun updateCell(
+        httpSession: HttpSession,
+        @PathVariable("id") sessionID: String,
+        @PathVariable("cellIndex") cellIndex: Int,
+        @RequestBody cell: UpdateGameFieldCellDTO
+    ) {
+        service.updateCell(httpSession.id, sessionID, cellIndex, cell.open)
+    }
+
+    @PostMapping("{id}/players")
+    fun newPlayers(httpSession: HttpSession, @PathVariable("id") sessionID: String): PlayerDTO {
+        return service.newPlayer(httpSession.id, sessionID)
+            .toDTO().players.find { it.id == httpSession.id }!!
     }
 }

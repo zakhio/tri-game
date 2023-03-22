@@ -14,10 +14,12 @@ data class GameSession(
     val id: String,
 
     val players: List<Player>,
+    val captains: Set<String> = emptySet(),
+    val playerIDtoTeamID: Map<String, Int> = emptyMap(),
 
     val state: State = State.IDLE,
     val config: Config? = null,
-    val cells: List<GameFieldCell>? = null,
+    val cells: List<GameFieldCell> = emptyList(),
 ) {
     enum class State {
         IDLE, IN_PROGRESS, FINISHED

@@ -1,15 +1,19 @@
 package io.zakh.tri
 
-import io.zakh.tri.facade.websocket.ChatMessageHandler
 import org.springframework.context.annotation.Configuration
-import org.springframework.web.socket.config.annotation.EnableWebSocket
-import org.springframework.web.socket.config.annotation.WebSocketConfigurer
-import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
+import org.springframework.messaging.simp.config.MessageBrokerRegistry
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker
+import org.springframework.web.socket.config.annotation.StompEndpointRegistry
+import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer
 
 @Configuration
-@EnableWebSocket
-class WebSocketConfig : WebSocketConfigurer {
-    override fun registerWebSocketHandlers(registry: WebSocketHandlerRegistry) {
-        registry.addHandler(ChatMessageHandler(), "socket/sessions").setAllowedOrigins("*")
+@EnableWebSocketMessageBroker
+class WebSocketConfig : WebSocketMessageBrokerConfigurer {
+    override fun registerStompEndpoints(registry: StompEndpointRegistry) {
+        registry.addEndpoint("/socket/sessions").setAllowedOrigins("*")
+    }
+
+    override fun configureMessageBroker(registry: MessageBrokerRegistry) {
+        registry.enableSimpleBroker("/session")
     }
 }
