@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.tags.Tag
 import io.zakh.tri.facade.rest.dto.*
 import io.zakh.tri.service.GameSessionsService
 import jakarta.servlet.http.HttpSession
@@ -13,7 +14,8 @@ import java.time.LocalDateTime
 import java.time.ZoneOffset
 
 @RestController
-@RequestMapping("api/sessions")
+@RequestMapping("sessions")
+@Tag(name = "game session", description = "the Game Session API")
 class GameSessionsController(
     val service: GameSessionsService
 ) {

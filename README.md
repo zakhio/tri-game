@@ -21,10 +21,7 @@ Swagger to TypeScript relies on [swagger-codegen][1] tool (do not forget to inst
 ```shell
 docker compose up -d redis
 (cd backend && ./gradlew clean generateOpenApiDocs)
-swagger-codegen generate -i backend/build/openapi.json -l typescript-fetch -o frontend/src/api/ && 
-  rm -fR frontend/src/api/.swagger-codegen && rm frontend/src/api/.gitignore && 
-  rm frontend/src/api/.swagger-codegen-ignore && rm frontend/src/api/git_push.sh &&
-  rm frontend/src/api/api_test.spec.ts
+(cd frontend && npm run generate-rest-client)
 ```
 
 [1]: https://github.com/swagger-api/swagger-codegen#homebrew

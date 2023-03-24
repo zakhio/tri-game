@@ -33,6 +33,7 @@ dependencies {
 
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4")
 	implementation("org.springdoc:springdoc-openapi-starter-common:2.0.4")
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.2")
 
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")

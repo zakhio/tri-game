@@ -9,13 +9,25 @@
  * ---------------------------------------------------------------
  */
 
+export interface ProblemDetail {
+  /** @format uri */
+  type?: string;
+  title?: string;
+  /** @format int32 */
+  status?: number;
+  detail?: string;
+  /** @format uri */
+  instance?: string;
+  properties?: Record<string, object>;
+}
+
 export interface GameConfigDTO {
   /** @format int32 */
-  columnCount?: number;
+  columnCount: number;
   /** @format int32 */
-  rowsCount?: number;
+  rowsCount: number;
   /** @format int32 */
-  teamsCount?: number;
+  teamsCount: number;
   language?: string;
 }
 
@@ -24,27 +36,27 @@ export interface UpdateGameFieldCellDTO {
 }
 
 export interface GameFieldCellDTO {
-  word?: string;
-  type?: "REGULAR" | "TEAM_OWNED" | "END_GAME";
+  word: string;
+  type: "REGULAR" | "TEAM_OWNED" | "END_GAME";
   /** @format int32 */
   ownerTeamId?: number;
-  open?: boolean;
+  open: boolean;
   /** @format int32 */
   openTeamId?: number;
 }
 
 export interface GameSessionDTO {
-  id?: string;
-  players?: PlayerDTO[];
-  state?: "IDLE" | "IN_PROGRESS" | "FINISHED";
+  id: string;
+  players: PlayerDTO[];
+  state: "IDLE" | "IN_PROGRESS" | "FINISHED";
   config?: GameConfigDTO;
-  cells?: GameFieldCellDTO[];
+  cells: GameFieldCellDTO[];
 }
 
 export interface PlayerDTO {
-  id?: string;
-  initialized?: boolean;
-  captain?: boolean;
+  id: string;
+  initialized: boolean;
+  captain: boolean;
   /** @format int32 */
   teamID?: number;
 }
@@ -265,18 +277,18 @@ export class HttpClient<SecurityDataType = unknown> {
  * @baseUrl http://localhost:8080
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
-  api = {
+  sessions = {
     /**
      * @description Starts a new game for a session with http session holder as a player.
      *
-     * @tags game-sessions-controller
+     * @tags game session
      * @name NewGame
      * @summary Start a new game for the specified session.
-     * @request PUT:/api/sessions/{id}/config
+     * @request PUT:/sessions/{id}/config
      */
     newGame: (id: string, data: GameConfigDTO, params: RequestParams = {}) =>
-      this.request<void, string>({
-        path: `/api/sessions/${id}/config`,
+      this.request<void, ProblemDetail | string>({
+        path: `/sessions/${id}/config`,
         method: "PUT",
         body: data,
         type: ContentType.Json,
@@ -286,14 +298,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * @description Updates the state of the game for a session with http session holder as a player.
      *
-     * @tags game-sessions-controller
+     * @tags game session
      * @name UpdateCell
      * @summary Update the state of the cell.
-     * @request PUT:/api/sessions/{id}/cells/{cellIndex}
+     * @request PUT:/sessions/{id}/cells/{cellIndex}
      */
     updateCell: (id: string, cellIndex: number, data: UpdateGameFieldCellDTO, params: RequestParams = {}) =>
-      this.request<void, string>({
-        path: `/api/sessions/${id}/cells/${cellIndex}`,
+      this.request<void, ProblemDetail | string>({
+        path: `/sessions/${id}/cells/${cellIndex}`,
         method: "PUT",
         body: data,
         type: ContentType.Json,
@@ -303,13 +315,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags game-sessions-controller
+     * @tags game session
      * @name Status
-     * @request GET:/api/sessions
+     * @request GET:/sessions
      */
     status: (params: RequestParams = {}) =>
-      this.request<GameSessionDTO[], any>({
-        path: `/api/sessions`,
+      this.request<GameSessionDTO[], ProblemDetail>({
+        path: `/sessions`,
         method: "GET",
         ...params,
       }),
@@ -317,14 +329,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * @description Starts a new game session with http session holder as a player.
      *
-     * @tags game-sessions-controller
+     * @tags game session
      * @name NewSession
      * @summary Start a new session.
-     * @request POST:/api/sessions
+     * @request POST:/sessions
      */
     newSession: (params: RequestParams = {}) =>
-      this.request<GameSessionDTO, string>({
-        path: `/api/sessions`,
+      this.request<GameSessionDTO, ProblemDetail | string>({
+        path: `/sessions`,
         method: "POST",
         ...params,
       }),
@@ -332,13 +344,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags game-sessions-controller
+     * @tags game session
      * @name NewPlayers
-     * @request POST:/api/sessions/{id}/players
+     * @request POST:/sessions/{id}/players
      */
     newPlayers: (id: string, params: RequestParams = {}) =>
-      this.request<PlayerDTO, any>({
-        path: `/api/sessions/${id}/players`,
+      this.request<PlayerDTO, ProblemDetail>({
+        path: `/sessions/${id}/players`,
         method: "POST",
         ...params,
       }),
@@ -346,27 +358,28 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags game-sessions-controller
+     * @tags game session
      * @name GetSession
-     * @request GET:/api/sessions/{id}
+     * @request GET:/sessions/{id}
      */
     getSession: (id: string, params: RequestParams = {}) =>
-      this.request<GameSessionDTO, any>({
-        path: `/api/sessions/${id}`,
+      this.request<GameSessionDTO, ProblemDetail>({
+        path: `/sessions/${id}`,
         method: "GET",
         ...params,
       }),
-
+  };
+  users = {
     /**
      * No description
      *
-     * @tags player-controller
+     * @tags user
      * @name GetMe
-     * @request GET:/api/players/me
+     * @request GET:/users/me
      */
     getMe: (params: RequestParams = {}) =>
-      this.request<PlayerDTO, any>({
-        path: `/api/players/me`,
+      this.request<PlayerDTO, ProblemDetail>({
+        path: `/users/me`,
         method: "GET",
         ...params,
       }),

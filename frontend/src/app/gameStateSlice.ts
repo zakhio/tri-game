@@ -39,7 +39,11 @@ const initialState: GameState = {
   session: null,
 };
 
-const rest_client = new Api({baseUrl: hostUrl(), baseApiParams: {format: "json", credentials: "include"}}).api;
+const rest_client = new Api({
+  baseUrl: hostUrl(),
+  baseApiParams: {format: "json", credentials: "include"}
+});
+
 let game_socket_client = Stomp.client("ws://localhost:8080/socket/sessions");
 game_socket_client.activate()
 
@@ -96,7 +100,7 @@ export const {
 // code can then be executed and other actions can be dispatched
 export const updateSession = (token: string, sessionId: string): AppThunk => dispatch => {
   localStorage.setItem("token", token);
-  rest_client.getSession(sessionId).then(r => {
+  rest_client.sessions.getSession(sessionId).then(r => {
     console.log('getSession', r.data);
     dispatch(replaceGameState(r.data));
     dispatch(subscribeOnUpdates(token, sessionId))
@@ -146,7 +150,7 @@ export const subscribeOnUpdates = (token: string, sessionId: string): AppThunk =
 // will call the thunk with the `dispatch` function as the first argument. Async
 // code can then be executed and other actions can be dispatched
 export const createSession = (token: string, navigate: NavigateFunction): AppThunk => dispatch => {
-  rest_client.newSession().then(resp => {
+  rest_client.sessions.newSession().then(resp => {
     const sessionId: string = resp.data.id!;
     navigate("/" + sessionId);
     dispatch(replaceConnectionStatus(null))
@@ -167,15 +171,14 @@ export const joinSession = (token: string, sessionId: string): AppThunk => (disp
 };
 
 export const startGame = (token: string, sessionId: string, language?: string): AppThunk => dispatch => {
-  const body: GameConfigDTO = {};
-  body.columnCount = 5;
-  body.rowsCount = 5;
-  body.teamsCount = 2;
-  if (language) {
-    body.language = language;
-  }
+  const body: GameConfigDTO = {
+    columnCount: 5,
+    rowsCount: 5,
+    teamsCount: 2,
+    language: language
+  };
 
-  rest_client.newGame(sessionId, body).then(resp => {
+  rest_client.sessions.newGame(sessionId, body).then(resp => {
     console.log(resp)
 
   }).catch(reason => {
@@ -185,7 +188,7 @@ export const startGame = (token: string, sessionId: string, language?: string): 
 };
 
 export const getMe = (): AppThunk => dispatch => {
-  rest_client.getMe().then(resp => {
+  rest_client.users.getMe().then(resp => {
     console.log("me", resp);
     dispatch(replaceMe(resp.data));
   }).catch(reason => {
