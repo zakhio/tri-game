@@ -20,8 +20,6 @@ repositories {
 }
 
 dependencies {
-	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
-
 	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
 
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -31,8 +29,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 	implementation("org.springframework.session:spring-session-data-redis")
 
-	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4")
-	implementation("org.springdoc:springdoc-openapi-starter-common:2.0.4")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
+	implementation("org.springdoc:springdoc-openapi-starter-common:2.1.0")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.2")
 
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
