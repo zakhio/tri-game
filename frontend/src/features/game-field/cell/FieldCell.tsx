@@ -1,10 +1,10 @@
-import React, {useRef} from "react";
+import React, { useRef } from "react";
 import styles from './FieldCell.module.css';
 import fieldStyles from '../GameField.module.css';
 import Box from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import {useSpring, animated} from "@react-spring/web";
-import {GameFieldCellDTO} from "../../../api/rest";
+import { useSpring, animated } from "@react-spring/web";
+import { GameFieldCellDTO } from "../../../api/rest";
 
 function calcVal(open?: boolean, hover: boolean = false): number {
     if (hover && open !== undefined && !open) {
@@ -19,17 +19,17 @@ const trans = (val: number) => {
     return `rotateX(${rot}deg`
 }
 
-export function FieldCell({cell, onClick, showColor}: { cell: GameFieldCellDTO, onClick: Function, showColor: boolean }) {
+export function FieldCell({ cell, onClick, showColor }: { cell: GameFieldCellDTO, onClick: Function, showColor: boolean }) {
     const prevVal = useRef(calcVal(cell.open));
-    const [{val}, setVal] = useSpring(() => ({val: prevVal.current}));
+    const [{ val }, setVal] = useSpring(() => ({ val: prevVal.current }));
 
     function onHover(flag: boolean) {
         const v = calcVal(cell.open, flag);
         prevVal.current = v;
-        setVal({val: v});
+        setVal({ val: v });
     }
 
-    setVal({val: calcVal(cell.open)})
+    setVal({ val: calcVal(cell.open) })
 
     let kind_style;
 
@@ -110,7 +110,7 @@ export function FieldCell({cell, onClick, showColor}: { cell: GameFieldCellDTO, 
             cell_overlay].join(" ")}>
         <animated.div
             className={styles.cell}
-            style={{transform: val.to(trans)}}>
+            style={{ transform: val.to(trans) }}>
             <animated.div
                 className={[
                     styles.cell_face,

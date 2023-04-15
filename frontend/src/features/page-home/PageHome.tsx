@@ -1,14 +1,14 @@
-import React, {useState} from 'react';
-import {useSelector} from 'react-redux';
-import {createSession, playerToken,} from '../../app/gameStateSlice';
-import {useIntl} from 'react-intl';
-import {useNavigate} from "react-router-dom";
-import {Box, Button, Grid, TextField, Typography} from "@mui/material";
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { createSession, playerToken, } from '../../app/gameStateSlice';
+import { useIntl } from 'react-intl';
+import { useNavigate } from "react-router-dom";
+import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import messages from "./PageHome.messages";
-import {LanguageSelector} from "../selector-language/LanguageSelector";
-import {useAppDispatch} from "../../app/store";
+import { LanguageSelector } from "../selector-language/LanguageSelector";
+import { useAppDispatch } from "../../app/store";
 
-export function PageHome({setLocale}: { setLocale: (locale: string) => void }) {
+export function PageHome({ setLocale }: { setLocale: (locale: string) => void }) {
     const intl = useIntl();
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
@@ -26,7 +26,7 @@ export function PageHome({setLocale}: { setLocale: (locale: string) => void }) {
             <form autoComplete="off">
                 <Grid container direction="column" alignItems="center" spacing={3}>
                     <Grid item xs={12}>
-                        <img src="logo.svg" alt="Game TRI logo"/>
+                        <img src="logo.svg" alt="Game TRI logo" />
                     </Grid>
                     <Grid item xs>
                         <Typography variant="h4" align="center">
@@ -48,12 +48,12 @@ export function PageHome({setLocale}: { setLocale: (locale: string) => void }) {
                     </Grid>
                     <Grid item xs>
                         <TextField required
-                                   autoFocus
-                                   fullWidth
-                                   id="standard-required"
-                                   label={intl.formatMessage(messages.sessionId)}
-                                   value={sessionId}
-                                   onChange={e => setSessionId(e.target.value)}/>
+                            autoFocus
+                            fullWidth
+                            id="standard-required"
+                            label={intl.formatMessage(messages.sessionId)}
+                            value={sessionId}
+                            onChange={e => setSessionId(e.target.value)} />
                     </Grid>
                     <Grid item xs>
                         <Button
@@ -66,7 +66,7 @@ export function PageHome({setLocale}: { setLocale: (locale: string) => void }) {
                 </Grid>
             </form>
             <Box position="absolute" top={10} right={10}>
-                <LanguageSelector setUILocale={setLocale}/>
+                <LanguageSelector setUILocale={setLocale} />
             </Box>
         </>
     );

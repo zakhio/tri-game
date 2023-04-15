@@ -1,7 +1,7 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
-import {gameMe, gameStarted, playerToken, setSettings,} from '../../app/gameStateSlice';
-import {useIntl} from 'react-intl';
+import { useSelector } from 'react-redux';
+import { gameMe, gameStarted, playerToken, setSettings, } from '../../app/gameStateSlice';
+import { useIntl } from 'react-intl';
 import {
     Button,
     Dialog,
@@ -12,11 +12,11 @@ import {
     useMediaQuery,
     useTheme
 } from "@mui/material";
-import {Settings} from "@mui/icons-material";
+import { Settings } from "@mui/icons-material";
 import messages from "./BeCaptain.messages";
-import {useAppDispatch} from "../../app/store";
+import { useAppDispatch } from "../../app/store";
 
-export function BeCaptain({sessionId}: { sessionId: string }) {
+export function BeCaptain({ sessionId }: { sessionId: string }) {
     const intl = useIntl();
     const dispatch = useAppDispatch();
     const theme = useTheme();
@@ -41,7 +41,7 @@ export function BeCaptain({sessionId}: { sessionId: string }) {
                 </DialogContentText>
                 <DialogContentText variant="body2">
                     {intl.formatMessage(messages.settingsInfo)}
-                    <Settings fontSize="small"/>
+                    <Settings fontSize="small" />
                 </DialogContentText>
             </DialogContent>
             <DialogActions>

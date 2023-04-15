@@ -1,6 +1,6 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
-import {useIntl} from 'react-intl';
+import { useIntl } from 'react-intl';
 import messages from "./End.messages";
 
 export function End() {

@@ -1,9 +1,9 @@
 import React from 'react';
-import {useIntl} from 'react-intl';
-import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
+import { useIntl } from 'react-intl';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import messages from "./RestartPopup.messages";
 
-export function RestartPopup({open, onAgree, onDisagree}: { open: boolean, onAgree: () => void, onDisagree: () => void }) {
+export function RestartPopup({ open, onAgree, onDisagree }: { open: boolean, onAgree: () => void, onDisagree: () => void }) {
     const intl = useIntl();
 
     return (

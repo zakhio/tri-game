@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
-import {useSelector} from 'react-redux';
-import {gameLanguage, gameMe, playerToken, setSettings, startGame,} from '../../app/gameStateSlice';
-import {useParams} from "react-router-dom";
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { gameLanguage, gameMe, playerToken, setSettings, startGame, } from '../../app/gameStateSlice';
+import { useParams } from "react-router-dom";
 import {
     Box,
     Button,
@@ -14,7 +14,7 @@ import {
     Select,
     Switch
 } from "@mui/material";
-import {useIntl} from 'react-intl';
+import { useIntl } from 'react-intl';
 import {
     FacebookIcon,
     FacebookShareButton,
@@ -25,16 +25,16 @@ import {
     WhatsappIcon,
     WhatsappShareButton
 } from "react-share";
-import {gameSessionUrl} from "../../app/config";
+import { gameSessionUrl } from "../../app/config";
 import messages from "./SettingsDrawer.messages";
-import {LanguageSelector} from "../selector-language/LanguageSelector";
-import {RestartPopup} from "../popup-restart/RestartPopup";
-import {useAppDispatch} from "../../app/store";
+import { LanguageSelector } from "../selector-language/LanguageSelector";
+import { RestartPopup } from "../popup-restart/RestartPopup";
+import { useAppDispatch } from "../../app/store";
 
-export function SettingsDrawer({open, onClose, setUILocale}: { open?: boolean, onClose: () => void, setUILocale: (locale: string) => void }) {
+export function SettingsDrawer({ open, onClose, setUILocale }: { open?: boolean, onClose: () => void, setUILocale: (locale: string) => void }) {
     const intl = useIntl();
     const dispatch = useAppDispatch();
-    const {sessionId} = useParams();
+    const { sessionId } = useParams();
 
     const token = useSelector(playerToken)
     const me = useSelector(gameMe)
@@ -51,7 +51,7 @@ export function SettingsDrawer({open, onClose, setUILocale}: { open?: boolean, o
                 <ListItem>
                     <ListItemText
                         primary={intl.formatMessage(messages.titlePrimary)}
-                        secondary={intl.formatMessage(messages.titleSecondary, {sessionId})}/>
+                        secondary={intl.formatMessage(messages.titleSecondary, { sessionId })} />
                     <Button
                         variant="text"
                         color="secondary"
@@ -63,15 +63,15 @@ export function SettingsDrawer({open, onClose, setUILocale}: { open?: boolean, o
                     </Button>
                 </ListItem>
                 <ListItem>
-                    <ListItemText style={{marginRight: "5px"}}
-                                  primary={intl.formatMessage(messages.uiLanguagePrimary)}
-                                  secondary={intl.formatMessage(messages.uiLanguageSecondary)}/>
-                    <LanguageSelector setUILocale={setUILocale}/>
+                    <ListItemText style={{ marginRight: "5px" }}
+                        primary={intl.formatMessage(messages.uiLanguagePrimary)}
+                        secondary={intl.formatMessage(messages.uiLanguageSecondary)} />
+                    <LanguageSelector setUILocale={setUILocale} />
                 </ListItem>
                 <ListItem>
                     <ListItemText
                         primary={intl.formatMessage(messages.languagePrimary)}
-                        secondary={intl.formatMessage(messages.languageSecondary)}/>
+                        secondary={intl.formatMessage(messages.languageSecondary)} />
                     <Select
                         labelId="language-select-label"
                         id="language-select"
@@ -90,12 +90,12 @@ export function SettingsDrawer({open, onClose, setUILocale}: { open?: boolean, o
                             dispatch(startGame(token!, sessionId!, language));
                             onClose();
                         }}
-                        onDisagree={() => setLanguage(currentLanguage)}/>
+                        onDisagree={() => setLanguage(currentLanguage)} />
                 </ListItem>
                 <ListItem>
                     <ListItemText
                         primary={intl.formatMessage(messages.captainPrimary)}
-                        secondary={intl.formatMessage(messages.captainSecondary)}/>
+                        secondary={intl.formatMessage(messages.captainSecondary)} />
                     <Switch
                         checked={captain}
                         onChange={e => {
@@ -103,10 +103,10 @@ export function SettingsDrawer({open, onClose, setUILocale}: { open?: boolean, o
                             onClose();
                         }}
                         color="secondary"
-                        inputProps={{'aria-label': 'captain checkbox'}}
+                        inputProps={{ 'aria-label': 'captain checkbox' }}
                     />
                 </ListItem>
-                <Divider variant="middle"/>
+                <Divider variant="middle" />
                 <ListItem>
                     <ListItemText
                         primary={intl.formatMessage(messages.invite)}
@@ -115,29 +115,29 @@ export function SettingsDrawer({open, onClose, setUILocale}: { open?: boolean, o
                                 <TelegramShareButton
                                     url={link}
                                     title={intl.formatMessage(messages.inviteMessage)}
-                                    style={{marginRight: "4px"}}>
-                                    <TelegramIcon size={30} round/>
+                                    style={{ marginRight: "4px" }}>
+                                    <TelegramIcon size={30} round />
                                 </TelegramShareButton>
                                 <FacebookShareButton
                                     url={link}
                                     title={intl.formatMessage(messages.inviteMessage)}
-                                    style={{marginRight: "4px"}}>
-                                    <FacebookIcon size={30} round/>
+                                    style={{ marginRight: "4px" }}>
+                                    <FacebookIcon size={30} round />
                                 </FacebookShareButton>
                                 <WhatsappShareButton
                                     url={link}
                                     title={intl.formatMessage(messages.inviteMessage)}
-                                    style={{marginRight: "4px"}}>
-                                    <WhatsappIcon size={30} round/>
+                                    style={{ marginRight: "4px" }}>
+                                    <WhatsappIcon size={30} round />
                                 </WhatsappShareButton>
                                 <WeiboShareButton
                                     url={link}
                                     title={intl.formatMessage(messages.inviteMessage)}
-                                    style={{marginRight: "4px"}}>
-                                    <WeiboIcon size={30} round/>
+                                    style={{ marginRight: "4px" }}>
+                                    <WeiboIcon size={30} round />
                                 </WeiboShareButton>
                             </Box>
-                        }/>
+                        } />
                 </ListItem>
             </List>
         </Drawer>

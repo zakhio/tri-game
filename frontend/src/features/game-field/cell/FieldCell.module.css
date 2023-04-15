@@ -24,13 +24,11 @@
     bottom: 0;
     left: 0;
     z-index: 1;
-    background: repeating-linear-gradient(
-            45deg,
+    background: repeating-linear-gradient(45deg,
             rgba(255, 255, 255, 0.07),
             rgba(255, 255, 255, 0.07) 10px,
             rgba(0, 0, 0, 0.18) 10px,
-            rgba(0, 0, 0, 0.18) 20px
-    );
+            rgba(0, 0, 0, 0.18) 20px);
 }
 
 /*.cell_overlay:before {*/
@@ -55,8 +53,7 @@
     align-items: center;
 }
 
-.face_front {
-}
+.face_front {}
 
 .face_back {
     transform: translateY(-100%) rotateX(180deg);

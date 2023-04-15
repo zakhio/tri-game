@@ -1,8 +1,8 @@
 import React from "react";
-import {useIntl} from "react-intl";
-import {ToggleButton, ToggleButtonGroup} from "@mui/material";
+import { useIntl } from "react-intl";
+import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 
-export function LanguageSelector({setUILocale}: { setUILocale: (locale: string) => void }) {
+export function LanguageSelector({ setUILocale }: { setUILocale: (locale: string) => void }) {
     const intl = useIntl();
 
     return (

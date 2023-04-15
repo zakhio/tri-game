@@ -1,12 +1,12 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
-import {playerToken, startGame,} from '../../app/gameStateSlice';
-import {useIntl} from 'react-intl';
-import {Button, ButtonGroup, Grid, Typography} from "@mui/material";
+import { useSelector } from 'react-redux';
+import { playerToken, startGame, } from '../../app/gameStateSlice';
+import { useIntl } from 'react-intl';
+import { Button, ButtonGroup, Grid, Typography } from "@mui/material";
 import messages from "./GameIntro.messages";
-import {useAppDispatch} from "../../app/store";
+import { useAppDispatch } from "../../app/store";
 
-export function GameIntro({sessionId}: { sessionId: string }) {
+export function GameIntro({ sessionId }: { sessionId: string }) {
     const intl = useIntl();
     const dispatch = useAppDispatch();
 
@@ -15,7 +15,7 @@ export function GameIntro({sessionId}: { sessionId: string }) {
     return (
         <Grid container spacing={3}>
             <Grid item xs={12} sm={2}>
-                <img src="logo.svg" alt="Game TRI logo"/>
+                <img src="logo.svg" alt="Game TRI logo" />
             </Grid>
             <Grid container direction="column" item xs={12} sm={10} wrap="nowrap">
                 <Typography variant="body1" gutterBottom>

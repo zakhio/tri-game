@@ -1,7 +1,7 @@
 import React from 'react';
 import fieldStyles from '../GameField.module.css';
-import {useSelector} from 'react-redux';
-import {gameTeams,} from '../../../app/gameStateSlice';
+import { useSelector } from 'react-redux';
+import { gameTeams, } from '../../../app/gameStateSlice';
 import Typography from '@mui/material/Typography';
 
 export function Score() {

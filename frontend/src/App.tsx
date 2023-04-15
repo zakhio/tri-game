@@ -1,12 +1,12 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import './App.css';
 
-import {Route, Routes} from "react-router-dom";
-import {PlayRouteContainer} from "./routes/play-route/PlayRouteContainer";
-import {IntlProvider} from 'react-intl';
+import { Route, Routes } from "react-router-dom";
+import { PlayRouteContainer } from "./routes/play-route/PlayRouteContainer";
+import { IntlProvider } from 'react-intl';
 
 import messages_ru from "./translations/ru.json";
-import {HomeRouteContainer} from "./routes/home-route/HomeRouteContainer";
+import { HomeRouteContainer } from "./routes/home-route/HomeRouteContainer";
 
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -26,12 +26,12 @@ function App() {
   }
 
   return (
-      <IntlProvider locale={locale} messages={messages[locale]}>
-        <Routes>
-          <Route path="/:sessionId" element={<PlayRouteContainer setLocale={setLocale}/>}/>
-          <Route path="/" element={<HomeRouteContainer setLocale={setLocale}/>}/>
-        </Routes>
-      </IntlProvider>
+    <IntlProvider locale={locale} messages={messages[locale]}>
+      <Routes>
+        <Route path="/:sessionId" element={<PlayRouteContainer setLocale={setLocale} />} />
+        <Route path="/" element={<HomeRouteContainer setLocale={setLocale} />} />
+      </Routes>
+    </IntlProvider>
   );
 }
 

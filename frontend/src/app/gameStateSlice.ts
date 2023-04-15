@@ -1,10 +1,10 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {AppThunk, RootState} from './store';
-import {hostUrl} from "./config";
-import {NavigateFunction} from "react-router-dom";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { AppThunk, RootState } from './store';
+import { hostUrl } from "./config";
+import { NavigateFunction } from "react-router-dom";
 
-import {Stomp} from "@stomp/stompjs";
-import {Api, GameConfigDTO, GameSessionDTO, PlayerDTO} from "../api/rest";
+import { Stomp } from "@stomp/stompjs";
+import { Api, GameConfigDTO, GameSessionDTO, PlayerDTO } from "../api/rest";
 
 export enum StreamStatus {
   Idle = 1,
@@ -41,7 +41,7 @@ const initialState: GameState = {
 
 const rest_client = new Api({
   baseUrl: hostUrl(),
-  baseApiParams: {format: "json", credentials: "include"}
+  baseApiParams: { format: "json", credentials: "include" }
 });
 
 let game_socket_client = Stomp.client("ws://localhost:8080/socket/sessions");
