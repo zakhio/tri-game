@@ -13,17 +13,17 @@
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@fontsource/roboto": "^4.5.8",
-    "@mui/icons-material": "^5.10.15",
-    "@mui/material": "^5.11.14",
-    "@react-spring/web": "^9.7.1",
-    "@reduxjs/toolkit": "^1.9.2",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/material": "^5.12.00",
+    "@react-spring/web": "^9.7.2",
+    "@reduxjs/toolkit": "^1.9.3",
     "@stomp/stompjs": "^7.0.0",
     "nosleep.js": "^0.12.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-intl": "^6.3.2",
     "react-redux": "^8.0.5",
-    "react-router-dom": "^6.8.1",
+    "react-router-dom": "^6.10.0",
     "react-share": "^4.4.1",
     "url": "^0.11.0",
     "uuidv4": "^6.2.13",
@@ -31,11 +31,11 @@
     "websocket-ts": "^1.1.1"
   },
   "devDependencies": {
-    "@types/react": "^18.0.28",
-    "@types/react-dom": "^18.0.8",
+    "@types/react": "^18.0.35",
+    "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react": "^3.1.0",
     "swagger-typescript-api": "^12.0.4",
-    "typescript": "^4.9.5",
+    "typescript": "^5.0.4",
     "vite": "^4.2.1"
   }
 }
