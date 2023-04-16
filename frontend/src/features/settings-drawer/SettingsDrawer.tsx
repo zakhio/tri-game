@@ -39,7 +39,7 @@ export function SettingsDrawer({ open, onClose, setUILocale }: { open?: boolean,
     const token = useSelector(playerToken)
     const currentLanguage = useSelector(gameLanguage);
 
-    const captain = useSelector(isPlayerCaptain);
+    const playerCaptain = useSelector(isPlayerCaptain);
     const link = gameSessionUrl(sessionId!);
 
     const [language, setLanguage] = useState(currentLanguage);
@@ -96,7 +96,7 @@ export function SettingsDrawer({ open, onClose, setUILocale }: { open?: boolean,
                         primary={intl.formatMessage(messages.captainPrimary)}
                         secondary={intl.formatMessage(messages.captainSecondary)} />
                     <Switch
-                        checked={captain}
+                        checked={playerCaptain}
                         onChange={e => {
                             dispatch(setSettings(token!, sessionId!, e.target.checked));
                             onClose();

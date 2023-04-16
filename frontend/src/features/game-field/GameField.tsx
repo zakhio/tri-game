@@ -19,8 +19,8 @@ export function GameField({ onSettingsClick, sessionId }: { onSettingsClick: Fun
 
     const token = useSelector(playerToken);
     const cells = useSelector(gameCells);
-    const started = useSelector(gameInProgress);
-    const captain = useSelector(isPlayerCaptain);
+    const inProgress = useSelector(gameInProgress);
+    const playerCaptain = useSelector(isPlayerCaptain);
     const numOfColumns = Math.max(1, useSelector(gameNumOfColumns));
 
     function turnWord(cellIndex: number) {
@@ -30,7 +30,7 @@ export function GameField({ onSettingsClick, sessionId }: { onSettingsClick: Fun
     const rows = [];
     for (let i = 0; i < cells.length; i += numOfColumns) {
         const cols = cells.slice(i, i + numOfColumns).map((c, index) => {
-            const showColor = captain ?? !started;
+            const showColor = playerCaptain ?? !inProgress;
             return <Grid item xs key={i + index}>
                 <FieldCell cell={c} onClick={() => turnWord(i + index)} showColor={showColor} />
             </Grid>

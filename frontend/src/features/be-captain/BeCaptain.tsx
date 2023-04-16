@@ -22,13 +22,13 @@ export function BeCaptain({ sessionId }: { sessionId: string }) {
     const theme = useTheme();
 
     const token = useSelector(playerToken);
-    const inGame = useSelector(isPlayerInGame);
+    const playerInGame = useSelector(isPlayerInGame);
     const inProgress = useSelector(gameInProgress);
 
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
     return (
-        <Dialog fullScreen={fullScreen} open={inProgress && !inGame} aria-labelledby="form-dialog-title">
+        <Dialog fullScreen={fullScreen} open={inProgress && !playerInGame} aria-labelledby="form-dialog-title">
             <DialogTitle id="form-dialog-title">
                 {intl.formatMessage(messages.title)}
             </DialogTitle>
