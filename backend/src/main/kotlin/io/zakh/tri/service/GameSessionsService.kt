@@ -168,7 +168,7 @@ class GameSessionsService(
         val players = if (session.players.none { it.id == playerID }) {
             session.players.toMutableList() + playerService.newPlayer(playerID, name)
         } else {
-            // TODO: Implement change of name for existing user"
+            // TODO: Implement change of name for existing user
             session.players
         }
 
@@ -204,7 +204,7 @@ class GameSessionsService(
             throw UnauthorizedPlayerException("player $playerID is not part of session $sessionID")
         }
 
-        if (session.state == GameSession.State.IDLE) {
+        if (session.state != GameSession.State.IN_PROGRESS) {
             throw GameIsNotStartedException("game in session $sessionID is not started")
         }
 
@@ -221,11 +221,12 @@ class GameSessionsService(
             if (cells[cellIndex].type == GameFieldCell.Type.END_GAME) {
                 state = GameSession.State.FINISHED
             } else if (cells[cellIndex].type == GameFieldCell.Type.TEAM_OWNED
-                && cells.none {
-                    it.type == GameFieldCell.Type.TEAM_OWNED
-                            && it.ownerTeamId == cells[cellIndex].ownerTeamId
-                            && !it.open
-                }
+                && cells
+                    .filter {
+                        it.type == GameFieldCell.Type.TEAM_OWNED
+                                && it.ownerTeamId == cells[cellIndex].ownerTeamId
+                    }
+                    .all { it.open }
             ) {
                 state = GameSession.State.FINISHED
             }
