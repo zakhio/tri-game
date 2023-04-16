@@ -21,7 +21,11 @@ export interface ProblemDetail {
   properties?: Record<string, object>;
 }
 
-export interface GameConfigDTO {
+export interface ChangeStateDTO {
+  state: "IDLE" | "IN_PROGRESS" | "FINISHED";
+}
+
+export interface ChangeConfigDTO {
   /** @format int32 */
   columnCount: number;
   /** @format int32 */
@@ -31,11 +35,11 @@ export interface GameConfigDTO {
   language?: string;
 }
 
-export interface UpdateGameFieldCellDTO {
+export interface ChangeFieldCellDTO {
   open?: boolean;
 }
 
-export interface GameFieldCellDTO {
+export interface FieldCellDTO {
   word: string;
   type: "REGULAR" | "TEAM_OWNED" | "END_GAME";
   /** @format int32 */
@@ -45,20 +49,27 @@ export interface GameFieldCellDTO {
   openTeamId?: number;
 }
 
-export interface GameSessionDTO {
+export interface PlayerDTO {
+  id: string;
+  name: string;
+}
+
+export interface SessionDTO {
   id: string;
   players: PlayerDTO[];
   state: "IDLE" | "IN_PROGRESS" | "FINISHED";
-  config?: GameConfigDTO;
-  cells: GameFieldCellDTO[];
+  /** @uniqueItems true */
+  captains: string[];
+  playerIDtoTeamID: Record<string, number>;
+  config?: ChangeConfigDTO;
+  cells: FieldCellDTO[];
 }
 
-export interface PlayerDTO {
-  id: string;
-  initialized: boolean;
+export interface ChangePlayerDTO {
+  name: string;
   captain: boolean;
   /** @format int32 */
-  teamID?: number;
+  teamID: number;
 }
 
 export type QueryParamsType = Record<string | number, any>;
@@ -167,8 +178,8 @@ export class HttpClient<SecurityDataType = unknown> {
           property instanceof Blob
             ? property
             : typeof property === "object" && property !== null
-              ? JSON.stringify(property)
-              : `${property}`,
+            ? JSON.stringify(property)
+            : `${property}`,
         );
         return formData;
       }, new FormData()),
@@ -248,18 +259,18 @@ export class HttpClient<SecurityDataType = unknown> {
       const data = !responseFormat
         ? r
         : await response[responseFormat]()
-          .then((data) => {
-            if (r.ok) {
-              r.data = data;
-            } else {
-              r.error = data;
-            }
-            return r;
-          })
-          .catch((e) => {
-            r.error = e;
-            return r;
-          });
+            .then((data) => {
+              if (r.ok) {
+                r.data = data;
+              } else {
+                r.error = data;
+              }
+              return r;
+            })
+            .catch((e) => {
+              r.error = e;
+              return r;
+            });
 
       if (cancelToken) {
         this.abortControllers.delete(cancelToken);
@@ -282,11 +293,28 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @description Starts a new game for a session with http session holder as a player.
      *
      * @tags game session
-     * @name NewGame
+     * @name ChangeState
+     * @summary Start a new game for the specified session.
+     * @request PUT:/sessions/{id}/state
+     */
+    changeState: (id: string, data: ChangeStateDTO, params: RequestParams = {}) =>
+      this.request<void, ProblemDetail | string>({
+        path: `/sessions/${id}/state`,
+        method: "PUT",
+        body: data,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description Starts a new game for a session with http session holder as a player.
+     *
+     * @tags game session
+     * @name ChangeConfig
      * @summary Start a new game for the specified session.
      * @request PUT:/sessions/{id}/config
      */
-    newGame: (id: string, data: GameConfigDTO, params: RequestParams = {}) =>
+    changeConfig: (id: string, data: ChangeConfigDTO, params: RequestParams = {}) =>
       this.request<void, ProblemDetail | string>({
         path: `/sessions/${id}/config`,
         method: "PUT",
@@ -299,11 +327,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @description Updates the state of the game for a session with http session holder as a player.
      *
      * @tags game session
-     * @name UpdateCell
+     * @name ChangeCell
      * @summary Update the state of the cell.
      * @request PUT:/sessions/{id}/cells/{cellIndex}
      */
-    updateCell: (id: string, cellIndex: number, data: UpdateGameFieldCellDTO, params: RequestParams = {}) =>
+    changeCell: (id: string, cellIndex: number, data: ChangeFieldCellDTO, params: RequestParams = {}) =>
       this.request<void, ProblemDetail | string>({
         path: `/sessions/${id}/cells/${cellIndex}`,
         method: "PUT",
@@ -320,7 +348,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/sessions
      */
     status: (params: RequestParams = {}) =>
-      this.request<GameSessionDTO[], ProblemDetail>({
+      this.request<SessionDTO[], ProblemDetail>({
         path: `/sessions`,
         method: "GET",
         ...params,
@@ -335,7 +363,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/sessions
      */
     newSession: (params: RequestParams = {}) =>
-      this.request<GameSessionDTO, ProblemDetail | string>({
+      this.request<SessionDTO, ProblemDetail | string>({
         path: `/sessions`,
         method: "POST",
         ...params,
@@ -345,13 +373,31 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags game session
-     * @name NewPlayers
+     * @name NewPlayer
      * @request POST:/sessions/{id}/players
      */
-    newPlayers: (id: string, params: RequestParams = {}) =>
-      this.request<PlayerDTO, ProblemDetail>({
+    newPlayer: (id: string, data: PlayerDTO, params: RequestParams = {}) =>
+      this.request<void, ProblemDetail>({
         path: `/sessions/${id}/players`,
         method: "POST",
+        body: data,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags game session
+     * @name ChangePlayer
+     * @request PATCH:/sessions/{id}/players/{playerID}
+     */
+    changePlayer: (id: string, playerId: string, data: ChangePlayerDTO, params: RequestParams = {}) =>
+      this.request<void, ProblemDetail>({
+        path: `/sessions/${id}/players/${playerId}`,
+        method: "PATCH",
+        body: data,
+        type: ContentType.Json,
         ...params,
       }),
 
@@ -363,7 +409,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/sessions/{id}
      */
     getSession: (id: string, params: RequestParams = {}) =>
-      this.request<GameSessionDTO, ProblemDetail>({
+      this.request<SessionDTO, ProblemDetail>({
         path: `/sessions/${id}`,
         method: "GET",
         ...params,

@@ -4,7 +4,7 @@ import { hostUrl } from "./config";
 import { NavigateFunction } from "react-router-dom";
 
 import { Stomp } from "@stomp/stompjs";
-import { Api, GameConfigDTO, GameSessionDTO, PlayerDTO } from "../api/rest";
+import { Api, ChangeConfigDTO, SessionDTO, PlayerDTO } from "../api/rest";
 
 export enum StreamStatus {
   Idle = 1,
@@ -29,7 +29,7 @@ interface GameState {
   serverUnavailable: boolean;
 
   me?: PlayerDTO
-  session: GameSessionDTO | null
+  session: SessionDTO | null
 }
 
 const initialState: GameState = {
@@ -52,7 +52,7 @@ export const gameStateSlice = createSlice({
   initialState,
   reducers: {
     // Use the PayloadAction type to declare the contents of `action.payload`
-    replaceGameState: (state, action: PayloadAction<GameSessionDTO>) => {
+    replaceGameState: (state, action: PayloadAction<SessionDTO>) => {
       console.log("replaceGameState", action)
       state.session = action.payload;
     },
@@ -171,14 +171,14 @@ export const joinSession = (token: string, sessionId: string): AppThunk => (disp
 };
 
 export const startGame = (token: string, sessionId: string, language?: string): AppThunk => dispatch => {
-  const body: GameConfigDTO = {
+  const body: ChangeConfigDTO = {
     columnCount: 5,
     rowsCount: 5,
     teamsCount: 2,
     language: language
   };
 
-  rest_client.sessions.newGame(sessionId, body).then(resp => {
+  rest_client.sessions.changeConfig(sessionId, body).then(resp => {
     console.log(resp)
 
   }).catch(reason => {

@@ -20,7 +20,7 @@ class GameSessionsController(
     val service: GameSessionsService
 ) {
     @GetMapping
-    fun status(session: HttpSession): List<GameSessionDTO> {
+    fun status(session: HttpSession): List<SessionDTO> {
         println(LocalDateTime.ofEpochSecond(session.creationTime / 1000, 0, ZoneOffset.UTC))
         println(LocalDateTime.ofEpochSecond(session.lastAccessedTime / 1000, 0, ZoneOffset.UTC))
         session.attributeNames.iterator().forEach {
@@ -46,7 +46,7 @@ class GameSessionsController(
         )]
     )
     @PostMapping
-    fun newSession(httpSession: HttpSession): GameSessionDTO {
+    fun newSession(httpSession: HttpSession): SessionDTO {
         return service.newSession(httpSession.id).toDTO()
     }
 
@@ -54,7 +54,7 @@ class GameSessionsController(
     fun getSession(
         httpSession: HttpSession,
         @PathVariable("id") sessionID: String
-    ): GameSessionDTO? {
+    ): SessionDTO? {
         return service.getSession(sessionID)?.toDTO()
     }
 
@@ -73,12 +73,35 @@ class GameSessionsController(
         )]
     )
     @PutMapping("{id}/config")
-    fun newGame(
+    fun changeConfig(
         httpSession: HttpSession,
         @PathVariable("id") sessionID: String,
-        @RequestBody config: GameConfigDTO
+        @RequestBody config: ChangeConfigDTO
     ) {
-        service.newGame(httpSession.id, sessionID, config.toEntity())
+        service.changeConfig(httpSession.id, sessionID, config.toEntity())
+    }
+
+    @Operation(
+        summary = "Start a new game for the specified session.",
+        description = "Starts a new game for a session with http session holder as a player."
+    )
+    @ApiResponses(
+        value = [ApiResponse(
+            responseCode = "201",
+            description = "Session created"
+        ), ApiResponse(
+            responseCode = "500",
+            description = "Internal server error",
+            content = [Content(schema = Schema(implementation = String::class))]
+        )]
+    )
+    @PutMapping("{id}/state")
+    fun changeState(
+        httpSession: HttpSession,
+        @PathVariable("id") sessionID: String,
+        @RequestBody config: ChangeStateDTO
+    ) {
+        service.changeState(httpSession.id, sessionID, config.state)
     }
 
     @Operation(
@@ -96,18 +119,30 @@ class GameSessionsController(
         )]
     )
     @PutMapping("{id}/cells/{cellIndex}")
-    fun updateCell(
+    fun changeCell(
         httpSession: HttpSession,
         @PathVariable("id") sessionID: String,
         @PathVariable("cellIndex") cellIndex: Int,
-        @RequestBody cell: UpdateGameFieldCellDTO
+        @RequestBody cell: ChangeFieldCellDTO
     ) {
-        service.updateCell(httpSession.id, sessionID, cellIndex, cell.open)
+        service.changeCell(httpSession.id, sessionID, cellIndex, cell.open)
     }
 
     @PostMapping("{id}/players")
-    fun newPlayers(httpSession: HttpSession, @PathVariable("id") sessionID: String): PlayerDTO {
-        return service.newPlayer(httpSession.id, sessionID)
-            .toDTO().players.find { it.id == httpSession.id }!!
+    fun newPlayer(
+        httpSession: HttpSession,
+        @PathVariable("id") sessionID: String,
+        @RequestBody newPlayer: PlayerDTO
+    ) {
+        return service.newPlayer(httpSession.id, sessionID, newPlayer.name)
+    }
+
+    @PatchMapping("{id}/players/{playerID}")
+    fun changePlayer(
+        httpSession: HttpSession,
+        @PathVariable("id") sessionID: String,
+        @RequestBody player: ChangePlayerDTO
+    ) {
+        service.changePlayer(httpSession.id, sessionID, player.name, player.captain, player.teamID)
     }
 }

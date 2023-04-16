@@ -3,7 +3,7 @@ package io.zakh.tri.facade.rest.dto
 import io.zakh.tri.model.GameSession
 import jakarta.validation.constraints.Positive
 
-data class GameConfigDTO(
+data class ChangeConfigDTO(
     @Positive
     val columnCount: Int = 0,
 
@@ -25,8 +25,8 @@ data class GameConfigDTO(
     }
 }
 
-fun GameSession.Config.toDTO(): GameConfigDTO {
-    return GameConfigDTO(
+fun GameSession.Config.toDTO(): ChangeConfigDTO {
+    return ChangeConfigDTO(
         this.columnCount,
         this.rowsCount,
         this.teamsCount,

@@ -13,5 +13,5 @@ data class Player(
     @Id
     val id: String,
 
-    val initialized: Boolean = false
+    val name: String = ""
 )

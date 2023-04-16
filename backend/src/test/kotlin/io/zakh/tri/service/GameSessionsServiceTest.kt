@@ -21,8 +21,8 @@ class GameSessionsServiceTest {
 
         val playerID = Random.nextInt().toString()
 
-        whenever(service.playersRepo.findById(playerID))
-            .thenReturn(Optional.of(Player(playerID)))
+        whenever(service.playerService.newPlayer(playerID, ""))
+            .thenReturn(Player(playerID))
 
         whenever(service.sessionsRepo.save(any<GameSession>()))
             .thenAnswer { it.getArgument<GameSession>(0) }
@@ -38,8 +38,8 @@ class GameSessionsServiceTest {
 
         val playerID = Random.nextInt().toString()
 
-        whenever(service.playersRepo.findById(playerID))
-            .thenReturn(Optional.of(Player(playerID)))
+        whenever(service.playerService.newPlayer(playerID, ""))
+            .thenReturn(Player(playerID))
 
         whenever(service.sessionsRepo.save(any<GameSession>()))
             .thenAnswer { it.getArgument<GameSession>(0) }
@@ -57,7 +57,7 @@ class GameSessionsServiceTest {
         val sessionID = Random.nextInt().toString()
         val config = GameSession.Config(0, 0, 0)
 
-        assertThrows<SessionNotFoundException> { service.newGame(playerID, sessionID, config) }
+        assertThrows<SessionNotFoundException> { service.changeConfig(playerID, sessionID, config) }
     }
 
     @Test
@@ -71,7 +71,7 @@ class GameSessionsServiceTest {
         whenever(service.sessionsRepo.findById(sessionID))
             .thenReturn(Optional.of(GameSession(sessionID, emptyList())))
 
-        assertThrows<UnauthorizedPlayerException> { service.newGame(playerID, sessionID, config) }
+        assertThrows<UnauthorizedPlayerException> { service.changeConfig(playerID, sessionID, config) }
     }
 
     @Test
@@ -87,7 +87,7 @@ class GameSessionsServiceTest {
         whenever(service.sessionsRepo.save(any<GameSession>()))
             .thenAnswer { it.getArgument<GameSession>(0) }
 
-        val sessionWithGame = service.newGame(playerID, sessionID, config)
+        val sessionWithGame = service.changeConfig(playerID, sessionID, config)
         assertEquals(sessionWithGame.state, GameSession.State.IN_PROGRESS)
         assertNotNull(sessionWithGame.cells)
         assertEquals(sessionWithGame.cells?.size, config.rowsCount * config.columnCount)

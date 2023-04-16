@@ -2,7 +2,7 @@ package io.zakh.tri.facade.rest.dto
 
 import io.zakh.tri.model.GameFieldCell
 
-data class GameFieldCellDTO(
+data class FieldCellDTO(
     val word: String,
     val type: GameFieldCell.Type,
     val ownerTeamId: Int? = null,
@@ -11,8 +11,8 @@ data class GameFieldCellDTO(
     val openTeamId: Int? = null
 )
 
-fun GameFieldCell.toDTO(): GameFieldCellDTO {
-    return GameFieldCellDTO(
+fun GameFieldCell.toDTO(): FieldCellDTO {
+    return FieldCellDTO(
         this.word,
         this.type,
         this.ownerTeamId,

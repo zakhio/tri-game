@@ -1,7 +1,6 @@
 package io.zakh.tri.service
 
 import io.zakh.tri.dao.GameSessionsRepo
-import io.zakh.tri.dao.PlayersRepo
 import io.zakh.tri.model.GameFieldCell
 import io.zakh.tri.model.GameSession
 import io.zakh.tri.model.Player
@@ -33,7 +32,7 @@ import kotlin.random.Random
 @Service
 class GameSessionsService(
     val sessionsRepo: GameSessionsRepo,
-    val playersRepo: PlayersRepo,
+    val playerService: PlayerService,
     val messagingTemplate: SimpMessagingTemplate
 ) {
     @Serializable
@@ -56,7 +55,7 @@ class GameSessionsService(
         // 12,960,000 of values
         val sessionID = List(4) { sessionIDCharPool.random() }.joinToString("")
 
-        val player = playersRepo.findById(playerID).orElseGet { playersRepo.save(Player(playerID)) }
+        val player = playerService.newPlayer(playerID, "")
 
         val newSession = GameSession(
             sessionID,
@@ -75,15 +74,12 @@ class GameSessionsService(
      * @param sessionID the id of the session
      * @param config    the config of for the game
      */
-    fun newGame(playerID: String, sessionID: String, config: GameSession.Config): GameSession {
+    fun changeConfig(playerID: String, sessionID: String, config: GameSession.Config): GameSession {
         val session = sessionsRepo.findById(sessionID)
             .orElseThrow { SessionNotFoundException("session $sessionID does not exist") }
 
-        val players = session.players.toMutableList()
         if (session.players.none { it.id == playerID }) {
-            val player = playersRepo.findById(playerID).orElseGet { playersRepo.save(Player(playerID)) }
-            players += player
-//            throw UnauthorizedPlayerException("player $playerID is not part of session $sessionID")
+            throw UnauthorizedPlayerException("player $playerID is not part of session $sessionID")
         }
 
         val dictionary = gameWordsConfig.words[config.language]
@@ -120,9 +116,19 @@ class GameSessionsService(
                 state = GameSession.State.IN_PROGRESS,
                 config = config,
                 cells = cells,
-                players = players,
             )
         )
+    }
+
+    fun changeState(playerID: String, sessionID: String, state: GameSession.State): GameSession {
+        val session = sessionsRepo.findById(sessionID)
+            .orElseThrow { SessionNotFoundException("session $sessionID does not exist") }
+
+        if (session.players.none { it.id == playerID }) {
+            throw UnauthorizedPlayerException("player $playerID is not part of session $sessionID")
+        }
+
+        return session
     }
 
     fun getSession(sessionID: String): GameSession? {
@@ -134,21 +140,50 @@ class GameSessionsService(
         return sessionsRepo.findAll()
     }
 
-    fun newPlayer(playerID: String, sessionID: String): GameSession {
+    fun newPlayer(playerID: String, sessionID: String, name: String) {
         var session = sessionsRepo.findById(sessionID)
             .orElseThrow { SessionNotFoundException("session $sessionID does not exist") }
 
-        val player = playersRepo.findById(playerID).orElseGet { playersRepo.save(Player(playerID)) }
-
+        val player = playerService.newPlayer(playerID, name)
         if (session.players.none { it.id == playerID }) {
             session = sessionsRepo.save(session.copy(players = session.players + player))
         }
 
-        messagingTemplate.convertAndSend("/session/${sessionID}", "")
-        return session
+        messagingTemplate.convertAndSend("/session/${sessionID}", session)
     }
 
-    fun updateCell(playerID: String, sessionID: String, cellIndex: Int, openCell: Boolean?): GameSession {
+    fun changePlayer(playerID: String, sessionID: String, name: String, captain: Boolean, teamID: Int) {
+        var session = sessionsRepo.findById(sessionID)
+            .orElseThrow { SessionNotFoundException("session $sessionID does not exist") }
+
+        if (session.players.none { it.id == playerID }) {
+            throw UnauthorizedPlayerException("player $playerID is not part of session $sessionID")
+        }
+
+        val captains: Set<String> = if (captain) {
+            session.captains.toMutableSet() + playerID
+        } else {
+            session.captains.toMutableSet() - playerID
+        }
+
+        val playerIDtoTeamID = session.playerIDtoTeamID.toMutableMap()
+        playerIDtoTeamID[playerID] = teamID
+
+        session = sessionsRepo.save(
+            session.copy(
+                captains = captains,
+                playerIDtoTeamID = playerIDtoTeamID
+            )
+        )
+        messagingTemplate.convertAndSend("/session/${sessionID}", session)
+    }
+
+    fun changeCell(
+        playerID: String,
+        sessionID: String,
+        cellIndex: Int,
+        openCell: Boolean?
+    ): GameSession {
         var session = sessionsRepo.findById(sessionID)
             .orElseThrow { SessionNotFoundException("session $sessionID does not exist") }
 
@@ -160,7 +195,7 @@ class GameSessionsService(
             throw GameIsNotStartedException("game in session $sessionID is not started")
         }
 
-        if (cellIndex < 0 || cellIndex >= session.cells.size ) {
+        if (cellIndex < 0 || cellIndex >= session.cells.size) {
             throw InvalidCellIndexException("game in session $sessionID is not started")
         }
 
@@ -168,7 +203,7 @@ class GameSessionsService(
             val mutableCells = session.cells.toMutableList()
             mutableCells[cellIndex] = mutableCells[cellIndex].copy(open = true)
             session = session.copy(cells = mutableCells)
-            messagingTemplate.convertAndSend("/session/$sessionID", "")
+            messagingTemplate.convertAndSend("/session/$sessionID", session)
         }
 
         return session

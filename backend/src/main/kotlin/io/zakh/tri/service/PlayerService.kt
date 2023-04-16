@@ -17,8 +17,8 @@ class PlayerService(
      *
      * @param playerID the id of the players
      */
-    fun newPlayer(playerID: String): Player {
-        return playersRepo.findById(playerID).orElseGet { playersRepo.save(Player(playerID)) }
+    fun newPlayer(playerID: String, name: String): Player {
+        return playersRepo.findById(playerID).orElseGet { playersRepo.save(Player(playerID, name)) }
     }
 
     /**
@@ -27,8 +27,7 @@ class PlayerService(
      * @param playerID  the id of player
      */
     fun getPlayer(playerID: String): Player {
-        return newPlayer(playerID)
-//        return playersRepo.findById(playerID)
-//            .orElseThrow { PlayerNotFoundException("session $playerID does not exist") }
+        return playersRepo.findById(playerID)
+            .orElseThrow { PlayerNotFoundException("session $playerID does not exist") }
     }
 }
