@@ -55,7 +55,7 @@ export function SettingsDrawer({ open, onClose, setUILocale }: { open?: boolean,
                         variant="text"
                         color="secondary"
                         onClick={() => {
-                            dispatch(startGame(token!, sessionId!));
+                            dispatch(startGame(token!, sessionId!, currentLanguage!));
                             onClose();
                         }}>
                         {intl.formatMessage(messages.restart)}
@@ -86,7 +86,7 @@ export function SettingsDrawer({ open, onClose, setUILocale }: { open?: boolean,
                     <RestartPopup
                         open={currentLanguage !== language}
                         onAgree={() => {
-                            dispatch(startGame(token!, sessionId!, language));
+                            dispatch(startGame(token!, sessionId!, language!));
                             onClose();
                         }}
                         onDisagree={() => setLanguage(currentLanguage)} />

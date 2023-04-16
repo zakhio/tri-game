@@ -152,7 +152,7 @@ export const joinSession = (token: string, sessionId: string): AppThunk => (disp
   setTimeout(() => dispatch(subscribeOnUpdates(token, sessionId)), 1000)
 };
 
-export const startGame = (token: string, sessionId: string, language?: string): AppThunk => dispatch => {
+export const startGame = (token: string, sessionId: string, language: string): AppThunk => dispatch => {
   const body: ChangeConfigDTO = {
     columnCount: 5,
     rowsCount: 5,

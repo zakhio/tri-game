@@ -24,7 +24,7 @@ import kotlin.random.Random
  *
  * Game ends when all words of one team are open.
  *
- * The configuration of words per langauge is in resources/dictionary.json file
+ * The configuration of words per language is in resources/dictionary.json file
  * (uses ExperimentalSerializationApi for deserializing).
  */
 @OptIn(ExperimentalSerializationApi::class)
@@ -81,8 +81,12 @@ class GameSessionsService(
             throw UnauthorizedPlayerException("player $playerID is not part of session $sessionID")
         }
 
-        val dictionary = gameWordsConfig.words[config.language]
-            ?: gameWordsConfig.words[gameWordsConfig.defaultLanguage]!!
+        var language = config.language
+        var dictionary = gameWordsConfig.words[config.language]
+        if (dictionary == null) {
+            language = gameWordsConfig.defaultLanguage
+            dictionary = gameWordsConfig.words[gameWordsConfig.defaultLanguage]!!
+        }
 
         val totalCellCount = config.rowsCount * config.columnCount
         val teamSize = totalCellCount / (config.teamsCount + 1)
@@ -113,7 +117,7 @@ class GameSessionsService(
         return sessionsRepo.save(
             session.copy(
                 state = GameSession.State.IN_PROGRESS,
-                config = config,
+                config = config.copy(language = language),
                 cells = cells,
             )
         )

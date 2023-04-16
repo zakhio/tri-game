@@ -1,7 +1,7 @@
 import { Box, Button, Grid } from "@mui/material";
 import { Score } from "../score/Score";
 import { End } from "../end/End";
-import { gameInProgress, playerToken, startGame } from "../../../app/gameStateSlice";
+import { gameInProgress, gameLanguage, playerToken, startGame } from "../../../app/gameStateSlice";
 import { useIntl } from 'react-intl';
 import React from "react";
 import { useSelector } from "react-redux";
@@ -15,6 +15,7 @@ export function FieldHeader({ sessionId, onSettingsClick }: { sessionId: string,
 
     const token = useSelector(playerToken);
     const inProgress = useSelector(gameInProgress);
+    const currentLanguage = useSelector(gameLanguage)
 
     return <Grid item container xs={inProgress ? 12 : 11} sm={12} spacing={2} justifyContent="center">
         {!inProgress &&
@@ -31,7 +32,7 @@ export function FieldHeader({ sessionId, onSettingsClick }: { sessionId: string,
                     <Button
                         variant="contained"
                         color="secondary"
-                        onClick={() => dispatch(startGame(token!, sessionId!))}>
+                        onClick={() => dispatch(startGame(token!, sessionId!, currentLanguage!))}>
                         {intl.formatMessage(messages.playAnotherOne)}
                     </Button>
                 </Grid>
