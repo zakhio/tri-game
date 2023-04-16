@@ -151,7 +151,13 @@ class GameSessionsService(
         messagingTemplate.convertAndSend("/session/${sessionID}", session)
     }
 
-    fun changePlayer(playerID: String, sessionID: String, name: String, captain: Boolean, teamID: Int) {
+    fun changePlayer(
+        playerID: String,
+        sessionID: String,
+        name: String,
+        captain: Boolean,
+        teamID: Int
+    ) {
         var session = sessionsRepo.findById(sessionID)
             .orElseThrow { SessionNotFoundException("session $sessionID does not exist") }
 
@@ -202,12 +208,28 @@ class GameSessionsService(
             throw InvalidCellIndexException("game in session $sessionID is not started")
         }
 
-        if (openCell) {
+        if (!session.cells[cellIndex].open && openCell) {
             val cells = session.cells.toMutableList()
-            cells[cellIndex] = cells[cellIndex].copy(open = true)
+            cells[cellIndex] =
+                cells[cellIndex].copy(open = true, openTeamId = session.playerIDtoTeamID[playerID])
+
+            var state = GameSession.State.IN_PROGRESS
+            if (cells[cellIndex].type == GameFieldCell.Type.END_GAME) {
+                state = GameSession.State.FINISHED
+            } else if (cells[cellIndex].type == GameFieldCell.Type.TEAM_OWNED
+                && cells.none {
+                    it.type == GameFieldCell.Type.TEAM_OWNED
+                            && it.ownerTeamId == cells[cellIndex].ownerTeamId
+                            && !it.open
+                }
+            ) {
+                state = GameSession.State.FINISHED
+            }
+
             session = sessionsRepo.save(
                 session.copy(
-                    cells = cells
+                    cells = cells,
+                    state = state
                 )
             )
 
