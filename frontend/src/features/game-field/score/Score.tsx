@@ -1,24 +1,25 @@
 import React from 'react';
 import fieldStyles from '../GameField.module.css';
 import { useSelector } from 'react-redux';
-import { gameTeams, } from '../../../app/gameStateSlice';
+import { gameCells, gameTeamCount } from '../../../app/gameStateSlice';
 import Typography from '@mui/material/Typography';
 
 export function Score() {
-    const teams = useSelector(gameTeams);
+    const teamCount = useSelector(gameTeamCount);
+    const cells = useSelector(gameCells)
 
-    const r: JSX.Element[] = [<span key='1'>TODO: Missing</span>];
-    // teams.forEach((t, i) => {
-    //     const teamStyle = fieldStyles["score_owned_" + t.id];
-    //     r.push(<span key={2 * i}
-    //                  className={teamStyle}>
-    //         {t.remainingcount}
-    //     </span>);
-    //
-    //     if (i !== teams.length - 1) {
-    //         r.push(<span key={2 * i + 1}>–</span>);
-    //     }
-    // });
+    const r: JSX.Element[] = [];
+    for (let i: number = 0; i < teamCount; i++) {
+        const teamStyle = fieldStyles["score_owned_" + i];
+        r.push(<span key={2 * i}
+            className={teamStyle}>
+            {cells.filter((v) => v.type === 'TEAM_OWNED' && v.ownerTeamId === i && v.open).length}
+        </span>);
+
+        if (i !== teamCount - 1) {
+            r.push(<span key={2 * i + 1}>–</span>);
+        }
+    }
 
     return <Typography variant="h3" align="center">{r}</Typography>;
 }

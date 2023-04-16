@@ -2,8 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import {
     gameCells,
-    gameMe,
-    gameNumOfColumns,
+    gameColumnCount,
     gameInProgress,
     isPlayerCaptain,
     playerToken,
@@ -21,15 +20,15 @@ export function GameField({ onSettingsClick, sessionId }: { onSettingsClick: Fun
     const cells = useSelector(gameCells);
     const inProgress = useSelector(gameInProgress);
     const playerCaptain = useSelector(isPlayerCaptain);
-    const numOfColumns = Math.max(1, useSelector(gameNumOfColumns));
+    const columnCount = Math.max(1, useSelector(gameColumnCount));
 
     function turnWord(cellIndex: number) {
         dispatch(turn(token, sessionId, cellIndex));
     }
 
     const rows = [];
-    for (let i = 0; i < cells.length; i += numOfColumns) {
-        const cols = cells.slice(i, i + numOfColumns).map((c, index) => {
+    for (let i = 0; i < cells.length; i += columnCount) {
+        const cols = cells.slice(i, i + columnCount).map((c, index) => {
             const showColor = playerCaptain ?? !inProgress;
             return <Grid item xs key={i + index}>
                 <FieldCell cell={c} onClick={() => turnWord(i + index)} showColor={showColor} />
