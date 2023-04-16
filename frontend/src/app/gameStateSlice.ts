@@ -123,26 +123,6 @@ export const subscribeOnUpdates = (token: string, sessionId: string): AppThunk =
     })
     dispatch(replaceStreamStatus(StreamStatus.Connected));
   }
-  // stream = game_session_client.observeSession(observerReq);
-  // dispatch(replaceStreamStatus(StreamStatus.Connecting));
-  // stream.on('status', (status: Status) => {
-  //     console.log('status', status);
-  //     dispatch(replaceConnectionStatus(status));
-  // });
-  //
-  // stream.on('data', (res) => {
-  //     if (navigate) {
-  //         navigate("/" + sessionId);
-  //     }
-  //
-  //     dispatch(replaceGameState(res.toObject()));
-  //     dispatch(replaceStreamStatus(StreamStatus.Connected));
-  // });
-  //
-  // stream.on("end", () => {
-  //     console.log('end')
-  //     dispatch(replaceStreamStatus(StreamStatus.Idle));
-  // });
 };
 
 
