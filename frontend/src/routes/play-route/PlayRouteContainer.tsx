@@ -5,7 +5,7 @@ import {
     playerToken,
     sessionNotFound,
     gameSession,
-    isInGame
+    isPlayerInGame
 } from "../../app/gameStateSlice";
 import React, { useEffect, useState } from "react";
 import { GameField } from "../../features/game-field/GameField";
@@ -25,7 +25,7 @@ export function PlayRouteContainer({ setLocale }: { setLocale: (locale: string) 
     const dispatch = useAppDispatch();
     const token = useSelector(playerToken);
     const session = useSelector(gameSession);
-    const inGame = useSelector(isInGame);
+    const inGame = useSelector(isPlayerInGame);
     const words = useSelector(gameCells);
     const notFound = useSelector(sessionNotFound);
 

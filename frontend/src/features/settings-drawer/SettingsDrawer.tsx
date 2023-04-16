@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { gameLanguage, gameMe, isCaptain, playerToken, setSettings, startGame, } from '../../app/gameStateSlice';
+import { gameLanguage, gameMe, isPlayerCaptain, playerToken, setSettings, startGame, } from '../../app/gameStateSlice';
 import { useParams } from "react-router-dom";
 import {
     Box,
@@ -39,7 +39,7 @@ export function SettingsDrawer({ open, onClose, setUILocale }: { open?: boolean,
     const token = useSelector(playerToken)
     const currentLanguage = useSelector(gameLanguage);
 
-    const captain = useSelector(isCaptain);
+    const captain = useSelector(isPlayerCaptain);
     const link = gameSessionUrl(sessionId!);
 
     const [language, setLanguage] = useState(currentLanguage);

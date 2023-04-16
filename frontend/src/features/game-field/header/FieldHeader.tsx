@@ -1,7 +1,7 @@
 import { Box, Button, Grid } from "@mui/material";
 import { Score } from "../score/Score";
 import { End } from "../end/End";
-import { gameStarted, playerToken, startGame } from "../../../app/gameStateSlice";
+import { gameInProgress, playerToken, startGame } from "../../../app/gameStateSlice";
 import { useIntl } from 'react-intl';
 import React from "react";
 import { useSelector } from "react-redux";
@@ -14,10 +14,10 @@ export function FieldHeader({ sessionId, onSettingsClick }: { sessionId: string,
     const dispatch = useAppDispatch();
 
     const token = useSelector(playerToken);
-    const started = useSelector(gameStarted);
+    const inProgress = useSelector(gameInProgress);
 
-    return <Grid item container xs={started ? 12 : 11} sm={12} spacing={2} justifyContent="center">
-        {!started &&
+    return <Grid item container xs={inProgress ? 12 : 11} sm={12} spacing={2} justifyContent="center">
+        {!inProgress &&
             <Grid item xs={12} sm={4}>
                 <End />
             </Grid>
@@ -25,7 +25,7 @@ export function FieldHeader({ sessionId, onSettingsClick }: { sessionId: string,
         <Grid item xs>
             <Score />
         </Grid>
-        {!started &&
+        {!inProgress &&
             <Grid item container xs={6} sm={4} alignItems="center" direction="row-reverse">
                 <Grid item style={{ paddingRight: "10px" }}>
                     <Button

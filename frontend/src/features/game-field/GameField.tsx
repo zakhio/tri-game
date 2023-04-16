@@ -4,8 +4,8 @@ import {
     gameCells,
     gameMe,
     gameNumOfColumns,
-    gameStarted,
-    isCaptain,
+    gameInProgress,
+    isPlayerCaptain,
     playerToken,
     turn
 } from "../../app/gameStateSlice";
@@ -19,8 +19,8 @@ export function GameField({ onSettingsClick, sessionId }: { onSettingsClick: Fun
 
     const token = useSelector(playerToken);
     const cells = useSelector(gameCells);
-    const started = useSelector(gameStarted);
-    const captain = useSelector(isCaptain);
+    const started = useSelector(gameInProgress);
+    const captain = useSelector(isPlayerCaptain);
     const numOfColumns = Math.max(1, useSelector(gameNumOfColumns));
 
     function turnWord(cellIndex: number) {

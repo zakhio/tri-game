@@ -168,6 +168,7 @@ export const joinSession = (token: string, sessionId: string): AppThunk => (disp
   dispatch(replaceStreamStatus(StreamStatus.Connecting));
   dispatch(getMe())
   dispatch(updateSession(token, sessionId))
+  setTimeout(() => dispatch(subscribeOnUpdates(token, sessionId)), 1000)
 };
 
 export const startGame = (token: string, sessionId: string, language?: string): AppThunk => dispatch => {
@@ -180,7 +181,7 @@ export const startGame = (token: string, sessionId: string, language?: string): 
 
   rest_client.sessions.changeConfig(sessionId, body).then(resp => {
     console.log(resp)
-    rest_client.sessions.changeState(sessionId, {state: 'IN_PROGRESS'}).then(resp => {
+    rest_client.sessions.changeState(sessionId, { state: 'IN_PROGRESS' }).then(resp => {
       console.log(resp)
       dispatch(updateSession(token, sessionId))
     }).catch(reason => {
@@ -209,10 +210,10 @@ export const turn = (token: string, sessionId: string, cellIndex: number): AppTh
   }
 
   rest_client.sessions.changeCell(sessionId, cellIndex, body).then(resp => {
-    console.log(resp)
+    console.log("changeCell", resp)
     dispatch(updateSession(token, sessionId))
   }).catch(reason => {
-    console.log(reason);
+    console.log("[catch] changeCell", reason);
     return;
   });
 };
@@ -241,12 +242,12 @@ export const gameCells = (state: RootState) => state.gameState.session?.cells ??
 export const gameTeams = (state: RootState) => state.gameState.session?.players;
 export const gamePlayers = (state: RootState) => state.gameState.session?.players;
 export const gameLanguage = (state: RootState) => state.gameState.session?.config?.language;
-export const gameStarted = (state: RootState) => state.gameState.session?.state !== "IDLE";
+export const gameInProgress = (state: RootState) => state.gameState.session?.state === "IN_PROGRESS";
 export const gameMe = (state: RootState) => state.gameState.me;
-export const isInGame = (state: RootState) => state.gameState.session?.playerIDtoTeamID[state.gameState.me?.id || ""] !== undefined;
-export const isCaptain = (state: RootState) => state.gameState.session?.captains.indexOf(state.gameState.me?.id || "") !== -1;
-export const sessionNotFound = (state: RootState) => state.gameState.notFound;
+export const isPlayerInGame = (state: RootState) => state.gameState.session?.playerIDtoTeamID[state.gameState.me?.id || ""] !== undefined;
+export const isPlayerCaptain = (state: RootState) => state.gameState.session?.captains.indexOf(state.gameState.me?.id || "") !== -1;
 export const playerToken = (state: RootState) => "";
 export const gameSession = (state: RootState) => state.gameState.session;
+export const sessionNotFound = (state: RootState) => state.gameState.notFound;
 
 export default gameStateSlice.reducer;
