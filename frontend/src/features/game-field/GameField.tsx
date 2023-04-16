@@ -5,6 +5,7 @@ import {
     gameMe,
     gameNumOfColumns,
     gameStarted,
+    isCaptain,
     playerToken,
     turn
 } from "../../app/gameStateSlice";
@@ -19,19 +20,17 @@ export function GameField({ onSettingsClick, sessionId }: { onSettingsClick: Fun
     const token = useSelector(playerToken);
     const cells = useSelector(gameCells);
     const started = useSelector(gameStarted);
-    const me = useSelector(gameMe);
+    const captain = useSelector(isCaptain);
     const numOfColumns = Math.max(1, useSelector(gameNumOfColumns));
 
-    function turnWord(position: number) {
-        if (sessionId && token) {
-            dispatch(turn(token, sessionId, position));
-        }
+    function turnWord(cellIndex: number) {
+        dispatch(turn(token, sessionId, cellIndex));
     }
 
     const rows = [];
     for (let i = 0; i < cells.length; i += numOfColumns) {
         const cols = cells.slice(i, i + numOfColumns).map((c, index) => {
-            const showColor = (me?.initialized && me?.captain) ?? !started;
+            const showColor = captain ?? !started;
             return <Grid item xs key={i + index}>
                 <FieldCell cell={c} onClick={() => turnWord(i + index)} showColor={showColor} />
             </Grid>

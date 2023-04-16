@@ -4,7 +4,8 @@ import {
     gameCells,
     playerToken,
     sessionNotFound,
-    gameSession
+    gameSession,
+    isInGame
 } from "../../app/gameStateSlice";
 import React, { useEffect, useState } from "react";
 import { GameField } from "../../features/game-field/GameField";
@@ -24,6 +25,7 @@ export function PlayRouteContainer({ setLocale }: { setLocale: (locale: string) 
     const dispatch = useAppDispatch();
     const token = useSelector(playerToken);
     const session = useSelector(gameSession);
+    const inGame = useSelector(isInGame);
     const words = useSelector(gameCells);
     const notFound = useSelector(sessionNotFound);
 
@@ -38,7 +40,7 @@ export function PlayRouteContainer({ setLocale }: { setLocale: (locale: string) 
         {notFound &&
             <NotFound sessionId={sessionId!} />
         }
-        {session &&
+        {session && !inGame &&
             <BeCaptain sessionId={sessionId!} />
         }
         {session && words.length === 0 &&

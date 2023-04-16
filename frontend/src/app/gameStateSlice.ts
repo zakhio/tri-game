@@ -4,7 +4,7 @@ import { hostUrl } from "./config";
 import { NavigateFunction } from "react-router-dom";
 
 import { Stomp } from "@stomp/stompjs";
-import { Api, ChangeConfigDTO, SessionDTO, PlayerDTO } from "../api/rest";
+import { Api, ChangeConfigDTO, SessionDTO, PlayerDTO, ChangePlayerDTO, FieldCellDTO, ChangeFieldCellDTO } from "../api/rest";
 
 export enum StreamStatus {
   Idle = 1,
@@ -180,7 +180,13 @@ export const startGame = (token: string, sessionId: string, language?: string): 
 
   rest_client.sessions.changeConfig(sessionId, body).then(resp => {
     console.log(resp)
-
+    rest_client.sessions.changeState(sessionId, {state: 'IN_PROGRESS'}).then(resp => {
+      console.log(resp)
+      dispatch(updateSession(token, sessionId))
+    }).catch(reason => {
+      console.log(reason);
+      return;
+    });
   }).catch(reason => {
     console.log(reason);
     return;
@@ -197,26 +203,34 @@ export const getMe = (): AppThunk => dispatch => {
   });
 };
 
-export const turn = (token: string, sessionId: string, position: number): AppThunk => dispatch => {
-  // const req = new TurnGameRequest();
-  // req.setToken(token)
-  // req.setSessionid(sessionId);
-  // req.setPosition(position);
-  // game_session_client.turn(req, null, (err: Error, response: Empty) => {
-  // });
+export const turn = (token: string, sessionId: string, cellIndex: number): AppThunk => dispatch => {
+  const body: ChangeFieldCellDTO = {
+    open: true
+  }
+
+  rest_client.sessions.changeCell(sessionId, cellIndex, body).then(resp => {
+    console.log(resp)
+    dispatch(updateSession(token, sessionId))
+  }).catch(reason => {
+    console.log(reason);
+    return;
+  });
 };
 
-export const setSettings = (token: string, sessionId: string, captain?: boolean): AppThunk => dispatch => {
-  dispatch(updateSession(token, sessionId))
-  // const req = new SetSettingsRequest();
-  // req.setToken(token)
-  // req.setSessionid(sessionId);
-  // if (captain) {
-  //     req.setCaptain(captain);
-  // }
-  //
-  // game_session_client.setSettings(req, null, (err: Error, response: Empty) => {
-  // });
+export const setSettings = (token: string, sessionId: string, captain: boolean): AppThunk => (dispatch, getState) => {
+  const body: ChangePlayerDTO = {
+    name: "",
+    captain: captain,
+    teamID: 0
+  }
+
+  rest_client.sessions.changePlayer(sessionId, getState().gameState.me?.id!, body).then(resp => {
+    console.log(resp)
+    dispatch(updateSession(token, sessionId))
+  }).catch(reason => {
+    console.log(reason);
+    return;
+  });
 };
 
 // The function below is called a selector and allows us to select a value from
@@ -227,8 +241,10 @@ export const gameCells = (state: RootState) => state.gameState.session?.cells ??
 export const gameTeams = (state: RootState) => state.gameState.session?.players;
 export const gamePlayers = (state: RootState) => state.gameState.session?.players;
 export const gameLanguage = (state: RootState) => state.gameState.session?.config?.language;
-export const gameStarted = (state: RootState) => state.gameState.session?.state === "IN_PROGRESS";
+export const gameStarted = (state: RootState) => state.gameState.session?.state !== "IDLE";
 export const gameMe = (state: RootState) => state.gameState.me;
+export const isInGame = (state: RootState) => state.gameState.session?.playerIDtoTeamID[state.gameState.me?.id || ""] !== undefined;
+export const isCaptain = (state: RootState) => state.gameState.session?.captains.indexOf(state.gameState.me?.id || "") !== -1;
 export const sessionNotFound = (state: RootState) => state.gameState.notFound;
 export const playerToken = (state: RootState) => "";
 export const gameSession = (state: RootState) => state.gameState.session;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { gameMe, gameStarted, playerToken, setSettings, } from '../../app/gameStateSlice';
+import { gameMe, gameStarted, isInGame, playerToken, setSettings, } from '../../app/gameStateSlice';
 import { useIntl } from 'react-intl';
 import {
     Button,
@@ -22,13 +22,13 @@ export function BeCaptain({ sessionId }: { sessionId: string }) {
     const theme = useTheme();
 
     const token = useSelector(playerToken);
-    const me = useSelector(gameMe);
+    const inGame = useSelector(isInGame);
     const started = useSelector(gameStarted);
 
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
     return (
-        <Dialog fullScreen={fullScreen} open={started && !me?.initialized} aria-labelledby="form-dialog-title">
+        <Dialog fullScreen={fullScreen} open={started && !inGame} aria-labelledby="form-dialog-title">
             <DialogTitle id="form-dialog-title">
                 {intl.formatMessage(messages.title)}
             </DialogTitle>

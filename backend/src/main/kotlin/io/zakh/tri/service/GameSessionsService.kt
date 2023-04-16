@@ -156,8 +156,11 @@ class GameSessionsService(
         var session = sessionsRepo.findById(sessionID)
             .orElseThrow { SessionNotFoundException("session $sessionID does not exist") }
 
-        if (session.players.none { it.id == playerID }) {
-            throw UnauthorizedPlayerException("player $playerID is not part of session $sessionID")
+        val players = if (session.players.none { it.id == playerID }) {
+            session.players.toMutableList() + playerService.newPlayer(playerID, name)
+        } else {
+            // TODO: Implement change of name for existing user"
+            session.players
         }
 
         val captains: Set<String> = if (captain) {
@@ -171,6 +174,7 @@ class GameSessionsService(
 
         session = sessionsRepo.save(
             session.copy(
+                players = players,
                 captains = captains,
                 playerIDtoTeamID = playerIDtoTeamID
             )

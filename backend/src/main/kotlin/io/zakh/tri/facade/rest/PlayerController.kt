@@ -16,6 +16,6 @@ class PlayerController(
 ) {
     @GetMapping("/me")
     fun getMe(httpSession: HttpSession): PlayerDTO {
-        return service.getPlayer(httpSession.id).toDTO()
+        return service.newPlayer(httpSession.id, "").toDTO()
     }
 }
