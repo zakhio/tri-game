@@ -3,7 +3,7 @@ import { AppThunk, RootState } from './store';
 import { hostUrl } from "./config";
 import { NavigateFunction } from "react-router-dom";
 
-import { Stomp } from "@stomp/stompjs";
+import { Stomp, StompSubscription } from "@stomp/stompjs";
 import { Api, ChangeConfigDTO, SessionDTO, PlayerDTO, ChangePlayerDTO, FieldCellDTO, ChangeFieldCellDTO } from "../api/rest";
 
 export enum StreamStatus {
@@ -28,8 +28,9 @@ interface GameState {
   notFound: boolean;
   serverUnavailable: boolean;
 
-  me?: PlayerDTO
-  session: SessionDTO | null
+  me?: PlayerDTO;
+  session: SessionDTO | null;
+  subscription: StompSubscription | null;
 }
 
 const initialState: GameState = {
@@ -37,6 +38,7 @@ const initialState: GameState = {
   notFound: false,
   serverUnavailable: false,
   session: null,
+  subscription: null
 };
 
 const rest_client = new Api({
@@ -46,6 +48,8 @@ const rest_client = new Api({
 
 let game_socket_client = Stomp.client("ws://localhost:8080/socket/sessions");
 game_socket_client.activate()
+
+let subscription: StompSubscription | null = null;
 
 export const gameStateSlice = createSlice({
   name: 'gameState',
@@ -103,7 +107,6 @@ export const updateSession = (token: string, sessionId: string): AppThunk => dis
   rest_client.sessions.getSession(sessionId).then(r => {
     console.log('getSession', r.data);
     dispatch(replaceGameState(r.data));
-    dispatch(subscribeOnUpdates(token, sessionId))
   }).catch(err => {
     console.log("get session err", err)
   })
@@ -113,15 +116,13 @@ export const updateSession = (token: string, sessionId: string): AppThunk => dis
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
 // will call the thunk with the `dispatch` function as the first argument. Async
 // code can then be executed and other actions can be dispatched
-export const subscribeOnUpdates = (token: string, sessionId: string): AppThunk => dispatch => {
-  // if (game_socket_client) {
-  //     game_socket_client.disconnect();
-  // }
-
-  game_socket_client.subscribe(`/session/${sessionId}`, message => {
-    console.log("subscribe", message)
+export const subscribeOnUpdates = (token: string, sessionId: string): AppThunk => (dispatch, getState) => {
+  if (!subscription) {
+    subscription = game_socket_client.subscribe(`/session/${sessionId}`, message => {
+      console.log("message:", message)
+    })
     dispatch(replaceStreamStatus(StreamStatus.Connected));
-  })
+  }
   // stream = game_session_client.observeSession(observerReq);
   // dispatch(replaceStreamStatus(StreamStatus.Connecting));
   // stream.on('status', (status: Status) => {
