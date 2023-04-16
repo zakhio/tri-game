@@ -3,7 +3,6 @@ package io.zakh.tri.service
 import io.zakh.tri.dao.GameSessionsRepo
 import io.zakh.tri.model.GameFieldCell
 import io.zakh.tri.model.GameSession
-import io.zakh.tri.model.Player
 import io.zakh.tri.service.exceptions.GameIsNotStartedException
 import io.zakh.tri.service.exceptions.InvalidCellIndexException
 import io.zakh.tri.service.exceptions.SessionNotFoundException
@@ -186,7 +185,7 @@ class GameSessionsService(
         playerID: String,
         sessionID: String,
         cellIndex: Int,
-        openCell: Boolean?
+        openCell: Boolean
     ): GameSession {
         var session = sessionsRepo.findById(sessionID)
             .orElseThrow { SessionNotFoundException("session $sessionID does not exist") }
@@ -203,10 +202,15 @@ class GameSessionsService(
             throw InvalidCellIndexException("game in session $sessionID is not started")
         }
 
-        if (openCell != null && openCell == true) {
-            val mutableCells = session.cells.toMutableList()
-            mutableCells[cellIndex] = mutableCells[cellIndex].copy(open = true)
-            session = session.copy(cells = mutableCells)
+        if (openCell) {
+            val cells = session.cells.toMutableList()
+            cells[cellIndex] = cells[cellIndex].copy(open = true)
+            session = sessionsRepo.save(
+                session.copy(
+                    cells = cells
+                )
+            )
+
             messagingTemplate.convertAndSend("/session/$sessionID", session)
         }
 

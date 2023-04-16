@@ -36,7 +36,7 @@ export interface ChangeConfigDTO {
 }
 
 export interface ChangeFieldCellDTO {
-  open?: boolean;
+  open: boolean;
 }
 
 export interface FieldCellDTO {
