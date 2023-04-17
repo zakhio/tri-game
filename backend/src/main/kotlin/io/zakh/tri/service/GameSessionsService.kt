@@ -114,13 +114,16 @@ class GameSessionsService(
             Random.nextInt(totalCellCount * 10) to GameFieldCell(word, cellType, teamID)
         }.sortedBy { it.first }.map { it.second }.toMutableList()
 
-        return sessionsRepo.save(
+        val result = sessionsRepo.save(
             session.copy(
-                state = GameSession.State.IN_PROGRESS,
+                state = GameSession.State.IDLE,
                 config = config.copy(language = language),
                 cells = cells,
             )
         )
+
+        messagingTemplate.convertAndSend("/session/$sessionID", "")
+        return result
     }
 
     fun changeState(playerID: String, sessionID: String, state: GameSession.State): GameSession {
@@ -131,7 +134,10 @@ class GameSessionsService(
             throw UnauthorizedPlayerException("player $playerID is not part of session $sessionID")
         }
 
-        return session
+        val result = sessionsRepo.save(session.copy(state = state))
+
+        messagingTemplate.convertAndSend("/session/$sessionID", "")
+        return result
     }
 
     fun getSession(sessionID: String): GameSession? {
@@ -144,15 +150,15 @@ class GameSessionsService(
     }
 
     fun newPlayer(playerID: String, sessionID: String, name: String) {
-        var session = sessionsRepo.findById(sessionID)
+        val session = sessionsRepo.findById(sessionID)
             .orElseThrow { SessionNotFoundException("session $sessionID does not exist") }
 
         val player = playerService.newPlayer(playerID, name)
         if (session.players.none { it.id == playerID }) {
-            session = sessionsRepo.save(session.copy(players = session.players + player))
+            sessionsRepo.save(session.copy(players = session.players + player))
         }
 
-        messagingTemplate.convertAndSend("/session/${sessionID}", session)
+        messagingTemplate.convertAndSend("/session/${sessionID}", "")
     }
 
     fun changePlayer(
@@ -162,7 +168,7 @@ class GameSessionsService(
         captain: Boolean,
         teamID: Int
     ) {
-        var session = sessionsRepo.findById(sessionID)
+        val session = sessionsRepo.findById(sessionID)
             .orElseThrow { SessionNotFoundException("session $sessionID does not exist") }
 
         val players = if (session.players.none { it.id == playerID }) {
@@ -181,14 +187,15 @@ class GameSessionsService(
         val playerIDtoTeamID = session.playerIDtoTeamID.toMutableMap()
         playerIDtoTeamID[playerID] = teamID
 
-        session = sessionsRepo.save(
+        sessionsRepo.save(
             session.copy(
                 players = players,
                 captains = captains,
                 playerIDtoTeamID = playerIDtoTeamID
             )
         )
-        messagingTemplate.convertAndSend("/session/${sessionID}", session)
+
+        messagingTemplate.convertAndSend("/session/${sessionID}", "")
     }
 
     fun changeCell(
@@ -197,7 +204,7 @@ class GameSessionsService(
         cellIndex: Int,
         openCell: Boolean
     ): GameSession {
-        var session = sessionsRepo.findById(sessionID)
+        val session = sessionsRepo.findById(sessionID)
             .orElseThrow { SessionNotFoundException("session $sessionID does not exist") }
 
         if (session.players.none { it.id == playerID }) {
@@ -231,14 +238,14 @@ class GameSessionsService(
                 state = GameSession.State.FINISHED
             }
 
-            session = sessionsRepo.save(
+            sessionsRepo.save(
                 session.copy(
                     cells = cells,
                     state = state
                 )
             )
 
-            messagingTemplate.convertAndSend("/session/$sessionID", session)
+            messagingTemplate.convertAndSend("/session/$sessionID", "")
         }
 
         return session

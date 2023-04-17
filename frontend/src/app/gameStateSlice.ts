@@ -105,7 +105,7 @@ export const {
 export const updateSession = (token: string, sessionId: string): AppThunk => dispatch => {
   localStorage.setItem("token", token);
   rest_client.sessions.getSession(sessionId).then(r => {
-    console.log('getSession', r.data);
+    console.log('updateSession', r.data);
     dispatch(replaceGameState(r.data));
   }).catch(err => {
     console.log("get session err", err)
@@ -120,6 +120,7 @@ export const subscribeOnUpdates = (token: string, sessionId: string): AppThunk =
   if (!subscription) {
     subscription = game_socket_client.subscribe(`/session/${sessionId}`, message => {
       console.log("message:", message)
+      dispatch(updateSession(token, sessionId))
     })
     dispatch(replaceStreamStatus(StreamStatus.Connected));
   }
@@ -164,7 +165,7 @@ export const startGame = (token: string, sessionId: string, language: string): A
     console.log(resp)
     rest_client.sessions.changeState(sessionId, { state: 'IN_PROGRESS' }).then(resp => {
       console.log(resp)
-      dispatch(updateSession(token, sessionId))
+      // dispatch(updateSession(token, sessionId))
     }).catch(reason => {
       console.log(reason);
       return;
@@ -192,7 +193,6 @@ export const turn = (token: string, sessionId: string, cellIndex: number): AppTh
 
   rest_client.sessions.changeCell(sessionId, cellIndex, body).then(resp => {
     console.log("changeCell", resp)
-    dispatch(updateSession(token, sessionId))
   }).catch(reason => {
     console.log("[catch] changeCell", reason);
     return;
@@ -207,8 +207,7 @@ export const setSettings = (token: string, sessionId: string, captain: boolean):
   }
 
   rest_client.sessions.changePlayer(sessionId, getState().gameState.me?.id!, body).then(resp => {
-    console.log(resp)
-    dispatch(updateSession(token, sessionId))
+    console.log("changePlayer", resp)
   }).catch(reason => {
     console.log(reason);
     return;
