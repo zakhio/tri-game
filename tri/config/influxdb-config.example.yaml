@@ -1,7 +1,0 @@
-url: "influx DB instance url"
-organizationId: "organization Id"
-bucketId: "bucked Id"
-token: "access token"
-measurement: "measurement"
-interval: "1m" # reporting interval
-alignTimestamps: true # round timestamps to interval
