@@ -2,7 +2,6 @@ import { useSelector } from "react-redux";
 import {
     joinSession,
     gameCells,
-    playerToken,
     sessionNotFound,
     gameSession,
     isPlayerInGame
@@ -18,22 +17,20 @@ import { NotFound } from "../../features/session-not-found/NotFound";
 import { useAppDispatch } from "../../app/store";
 
 export function PlayRouteContainer({ setLocale }: { setLocale: (locale: string) => void }) {
+    const dispatch = useAppDispatch();
     useNoSleep(true);
 
     const { sessionId } = useParams();
 
-    const dispatch = useAppDispatch();
-    const token = useSelector(playerToken);
     const session = useSelector(gameSession);
     const inGame = useSelector(isPlayerInGame);
-    const words = useSelector(gameCells);
     const notFound = useSelector(sessionNotFound);
+    const cells = useSelector(gameCells);
 
     const [showSettings, setShowSettings] = useState(false);
 
     useEffect(() => {
-        console.log("join", token, session, words, notFound)
-        dispatch(joinSession(token, sessionId!));
+        dispatch(joinSession(sessionId!));
     });
 
     return <>
@@ -43,10 +40,10 @@ export function PlayRouteContainer({ setLocale }: { setLocale: (locale: string) 
         {session && !inGame &&
             <BeCaptain sessionId={sessionId!} />
         }
-        {session && words.length === 0 &&
+        {session && cells.length === 0 &&
             <GameIntro sessionId={sessionId!} />
         }
-        {words.length > 0 &&
+        {cells.length > 0 &&
             <>
                 <React.Fragment key="right">
                     <SettingsDrawer open={showSettings} setUILocale={setLocale} onClose={() => setShowSettings(false)} />

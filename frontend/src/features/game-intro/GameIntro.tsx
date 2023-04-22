@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { playerToken, startGame, } from '../../app/gameStateSlice';
+import { startGame, } from '../../app/gameStateSlice';
 import { useIntl } from 'react-intl';
 import { Button, ButtonGroup, Grid, Typography } from "@mui/material";
 import messages from "./GameIntro.messages";
@@ -9,8 +9,6 @@ import { useAppDispatch } from "../../app/store";
 export function GameIntro({ sessionId }: { sessionId: string }) {
     const intl = useIntl();
     const dispatch = useAppDispatch();
-
-    const token = useSelector(playerToken);
 
     return (
         <Grid container spacing={3}>
@@ -35,11 +33,11 @@ export function GameIntro({ sessionId }: { sessionId: string }) {
                 <Grid container justifyContent="center">
                     <ButtonGroup color="secondary" variant="contained" aria-label="outlined primary button group">
                         <Button
-                            onClick={() => dispatch(startGame(token!, sessionId!, 'en'))}>
+                            onClick={() => dispatch(startGame(sessionId!, 'en'))}>
                             {intl.formatMessage(messages.enButton)}
                         </Button>
                         <Button
-                            onClick={() => dispatch(startGame(token!, sessionId!, 'ru'))}>
+                            onClick={() => dispatch(startGame(sessionId!, 'ru'))}>
                             {intl.formatMessage(messages.ruButton)}
                         </Button>
                     </ButtonGroup>

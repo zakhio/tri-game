@@ -2,11 +2,10 @@ import React from "react";
 import { useSelector } from "react-redux";
 import {
     gameCells,
-    gameColumnCount,
-    gameInProgress,
+    gameConfig,
+    isGameInProgress,
     isPlayerCaptain,
-    playerToken,
-    turn
+    makeTurn
 } from "../../app/gameStateSlice";
 import { FieldCell } from "./cell/FieldCell";
 import { Grid } from '@mui/material';
@@ -16,14 +15,16 @@ import { useAppDispatch } from "../../app/store";
 export function GameField({ onSettingsClick, sessionId }: { onSettingsClick: Function, sessionId: string }) {
     const dispatch = useAppDispatch();
 
-    const token = useSelector(playerToken);
     const cells = useSelector(gameCells);
-    const inProgress = useSelector(gameInProgress);
+    const config = useSelector(gameConfig);
+
+    const inProgress = useSelector(isGameInProgress);
     const playerCaptain = useSelector(isPlayerCaptain);
-    const columnCount = Math.max(1, useSelector(gameColumnCount));
+
+    const columnCount = Math.max(1, config.columnCount);
 
     function turnWord(cellIndex: number) {
-        dispatch(turn(token, sessionId, cellIndex));
+        dispatch(makeTurn(sessionId, cellIndex));
     }
 
     const rows = [];
@@ -43,9 +44,9 @@ export function GameField({ onSettingsClick, sessionId }: { onSettingsClick: Fun
             <FieldHeader sessionId={sessionId} onSettingsClick={onSettingsClick} />
         </Grid>
         <Grid container item xs={12} spacing={1}>
-            {rows.map((r, index) =>
+            {rows.map((row, index) =>
                 <Grid container item xs={12} spacing={1} key={index}>
-                    {r}
+                    {row}
                 </Grid>
             )}
         </Grid>

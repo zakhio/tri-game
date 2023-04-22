@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { createSession, playerToken, } from '../../app/gameStateSlice';
+import { createSession } from '../../app/gameStateSlice';
 import { useIntl } from 'react-intl';
 import { useNavigate } from "react-router-dom";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
@@ -12,8 +12,6 @@ export function PageHome({ setLocale }: { setLocale: (locale: string) => void })
     const intl = useIntl();
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-
-    const token = useSelector(playerToken)
 
     const [sessionId, setSessionId] = useState("");
 
@@ -37,7 +35,7 @@ export function PageHome({ setLocale }: { setLocale: (locale: string) => void })
                         <Button
                             variant="contained"
                             color="secondary"
-                            onClick={() => dispatch(createSession(token, navigate))}>
+                            onClick={() => dispatch(createSession(navigate))}>
                             {intl.formatMessage(messages.create)}
                         </Button>
                     </Grid>
