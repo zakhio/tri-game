@@ -102,8 +102,7 @@ export const {
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
 // will call the thunk with the `dispatch` function as the first argument. Async
 // code can then be executed and other actions can be dispatched
-export const updateSession = (token: string, sessionId: string): AppThunk => dispatch => {
-  localStorage.setItem("token", token);
+export const updateSession = (sessionId: string): AppThunk => dispatch => {
   rest_client.sessions.getSession(sessionId).then(r => {
     console.log('updateSession', r.data);
     dispatch(replaceGameState(r.data));
@@ -116,11 +115,11 @@ export const updateSession = (token: string, sessionId: string): AppThunk => dis
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
 // will call the thunk with the `dispatch` function as the first argument. Async
 // code can then be executed and other actions can be dispatched
-export const subscribeOnUpdates = (token: string, sessionId: string): AppThunk => (dispatch, getState) => {
+export const subscribeOnUpdates = (sessionId: string): AppThunk => (dispatch, getState) => {
   if (!subscription) {
     subscription = game_socket_client.subscribe(`/session/${sessionId}`, message => {
       console.log("message:", message)
-      dispatch(updateSession(token, sessionId))
+      dispatch(updateSession(sessionId))
     })
     dispatch(replaceStreamStatus(StreamStatus.Connected));
   }
@@ -131,7 +130,7 @@ export const subscribeOnUpdates = (token: string, sessionId: string): AppThunk =
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
 // will call the thunk with the `dispatch` function as the first argument. Async
 // code can then be executed and other actions can be dispatched
-export const createSession = (token: string, navigate: NavigateFunction): AppThunk => dispatch => {
+export const createSession = (navigate: NavigateFunction): AppThunk => dispatch => {
   rest_client.sessions.newSession().then(resp => {
     const sessionId: string = resp.data.id!;
     navigate("/" + sessionId);
@@ -142,18 +141,18 @@ export const createSession = (token: string, navigate: NavigateFunction): AppThu
   });
 };
 
-export const joinSession = (token: string, sessionId: string): AppThunk => (dispatch, getState) => {
+export const joinSession = (sessionId: string): AppThunk => (dispatch, getState) => {
   if (getState().gameState.session !== null || getState().gameState.streamStatus === StreamStatus.Connecting) {
     return;
   }
 
   dispatch(replaceStreamStatus(StreamStatus.Connecting));
   dispatch(getMe())
-  dispatch(updateSession(token, sessionId))
-  setTimeout(() => dispatch(subscribeOnUpdates(token, sessionId)), 1000)
+  dispatch(updateSession(sessionId))
+  setTimeout(() => dispatch(subscribeOnUpdates(sessionId)), 1000)
 };
 
-export const startGame = (token: string, sessionId: string, language: string): AppThunk => dispatch => {
+export const startGame = (sessionId: string, language: string): AppThunk => dispatch => {
   const body: ChangeConfigDTO = {
     columnCount: 5,
     rowsCount: 5,
@@ -162,72 +161,57 @@ export const startGame = (token: string, sessionId: string, language: string): A
   };
 
   rest_client.sessions.changeConfig(sessionId, body).then(resp => {
-    console.log(resp)
-    rest_client.sessions.changeState(sessionId, { state: 'IN_PROGRESS' }).then(resp => {
-      console.log(resp)
-      // dispatch(updateSession(token, sessionId))
-    }).catch(reason => {
-      console.log(reason);
-      return;
-    });
+    rest_client.sessions.changeState(sessionId, { state: 'IN_PROGRESS' })
+      .catch(reason => {
+        console.log("[catch] changeState", reason);
+        return;
+      });
   }).catch(reason => {
-    console.log(reason);
+    console.log("[catch] changeConfig", reason);
     return;
-  });
+  });;
 };
 
 export const getMe = (): AppThunk => dispatch => {
   rest_client.users.getMe().then(resp => {
-    console.log("me", resp);
     dispatch(replaceMe(resp.data));
   }).catch(reason => {
-    console.log(reason);
+    console.log("[catch] getMe", reason);
     return;
   });
 };
 
-export const turn = (token: string, sessionId: string, cellIndex: number): AppThunk => dispatch => {
-  const body: ChangeFieldCellDTO = {
-    open: true
-  }
-
-  rest_client.sessions.changeCell(sessionId, cellIndex, body).then(resp => {
-    console.log("changeCell", resp)
-  }).catch(reason => {
-    console.log("[catch] changeCell", reason);
-    return;
-  });
+export const makeTurn = (sessionId: string, cellIndex: number): AppThunk => dispatch => {
+  rest_client.sessions.changeCell(sessionId, cellIndex, { open: true })
+    .catch(reason => {
+      console.log("[catch] changeCell", reason);
+    });
 };
 
-export const setSettings = (token: string, sessionId: string, captain: boolean): AppThunk => (dispatch, getState) => {
+export const setSettings = (sessionId: string, captain: boolean): AppThunk => (dispatch, getState) => {
   const body: ChangePlayerDTO = {
     name: "",
     captain: captain,
     teamID: 0
   }
 
-  rest_client.sessions.changePlayer(sessionId, getState().gameState.me?.id!, body).then(resp => {
-    console.log("changePlayer", resp)
-  }).catch(reason => {
-    console.log(reason);
-    return;
-  });
+  rest_client.sessions.changePlayer(sessionId, getState().gameState.me?.id!, body)
+    .catch(reason => {
+      console.log("[catch] changePlayer", reason);
+    });
 };
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
-export const gameColumnCount = (state: RootState) => state.gameState.session?.config?.columnCount ?? 0;
+export const gameConfig = (state: RootState) => state.gameState.session?.config ?? {} as ChangeConfigDTO;
 export const gameCells = (state: RootState) => state.gameState.session?.cells ?? [];
-export const gameTeamCount = (state: RootState) => state.gameState.session?.config?.teamsCount ?? 0;
 export const gamePlayers = (state: RootState) => state.gameState.session?.players;
-export const gameLanguage = (state: RootState) => state.gameState.session?.config?.language;
-export const gameInProgress = (state: RootState) => state.gameState.session?.state === "IN_PROGRESS";
 export const gameMe = (state: RootState) => state.gameState.me;
+export const gameSession = (state: RootState) => state.gameState.session;
+export const isGameInProgress = (state: RootState) => state.gameState.session?.state === "IN_PROGRESS";
 export const isPlayerInGame = (state: RootState) => state.gameState.session?.playerIDtoTeamID[state.gameState.me?.id || ""] !== undefined;
 export const isPlayerCaptain = (state: RootState) => state.gameState.session?.captains.indexOf(state.gameState.me?.id || "") !== -1;
-export const playerToken = (state: RootState) => "";
-export const gameSession = (state: RootState) => state.gameState.session;
 export const sessionNotFound = (state: RootState) => state.gameState.notFound;
 
 export default gameStateSlice.reducer;

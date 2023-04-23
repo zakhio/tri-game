@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { gameMe, gameInProgress, isPlayerInGame, playerToken, setSettings, } from '../../app/gameStateSlice';
+import { isGameInProgress, isPlayerInGame, setSettings } from '../../app/gameStateSlice';
 import { useIntl } from 'react-intl';
 import {
     Button,
@@ -21,9 +21,8 @@ export function BeCaptain({ sessionId }: { sessionId: string }) {
     const dispatch = useAppDispatch();
     const theme = useTheme();
 
-    const token = useSelector(playerToken);
     const playerInGame = useSelector(isPlayerInGame);
-    const inProgress = useSelector(gameInProgress);
+    const inProgress = useSelector(isGameInProgress);
 
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -47,13 +46,13 @@ export function BeCaptain({ sessionId }: { sessionId: string }) {
             <DialogActions>
                 <Button
                     color="secondary"
-                    onClick={() => dispatch(setSettings(token, sessionId!, true))}>
+                    onClick={() => dispatch(setSettings(sessionId!, true))}>
                     {intl.formatMessage(messages.captainRole)}
                 </Button>
                 <Button
                     variant="contained"
                     color="secondary"
-                    onClick={() => dispatch(setSettings(token, sessionId!, false))}>
+                    onClick={() => dispatch(setSettings(sessionId!, false))}>
                     {intl.formatMessage(messages.regularRole)}
                 </Button>
             </DialogActions>

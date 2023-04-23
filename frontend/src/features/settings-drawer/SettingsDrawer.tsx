@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { gameLanguage, gameMe, isPlayerCaptain, playerToken, setSettings, startGame, } from '../../app/gameStateSlice';
+import { gameConfig, gameMe, isPlayerCaptain, setSettings, startGame } from '../../app/gameStateSlice';
 import { useParams } from "react-router-dom";
 import {
     Box,
@@ -36,13 +36,13 @@ export function SettingsDrawer({ open, onClose, setUILocale }: { open?: boolean,
     const dispatch = useAppDispatch();
     const { sessionId } = useParams();
 
-    const token = useSelector(playerToken)
-    const currentLanguage = useSelector(gameLanguage);
-
+    const config = useSelector(gameConfig)
     const playerCaptain = useSelector(isPlayerCaptain);
+    
+    const gameLanguage = config.language;
     const link = gameSessionUrl(sessionId!);
 
-    const [language, setLanguage] = useState(currentLanguage);
+    const [language, setLanguage] = useState(gameLanguage);
 
     return (
         <Drawer anchor="right" open={open} onClose={() => onClose()}>
@@ -55,7 +55,7 @@ export function SettingsDrawer({ open, onClose, setUILocale }: { open?: boolean,
                         variant="text"
                         color="secondary"
                         onClick={() => {
-                            dispatch(startGame(token!, sessionId!, currentLanguage!));
+                            dispatch(startGame(sessionId!, gameLanguage!));
                             onClose();
                         }}>
                         {intl.formatMessage(messages.restart)}
@@ -84,12 +84,12 @@ export function SettingsDrawer({ open, onClose, setUILocale }: { open?: boolean,
                         <MenuItem value={'ru'}>{intl.formatMessage(messages.russian)}</MenuItem>
                     </Select>
                     <RestartPopup
-                        open={currentLanguage !== language}
+                        open={gameLanguage !== language}
                         onAgree={() => {
-                            dispatch(startGame(token!, sessionId!, language!));
+                            dispatch(startGame(sessionId!, language!));
                             onClose();
                         }}
-                        onDisagree={() => setLanguage(currentLanguage)} />
+                        onDisagree={() => setLanguage(gameLanguage)} />
                 </ListItem>
                 <ListItem>
                     <ListItemText
@@ -98,7 +98,7 @@ export function SettingsDrawer({ open, onClose, setUILocale }: { open?: boolean,
                     <Switch
                         checked={playerCaptain}
                         onChange={e => {
-                            dispatch(setSettings(token!, sessionId!, e.target.checked));
+                            dispatch(setSettings(sessionId!, e.target.checked));
                             onClose();
                         }}
                         color="secondary"
