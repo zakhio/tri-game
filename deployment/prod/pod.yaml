@@ -1,0 +1,29 @@
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tri-game-pod
+  namespace: tri-game
+spec:
+  volumes:
+    - name: redis-data
+      persistentVolumeClaim:
+        claimName: tri-game-redis-data-pvc
+  containers:
+    - name: redis
+      image: docker.io/library/redis:7.0-alpine3.17
+      command: [ "redis-server" ]
+      args: [ "--appendonly", "yes" ]
+      volumeMounts:
+        - name: redis-data
+          mountPath: /data
+    - name: app
+      image: docker.io/zakhio/tri-game:latest
+      privileged: true
+      ports:
+        - containerPort: 8080
+          hostPort: 2001
+      env:
+        - name: SPRING_DATA_REDIS_HOST
+          value: "tri-game-pod-redis"
