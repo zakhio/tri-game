@@ -38,7 +38,7 @@ jobs:
           push: true
           tags: |
             ${{ secrets.DOCKER_HUB_USERNAME }}/tri-game:${{ github.sha }}
-            ${{ secrets.DOCKER_HUB_USERNAME }}/tri-game:mb${{ github.run_id }}
+            ${{ secrets.DOCKER_HUB_USERNAME }}/tri-game:mb${{ github.run_number }}
             ${{ secrets.DOCKER_HUB_USERNAME }}/tri-game:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
