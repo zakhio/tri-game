@@ -54,3 +54,4 @@ jobs:
           SCRIPT_AFTER: |
             podman pull docker.io/zakhio/tri-game:latest
             podman play kube --userns=nomap --network tri-game-network --replace deployment/tri-game/pod.yaml
+            podman ps -a
