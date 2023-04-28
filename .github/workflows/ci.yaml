@@ -25,7 +25,7 @@ jobs:
 #          file: ./Dockerfile
 #          #          platforms: linux/amd64,linux/arm64/v8
 #          push: true
-#          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/tri-game:${{ GITHUB_SHA }}
+#          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/tri-game:${{ env.GITHUB_SHA }}
 #          cache-from: type=gha
 #          cache-to: type=gha,mode=max
       - name: Build and push master Docker Image
@@ -37,8 +37,8 @@ jobs:
 #          platforms: linux/amd64,linux/arm64/v8
           push: true
           tags: |
-            ${{ secrets.DOCKER_HUB_USERNAME }}/tri-game:${{ GITHUB_SHA }}
-            ${{ secrets.DOCKER_HUB_USERNAME }}/tri-game:mb${{ GITHUB_RUN_ID }}
+            ${{ secrets.DOCKER_HUB_USERNAME }}/tri-game:${{ env.GITHUB_SHA }}
+            ${{ secrets.DOCKER_HUB_USERNAME }}/tri-game:mb${{ env.GITHUB_RUN_ID }}
             ${{ secrets.DOCKER_HUB_USERNAME }}/tri-game:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
