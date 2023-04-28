@@ -1,0 +1,9 @@
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tri-game-redis-data-pvc
+  namespace: tri-game
+spec:
+  storageClassName: "" # Empty string must be explicitly set otherwise default StorageClass will be set
