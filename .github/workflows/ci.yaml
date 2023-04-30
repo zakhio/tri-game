@@ -42,6 +42,13 @@ jobs:
             ${{ secrets.DOCKER_HUB_USERNAME }}/tri-game:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
+      - name: Render Deployment Pod Template
+        uses: chuhlomin/render-template@v1.6
+        with:
+          template: deployment/prod/pod.yaml
+          result_path: deployment/prod/pod.yaml
+          vars: |
+            imageTag: mb${{ github.run_number }}
       - name: Deploy to Production server
 #        if: github.ref == 'refs/heads/master'
         uses: easingthemes/ssh-deploy@main
@@ -52,6 +59,8 @@ jobs:
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           SCRIPT_AFTER: |
-            podman pull docker.io/zakhio/tri-game:latest
-            podman play kube --userns=nomap --network tri-game-network --replace deployment/tri-game/pod.yaml
+            echo "Deploying mb${{ github.run_number }}"
+            podman pull docker.io/zakhio/tri-game:mb${{ github.run_number }}
+            escaped=$(systemd-escape ~/deployment/tri-game/pod.yaml)
+            systemctl --user restart podman-kube@$escaped.service
             podman ps -a
