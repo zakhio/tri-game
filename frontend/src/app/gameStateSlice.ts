@@ -42,11 +42,10 @@ const initialState: GameState = {
 };
 
 const rest_client = new Api({
-  baseUrl: hostUrl(),
   baseApiParams: { format: "json", credentials: "include" }
 });
 
-let game_socket_client = Stomp.client("ws://localhost:8080/socket/sessions");
+let game_socket_client = Stomp.client(`ws://${window.location.host}/socket/sessions`);
 game_socket_client.activate()
 
 let subscription: StompSubscription | null = null;
@@ -204,7 +203,7 @@ export const setSettings = (sessionId: string, captain: boolean): AppThunk => (d
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
-export const gameConfig = (state: RootState) => state.gameState.session?.config ?? {} as ChangeConfigDTO;
+export const gameConfig = (state: RootState) => state.gameState.session?.config ?? { columnCount: 0, rowsCount: 0, teamsCount: 0, language: 'en' } as ChangeConfigDTO;
 export const gameCells = (state: RootState) => state.gameState.session?.cells ?? [];
 export const gamePlayers = (state: RootState) => state.gameState.session?.players;
 export const gameMe = (state: RootState) => state.gameState.me;
