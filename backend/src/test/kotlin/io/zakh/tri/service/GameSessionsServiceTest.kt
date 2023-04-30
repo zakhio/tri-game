@@ -71,7 +71,13 @@ class GameSessionsServiceTest {
         whenever(service.sessionsRepo.findById(sessionID))
             .thenReturn(Optional.of(GameSession(sessionID, emptyList())))
 
-        assertThrows<UnauthorizedPlayerException> { service.changeConfig(playerID, sessionID, config) }
+        assertThrows<UnauthorizedPlayerException> {
+            service.changeConfig(
+                playerID,
+                sessionID,
+                config
+            )
+        }
     }
 
     @Test
@@ -88,17 +94,17 @@ class GameSessionsServiceTest {
             .thenAnswer { it.getArgument<GameSession>(0) }
 
         val sessionWithGame = service.changeConfig(playerID, sessionID, config)
-        assertEquals(sessionWithGame.state, GameSession.State.IN_PROGRESS)
+        assertEquals(sessionWithGame.state, GameSession.State.IDLE)
         assertNotNull(sessionWithGame.cells)
-        assertEquals(sessionWithGame.cells?.size, config.rowsCount * config.columnCount)
-        assertEquals(sessionWithGame.cells?.count { it.type == GameFieldCell.Type.END_GAME }, 1)
+        assertEquals(sessionWithGame.cells.size, config.rowsCount * config.columnCount)
+        assertEquals(sessionWithGame.cells.count { it.type == GameFieldCell.Type.END_GAME }, 1)
         assertEquals(
-            sessionWithGame.cells?.count { it.type == GameFieldCell.Type.TEAM_OWNED },
+            sessionWithGame.cells.count { it.type == GameFieldCell.Type.TEAM_OWNED },
             (config.rowsCount * config.columnCount) / (config.teamsCount + 1)
         )
         assertEquals(
-            sessionWithGame.cells?.filter { it.ownerTeamId != null }?.map { it.ownerTeamId }
-                ?.toSet()?.size,
+            sessionWithGame.cells.filter { it.ownerTeamId != null }.map { it.ownerTeamId }
+                .toSet().size,
             config.teamsCount
         )
     }
