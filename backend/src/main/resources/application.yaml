@@ -9,3 +9,8 @@ server:
     session:
       tracking-modes: cookie
       persistent: true
+
+spring:
+  devtools:
+    restart:
+      exclude: static/**

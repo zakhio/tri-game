@@ -36,6 +36,8 @@ dependencies {
 
 	runtimeOnly("io.micrometer:micrometer-registry-influx")
 
+	compileOnly("org.springframework.boot:spring-boot-devtools")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
 }
@@ -49,4 +51,11 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+tasks.register<Copy>("reload") {
+	from("src/main/resources")
+	into(layout.buildDirectory.dir("resources/main"))
+
+	include("static/**")
 }

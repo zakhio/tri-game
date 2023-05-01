@@ -2,9 +2,9 @@
 
 Guess game TRI influenced by Codenames
 
-## Local setup
+## Running the game locally
 
-To run the app just call
+To run the game just call
 
 ```shell
 docker compose up --build
@@ -12,6 +12,32 @@ docker compose up --build
 
 Note: `--build` is required in case of code changes to rebuild docker image for the service,
 otherwise Docker would use cache version
+
+## Local development
+
+At first, run Redis
+
+```shell
+docker compose up -d redis
+```
+
+Then enable auto-builds for frontend
+
+```shell
+cd ./frontend && pnpm run watch
+```
+
+And the last step is to run backend (which will also serve frontend as static files)
+
+```shell
+cd ./backend && ./gradlew bootRun
+```
+
+Note: use this command (or enable it in IDE as action) to refresh frontend files in the classpath
+
+```shell
+./gradlew reload
+```
 
 ## Re-generating frontend client sdk
 
@@ -26,8 +52,8 @@ docker compose up -d redis
 
 ## Deployment
 
-Server is running on rootless containers via podman. The pod definition can be found in 
-`deployment/prod` folder.  
+Server is running on rootless containers via podman. The pod definition can be found
+in `deployment/prod` folder.
 
 Helpful links:
 
