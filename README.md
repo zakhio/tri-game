@@ -1,6 +1,6 @@
-# Guess game TRI
+# Game TRI
 
-Guess game TRI influenced by Codenames
+Words guessing game influenced by Codenames. 
 
 ## Running the game locally
 
