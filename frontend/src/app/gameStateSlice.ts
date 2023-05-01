@@ -45,7 +45,7 @@ const rest_client = new Api({
   baseApiParams: { format: "json", credentials: "include" }
 });
 
-let game_socket_client = Stomp.client(`${window.location.protocol == 'https' ? 'wss:' : "ws:"}//${window.location.host}/socket/sessions`);
+let game_socket_client = Stomp.client(`${window.location.protocol === 'https:' ? 'wss:' : "ws:"}//${window.location.host}/socket/sessions`);
 game_socket_client.activate()
 
 let subscription: StompSubscription | null = null;
