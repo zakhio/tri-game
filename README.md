@@ -24,4 +24,19 @@ docker compose up -d redis
 (cd frontend && npm run generate-rest-client)
 ```
 
+## Deployment
+
+Server is running on rootless containers via podman. The pod definition can be found in 
+`deployment/prod` folder.  
+
+Helpful links:
+
+* [How To Secure Nginx with Let's Encrypt on CentOS 8][2]
+* [How to run Kubernetes workloads in systemd with Podman][3]
+* [Enabling and disabling systemd services][4]
+
+
 [1]: https://github.com/swagger-api/swagger-codegen#homebrew
+[2]: https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-centos-8
+[3]: https://www.redhat.com/sysadmin/kubernetes-workloads-podman-systemd
+[4]: https://documentation.suse.com/smart/systems-management/html/reference-systemctl-enable-disable-services/index.html
