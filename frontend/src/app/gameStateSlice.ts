@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppThunk, RootState } from './store';
-import { hostUrl } from "./config";
 import { NavigateFunction } from "react-router-dom";
 
 import { Stomp, StompSubscription } from "@stomp/stompjs";
@@ -42,6 +41,7 @@ const initialState: GameState = {
 };
 
 const rest_client = new Api({
+  baseUrl: `${window.location.protocol}//${window.location.host}`,
   baseApiParams: { format: "json", credentials: "include" }
 });
 
