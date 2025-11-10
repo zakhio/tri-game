@@ -31,7 +31,7 @@ export function PlayRouteContainer({ setLocale }: { setLocale: (locale: string) 
 
     useEffect(() => {
         dispatch(joinSession(sessionId!));
-    });
+    }, [sessionId]);
 
     return <>
         {notFound &&

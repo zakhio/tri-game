@@ -1,12 +1,12 @@
 # Step 1: Frontend Builder
-FROM node:19-alpine as frontend-builder
+FROM node:24-alpine AS frontend-builder
 COPY frontend /frontend
 WORKDIR /frontend
 RUN npm install
 RUN npm run build
 
 # Step 2: Backend Builder
-FROM gradle:8.1-jdk17 as backend-builder
+FROM gradle:9.2.0-jdk17 AS backend-builder
 COPY backend /backend
 COPY --from=frontend-builder /frontend/dist /backend/src/main/resources/static
 WORKDIR /backend

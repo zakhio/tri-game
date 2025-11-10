@@ -1,9 +1,9 @@
-import React, { useRef } from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import styles from './FieldCell.module.css';
 import fieldStyles from '../GameField.module.css';
 import Box from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import { useSpring, animated } from "@react-spring/web";
+import {useSpring, animated, useSpringValue} from "@react-spring/web";
 import { FieldCellDTO } from "../../../api/rest";
 
 function calcVal(open?: boolean, hover: boolean = false): number {
@@ -21,15 +21,15 @@ const trans = (val: number) => {
 
 export function FieldCell({ cell, onClick, showColor }: { cell: FieldCellDTO, onClick: Function, showColor: boolean }) {
     const prevVal = useRef(calcVal(cell.open));
-    const [{ val }, setVal] = useSpring(() => ({ val: prevVal.current }));
+    const val = useSpringValue(prevVal.current);
 
-    function onHover(flag: boolean) {
-        const v = calcVal(cell.open, flag);
-        prevVal.current = v;
-        setVal({ val: v });
-    }
+    const onHover = useCallback((hover: boolean)=> {
+      val.start(calcVal(cell.open, hover));
+    }, [val, cell]);
 
-    setVal({ val: calcVal(cell.open) })
+    useEffect(() => {
+      val.start(calcVal(cell.open));
+    }, [val, cell])
 
     let kind_style;
 
@@ -55,9 +55,7 @@ export function FieldCell({ cell, onClick, showColor }: { cell: FieldCellDTO, on
             if (showColor) {
                 return
             }
-            if (prevVal.current === 1) {
-                onClick();
-            }
+            onClick();
         }}
 
         onMouseOver={(event) => {
@@ -86,9 +84,7 @@ export function FieldCell({ cell, onClick, showColor }: { cell: FieldCellDTO, on
             if (showColor) {
                 return
             }
-            if (prevVal.current === 1) {
-                onClick();
-            }
+            onClick();
         }}
         onTouchMove={(event) => {
             if (showColor) {

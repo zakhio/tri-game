@@ -8,7 +8,7 @@ export function Score() {
     const config = useSelector(gameConfig);
     const cells = useSelector(gameCells)
 
-    const r: JSX.Element[] = [];
+    const r: React.JSX.Element[] = [];
     for (let i: number = 0; i < config.teamsCount; i++) {
         const teamStyle = fieldStyles["score_owned_" + i];
         r.push(<span key={2 * i}

@@ -17,19 +17,20 @@ export function FieldHeader({ sessionId, onSettingsClick }: { sessionId: string,
     const inProgress = useSelector(isGameInProgress);
 
     const language = config.language ?? "en"
+    const gridSize = inProgress ? 12 : 11;
 
-    return <Grid item container xs={inProgress ? 12 : 11} sm={12} spacing={2} justifyContent="center">
+    return <Grid container size={{xs: gridSize, sm: 12}} spacing={2} justifyContent="center">
         {!inProgress &&
-            <Grid item xs={12} sm={4}>
+            <Grid size={{xs: 12, sm: 4}}>
                 <End />
             </Grid>
         }
-        <Grid item xs>
+        <Grid size="grow">
             <Score />
         </Grid>
         {!inProgress &&
-            <Grid item container xs={6} sm={4} alignItems="center" direction="row-reverse">
-                <Grid item style={{ paddingRight: "10px" }}>
+            <Grid container size={{xs: 6, sm: 4}} alignItems="center" direction="row-reverse">
+                <Grid style={{ paddingRight: "10px" }}>
                     <Button
                         variant="contained"
                         color="secondary"

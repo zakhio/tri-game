@@ -13,12 +13,12 @@ export function SessionShare() {
     const link = gameSessionUrl(sessionId!);
 
     return <Grid container justifyContent="center" alignItems="center">
-        <Grid item>
+        <Grid>
             <Typography variant="body2">
                 {intl.formatMessage(messages.invite)}
             </Typography>
         </Grid>
-        <Grid item>
+        <Grid>
             <TelegramShareButton
                 url={link}
                 title={intl.formatMessage(messages.inviteMessage)}>
