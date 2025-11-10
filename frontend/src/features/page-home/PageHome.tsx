@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useCallback, useState} from 'react';
 import { useSelector } from 'react-redux';
 import { createSession } from '../../app/gameStateSlice';
 import { useIntl } from 'react-intl';
@@ -15,23 +15,23 @@ export function PageHome({ setLocale }: { setLocale: (locale: string) => void })
 
     const [sessionId, setSessionId] = useState("");
 
-    function openSessionPage() {
+    const openSessionPage = useCallback(() => {
         navigate(`/${sessionId}`);
-    }
+    }, [sessionId, navigate])
 
     return (
         <>
             <form autoComplete="off">
                 <Grid container direction="column" alignItems="center" spacing={3}>
-                    <Grid item xs={12}>
+                    <Grid size={12}>
                         <img src="logo.svg" alt="Game TRI logo" />
                     </Grid>
-                    <Grid item xs>
+                    <Grid size="grow">
                         <Typography variant="h4" align="center">
                             {intl.formatMessage(messages.title)}
                         </Typography>
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid size={12}>
                         <Button
                             variant="contained"
                             color="secondary"
@@ -39,12 +39,12 @@ export function PageHome({ setLocale }: { setLocale: (locale: string) => void })
                             {intl.formatMessage(messages.create)}
                         </Button>
                     </Grid>
-                    <Grid item xs>
+                    <Grid size="grow">
                         <Typography align="center">
                             {intl.formatMessage(messages.or)}
                         </Typography>
                     </Grid>
-                    <Grid item xs>
+                    <Grid size="grow">
                         <TextField required
                             autoFocus
                             fullWidth
@@ -53,7 +53,7 @@ export function PageHome({ setLocale }: { setLocale: (locale: string) => void })
                             value={sessionId}
                             onChange={e => setSessionId(e.target.value)} />
                     </Grid>
-                    <Grid item xs>
+                    <Grid size="grow">
                         <Button
                             variant="contained"
                             color="secondary"

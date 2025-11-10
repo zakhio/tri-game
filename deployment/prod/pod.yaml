@@ -12,7 +12,7 @@ spec:
         claimName: tri-game-redis-data-pvc
   containers:
     - name: redis
-      image: docker.io/library/redis:7.0-alpine3.17
+      image: docker.io/library/redis:7.0-alpine3
       command: [ "redis-server" ]
       args: [ "--appendonly", "yes" ]
       volumeMounts:
@@ -20,10 +20,13 @@ spec:
           mountPath: /data
     - name: app
       image: docker.io/zakhio/tri-game:{{ .imageTag }}
-      privileged: true
       ports:
         - containerPort: 8080
           hostPort: 2001
       env:
-        - name: SPRING_DATA_REDIS_HOST
+        - name: SPRING.DATA.REDIS.HOST
           value: "tri-game-pod-redis"
+        - name: SPRINGDOC.API-DOCS.ENABLED
+          value: "false"
+        - name: SPRINGDOC.SWAGGER-UI.ENABLED
+          value: "false"

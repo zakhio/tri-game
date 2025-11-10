@@ -14,15 +14,15 @@ export function NotFound({ sessionId }: { sessionId: string }) {
 
     return (
         <Grid container spacing={3}>
-            <Grid item xs={12} sm={2}>
+            <Grid size={{xs: 12, sm: 2}}>
                 <img src="logo.svg" alt="Game TRI logo" />
             </Grid>
-            <Grid container direction="column" item xs={12} sm={10} wrap="nowrap">
+            <Grid container direction="column" size={{xs: 12, sm: 10}} wrap="nowrap">
                 <Typography variant="body1" gutterBottom>
                     {intl.formatMessage(messages.text, { sessionId })}
                 </Typography>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
                 <Grid container justifyContent="center">
                     <Button
                         variant="contained"

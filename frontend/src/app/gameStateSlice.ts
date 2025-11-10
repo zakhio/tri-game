@@ -4,6 +4,7 @@ import { NavigateFunction } from "react-router-dom";
 
 import { Stomp, StompSubscription } from "@stomp/stompjs";
 import { Api, ChangeConfigDTO, SessionDTO, PlayerDTO, ChangePlayerDTO, FieldCellDTO, ChangeFieldCellDTO } from "../api/rest";
+import isDev from "./config";
 
 export enum StreamStatus {
   Idle = 1,
@@ -46,6 +47,11 @@ const rest_client = new Api({
 });
 
 let game_socket_client = Stomp.client(`${window.location.protocol === 'https:' ? 'wss:' : "ws:"}//${window.location.host}/socket/sessions`);
+game_socket_client.debug = msg => {
+  if (isDev()) {
+    console.log(msg)
+  }
+}
 game_socket_client.activate()
 
 let subscription: StompSubscription | null = null;
@@ -56,12 +62,16 @@ export const gameStateSlice = createSlice({
   reducers: {
     // Use the PayloadAction type to declare the contents of `action.payload`
     replaceGameState: (state, action: PayloadAction<SessionDTO>) => {
-      console.log("replaceGameState", action)
+      if (isDev()) {
+        console.log("replaceGameState", action)
+      }
       state.session = action.payload;
     },
     // Use the PayloadAction type to declare the contents of `action.payload`
     replaceStreamStatus: (state, action: PayloadAction<StreamStatus>) => {
-      console.log("replaceStreamStatus", action)
+      if (isDev()) {
+        console.log("replaceStreamStatus", action)
+      }
       state.streamStatus = action.payload;
     },
     // Use the PayloadAction type to declare the contents of `action.payload`
@@ -70,7 +80,9 @@ export const gameStateSlice = createSlice({
     },
     // Use the PayloadAction type to declare the contents of `action.payload`
     replaceConnectionStatus: (state, action: PayloadAction<Status | null>) => {
-      console.log("replaceConnectionStatus", action)
+      if (isDev()) {
+        console.log("replaceConnectionStatus", action)
+      }
       let status = action.payload;
 
       if (!status) {
@@ -103,10 +115,14 @@ export const {
 // code can then be executed and other actions can be dispatched
 export const updateSession = (sessionId: string): AppThunk => dispatch => {
   rest_client.sessions.getSession(sessionId).then(r => {
-    console.log('updateSession', r.data);
+    if (isDev()) {
+      console.log('updateSession', r.data);
+    }
     dispatch(replaceGameState(r.data));
   }).catch(err => {
-    console.log("get session err", err)
+    if (isDev()) {
+      console.log("get session err", err)
+    }
   })
 };
 
@@ -117,7 +133,9 @@ export const updateSession = (sessionId: string): AppThunk => dispatch => {
 export const subscribeOnUpdates = (sessionId: string): AppThunk => (dispatch, getState) => {
   if (!subscription) {
     subscription = game_socket_client.subscribe(`/session/${sessionId}`, message => {
-      console.log("message:", message)
+      if (isDev()) {
+        console.log("message:", message)
+      }
       dispatch(updateSession(sessionId))
     })
     dispatch(replaceStreamStatus(StreamStatus.Connected));
@@ -162,20 +180,26 @@ export const startGame = (sessionId: string, language: string): AppThunk => disp
   rest_client.sessions.changeConfig(sessionId, body).then(resp => {
     rest_client.sessions.changeState(sessionId, { state: 'IN_PROGRESS' })
       .catch(reason => {
-        console.log("[catch] changeState", reason);
+        if (isDev()) {
+          console.log("[catch] changeState", reason);
+        }
         return;
       });
   }).catch(reason => {
-    console.log("[catch] changeConfig", reason);
+    if (isDev()) {
+      console.log("[catch] changeConfig", reason);
+    }
     return;
-  });;
+  });
 };
 
 export const getMe = (): AppThunk => dispatch => {
   rest_client.users.getMe().then(resp => {
     dispatch(replaceMe(resp.data));
   }).catch(reason => {
-    console.log("[catch] getMe", reason);
+    if (isDev()) {
+      console.log("[catch] getMe", reason);
+    }
     return;
   });
 };
@@ -183,7 +207,9 @@ export const getMe = (): AppThunk => dispatch => {
 export const makeTurn = (sessionId: string, cellIndex: number): AppThunk => dispatch => {
   rest_client.sessions.changeCell(sessionId, cellIndex, { open: true })
     .catch(reason => {
-      console.log("[catch] changeCell", reason);
+      if (isDev()) {
+        console.log("[catch] changeCell", reason);
+      }
     });
 };
 
@@ -196,7 +222,9 @@ export const setSettings = (sessionId: string, captain: boolean): AppThunk => (d
 
   rest_client.sessions.changePlayer(sessionId, getState().gameState.me?.id!, body)
     .catch(reason => {
-      console.log("[catch] changePlayer", reason);
+      if (isDev()) {
+        console.log("[catch] changePlayer", reason);
+      }
     });
 };
 
